@@ -63,21 +63,6 @@ static void jni_destroySurfaceManager(JNIEnv *env, jclass jcls, jint instanceId)
     engine->destroySurfaceManager(sm);
 }
 
-static void jni_setWorkdir(JNIEnv* env, jclass clazz, jstring jworkDir) {
-    if (jworkDir == nullptr) {
-        AGENUI_LOG("workDir is null");
-        return;
-    }
-    IAGenUIEngine *engine = getAGenUIEngine();
-    if (!engine) {
-        return;
-    }
-    ScopedUtfChars contentObj(env, jworkDir);
-    std::string workDir = contentObj.c_str();
-    AGENUI_LOG("%s", workDir.c_str());
-    engine->setWorkingDir(workDir);
-}
-
 static jboolean jni_loadThemeConfig(JNIEnv* env, jclass clazz, jstring jThemeConfig) {
     if (jThemeConfig == nullptr) {
         AGENUI_LOG("themeConfig is null");
@@ -251,7 +236,6 @@ jint register_jni_AGenUIEngine(JNIEnv* env) {
         {"nativeCreateSurfaceManager", "()I", (void *) jni_createSurfaceManager},
         {"nativeDestroySurfaceManager", "(I)V", (void *) jni_destroySurfaceManager},
         // Engine-level methods
-        {"nativeSetWorkdir", "(Ljava/lang/String;)V", (void*)jni_setWorkdir},
         {"nativeLoadThemeConfig", "(Ljava/lang/String;)Z", (void*)jni_loadThemeConfig},
         {"nativeLoadDesignTokenConfig", "(Ljava/lang/String;)Z", (void*)jni_loadDesignTokenConfig},
         {"nativeSetDayNightMode", "(Ljava/lang/String;)V", (void*)jni_setDayNightMode},

@@ -41,12 +41,6 @@ public:
     virtual ISurfaceManager* findSurfaceManager(int instanceId) = 0;
 
     /**
-     * @brief Sets the working directory for debugging info
-     * @param dir Working directory path
-     */
-    virtual void setWorkingDir(const std::string &dir) = 0;
-
-    /**
      * @brief Sets the platform layout bridge service (singleton)
      * @param platformLayoutBridge Platform layout bridge interface pointer
      */

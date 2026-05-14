@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -683,16 +682,7 @@ public class A2UIPlaygroundActivity extends AppCompatActivity {
                 }
             });
 
-            // 4. Copy UI Templates and set the working directory
-            String sandboxDir = UITemplatesCopier.copyUITemplatesToSandbox(this);
-            if (!TextUtils.isEmpty(sandboxDir)) {
-                //todo
-//                aGenUI.setWorkdir(sandboxDir);
-            } else {
-                addLog("AGenUI init: failed to copy UI Templates");
-            }
-
-            // 5. Register Components and Functions
+            // 4. Register Components and Functions
             AGenUI.getInstance().registerFunction(new ToastFunction(this));
 
             AGenUI.getInstance().registerComponent("Markdown", new MarkdownComponentFactory());

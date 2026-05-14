@@ -108,10 +108,6 @@ void AGenUIEngine::destroySurfaceManager(ISurfaceManager* surfaceManager) {
     AGENUI_LOG("SurfaceManager not found for destruction");
 }
 
-void AGenUIEngine::setWorkingDir(const std::string &dir) {
-    _workingDir = dir;
-}
-
 void AGenUIEngine::setPlatformLayoutBridge(IPlatformLayoutBridge* platformLayoutBridge) {
     if (!_isRunning.load()) {
         return;

@@ -44,11 +44,6 @@ static std::unordered_map<std::string, agenui::AGenUIEngineFunction*> sPlatformF
     if (self) {
         _functionCallCallbacks = [NSMutableDictionary dictionary];
         [self initialize];
-        // Automatically set sandbox Documents directory as working directory
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        if (paths.count > 0) {
-            [self setWorkingDirectory:paths.firstObject];
-        }
     }
     return self;
 }
@@ -222,17 +217,6 @@ static std::unordered_map<std::string, agenui::AGenUIEngineFunction*> sPlatformF
         return nil;
     }
     return _functionCallCallbacks[functionCallName];
-}
-
-- (void)setWorkingDirectory:(NSString *)workingDir {
-    if (!workingDir || workingDir.length == 0) {
-        return;
-    }
-    if (_engine == nullptr) {
-        return;
-    }
-    std::string dir = [workingDir UTF8String];
-    _engine->setWorkingDir(dir);
 }
 
 @end

@@ -41,7 +41,6 @@ public:
     void destroySurfaceManager(ISurfaceManager* surfaceManager) override;
     ISurfaceManager* findSurfaceManager(int instanceId) override;
 
-    void setWorkingDir(const std::string &dir) override;
     void setPlatformLayoutBridge(IPlatformLayoutBridge* platformLayoutBridge) override;
     IPlatformLayoutBridge* getPlatformLayoutBridge() override;
 
@@ -53,7 +52,6 @@ public:
 
     FunctionCallManager* getFunctionCallManager() override { return _functionCallManager; }
     IComponentPropertySpecManager* getComponentPropertySpecManager() override { return _componentPropertySpecManager; }
-    const std::string& getWorkingDir() const override { return _workingDir; }
 
 private:
     std::atomic_bool _isRunning{false};
@@ -63,9 +61,6 @@ private:
 
     // Single-instance external dependency (not owned)
     IPlatformLayoutBridge* _platformLayoutBridge = nullptr;
-
-    // Working directory
-    std::string _workingDir;
 
     // Multi-instance SurfaceManager map
     std::map<int32_t, std::shared_ptr<SurfaceManager>> _surfaceManagers;

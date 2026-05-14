@@ -399,13 +399,6 @@ static napi_value SetWorkingDir(napi_env env, napi_callback_info info) {
     // Store filesDir in a global variable
     g_filesDir = workingDir;
     
-    auto* engine = agenui::getAGenUIEngine();
-    if (engine) {
-        engine->setWorkingDir(workingDir);
-    } else {
-        HM_LOGW("SetWorkingDir: Engine not initialized yet");
-    }
-    
     NAPI_RETURN_UNDEFINED(env);
 }
 

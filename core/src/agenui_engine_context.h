@@ -26,7 +26,6 @@ public:
     virtual FunctionCallManager* getFunctionCallManager() = 0;
     virtual IComponentPropertySpecManager* getComponentPropertySpecManager() = 0;
     virtual IPlatformLayoutBridge* getPlatformLayoutBridge() = 0;
-    virtual const std::string& getWorkingDir() const = 0;
 };
 
 /**

@@ -61,14 +61,6 @@ public class AGenUI {
 
     /**
      * Initializes the AGenUI Engine
-     *
-     * Performs the following steps:
-     * 1. Loads Native modules
-     * 2. Creates the Engine instance (initAGenUIEngine)
-     * 3. Sets the working directory
-     * 4. Copies template files to the sandbox
-     * 5. Initializes SkillManager and registers platform Skills
-     *
      * @throws RuntimeException if initialization fails
      */
     public void initialize(Context applicationContext) {
@@ -82,8 +74,6 @@ public class AGenUI {
                 appContext = applicationContext.getApplicationContext();
                 nativePtr = nativeInitAGenUIEngine();
                 Log.i(TAG, "AGenUI Engine created: nativePtr=" + nativePtr);
-                nativeSetWorkdir(getInternalFilesDir());
-                copyAssetsToSandbox();
                 ComponentRegistry.registerBuiltInComponents();
 
                 isInitialized = true;
@@ -309,75 +299,11 @@ public class AGenUI {
         }
     }
 
-    @RestrictTo(androidx.annotation.RestrictTo.Scope.LIBRARY)
-    public String getInternalFilesDir() {
-        if (appContext == null) {
-            throw new IllegalStateException("AGenUI not initialized");
-        }
-        return appContext.getFilesDir().getAbsolutePath();
-    }
-
-
-    /**
-     * Copies template files from assets/agenui to the sandbox ui_templates directory
-     */
-    private void copyAssetsToSandbox() {
-        try {
-            String targetDirPath = getInternalFilesDir() + File.separator + "data" + File.separator + "ui_templates";
-            File targetDir = new File(targetDirPath);
-            if (!targetDir.exists() && !targetDir.mkdirs()) {
-                Log.e(TAG, "copyAssetsToSandbox: Failed to create directory: " + targetDirPath);
-                return;
-            }
-
-            AssetManager assetManager = appContext.getAssets();
-            String[] files = assetManager.list("agenui");
-            if (files == null || files.length == 0) {
-                Log.w(TAG, "copyAssetsToSandbox: No files found in assets/agenui");
-                return;
-            }
-
-            for (String fileName : files) {
-                File targetFile = new File(targetDir, fileName);
-                if (targetFile.exists()) {
-                    continue;
-                }
-                InputStream is = null;
-                FileOutputStream fos = null;
-                try {
-                    is = assetManager.open("agenui" + File.separator + fileName);
-                    fos = new FileOutputStream(targetFile);
-                    byte[] buffer = new byte[4096];
-                    int bytesRead;
-                    while ((bytesRead = is.read(buffer)) != -1) {
-                        fos.write(buffer, 0, bytesRead);
-                    }
-                    fos.flush();
-                } catch (IOException e) {
-                    Log.e(TAG, "copyAssetsToSandbox: Failed to copy file: " + fileName, e);
-                } finally {
-                    if (is != null) {
-                        try { is.close(); } catch (IOException ignored) {}
-                    }
-                    if (fos != null) {
-                        try { fos.close(); } catch (IOException ignored) {}
-                    }
-                }
-            }
-            Log.i(TAG, "copyAssetsToSandbox: Templates copied to " + targetDirPath);
-        } catch (Exception e) {
-            Log.e(TAG, "copyAssetsToSandbox: Failed to copy assets", e);
-        }
-    }
-
-
     private native long nativeInitAGenUIEngine();
     private native void nativeDestroyAGenUIEngine();
 
     public static native int nativeCreateSurfaceManager();
     public static native void nativeDestroySurfaceManager(int instanceId);
-
-    public static native void nativeSetWorkdir(String workdir);
 
     private static native boolean nativeLoadThemeConfig(String themeConfig);
     private static native boolean nativeLoadDesignTokenConfig(String designTokenConfig);
