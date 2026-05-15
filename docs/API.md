@@ -1,6 +1,6 @@
 # API Reference
 
-English | [中文](API.zh-CN.md)
+English | [中文](https://github.com/AGenUI/AGenUI/blob/main/docs/API.zh-CN.md)
 
 ## Core API
 
@@ -823,5 +823,4 @@ AGenUI.setDayNightMode('dark');
 
 ## Related Links
 
-- [QuickStart](./QuickStart.md)
-- [Project Structure](./PROJECT_STRUCTURE.md)
+- [QuickStart](https://github.com/AGenUI/AGenUI/blob/main/docs/QuickStart.md)

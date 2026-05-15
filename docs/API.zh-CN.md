@@ -1,6 +1,6 @@
 # API 参考
 
-[English](API.md) | 中文
+[English](https://github.com/AGenUI/AGenUI/blob/main/docs/API.md) | 中文
 
 ## 核心 API
 
@@ -823,5 +823,4 @@ AGenUI.setDayNightMode('dark');
 
 ## 相关链接
 
-- [快速上手](./QuickStart.zh-CN.md)
-- [项目结构说明](./PROJECT_STRUCTURE.zh-CN.md)
+- [快速上手](https://github.com/AGenUI/AGenUI/blob/main/docs/QuickStart.zh-CN.md)
