@@ -1,0 +1,57 @@
+name: PR Welcome
+
+on:
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Welcome PR Author
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const author = context.payload.pull_request.user.login;
+            const prNumber = context.payload.pull_request.number;
+
+            // Check if this is user's first PR
+            let isFirstPR = false;
+            try {
+              const { data: searchResult } = await github.rest.search.issuesAndPullRequests({
+                q: `repo:${context.repo.owner}/${context.repo.repo} type:pr author:${author} is:closed`,
+              });
+              isFirstPR = searchResult.total_count === 0;
+            } catch (err) {
+              console.log(`Could not determine first PR status: ${err.message}`);
+            }
+
+            const greeting = isFirstPR
+              ? `Thanks for your first PR, @${author}! :tada: Welcome to AGenUI.`
+              : `Thanks for the PR, @${author}!`;
+
+            const comment = `${greeting}\n\nA maintainer will review it shortly.`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: comment,
+            });
+
+            if (isFirstPR) {
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: prNumber,
+                  labels: ['first-time-contributor'],
+                });
+              } catch (err) {
+                console.log(`Could not add label: ${err.message}`);
+              }
+            }

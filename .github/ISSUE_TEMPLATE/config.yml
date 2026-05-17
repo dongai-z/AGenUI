@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Questions & Discussions
+    url: https://github.com/AGenUI/AGenUI/discussions
+    about: Ask questions, share ideas, or discuss AGenUI here.
+  - name: Documentation
+    url: https://github.com/AGenUI/AGenUI/tree/main/docs
+    about: Check the documentation before filing an issue.

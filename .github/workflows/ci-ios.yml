@@ -1,0 +1,49 @@
+name: CI - iOS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'core/**'
+      - 'platforms/ios/**'
+      - 'playground/ios/**'
+      - 'scripts/ios/**'
+      - 'scripts/common/**'
+      - '.github/workflows/ci-ios.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'core/**'
+      - 'platforms/ios/**'
+      - 'playground/ios/**'
+      - 'scripts/ios/**'
+      - 'scripts/common/**'
+      - '.github/workflows/ci-ios.yml'
+
+concurrency:
+  group: ci-ios-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: iOS Build
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
+      - name: Build iOS XCFramework
+        run: ./scripts/ios/build.sh
+
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-xcframework-${{ github.sha }}
+          path: dist/ios/release/
+          retention-days: 7

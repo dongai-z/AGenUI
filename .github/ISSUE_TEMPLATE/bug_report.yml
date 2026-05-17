@@ -1,0 +1,62 @@
+name: "Bug Report"
+description: "Something isn't working as expected? Let us know so we can fix it."
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please search [existing issues](https://github.com/AGenUI/AGenUI/issues) first to avoid duplicates.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Affected Platform
+      description: Which platform renderer is affected?
+      multiple: true
+      options:
+        - Android
+        - iOS
+        - HarmonyOS
+        - C++ Core Engine
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Describe what happened, how to reproduce it, and what you expected instead.
+      placeholder: |
+        **What happened:**
+        When I do X, Y happens.
+
+        **Steps to reproduce:**
+        1. ...
+        2. ...
+
+        **Expected behavior:**
+        I expected Z to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Versions and device info help us reproduce the issue.
+      placeholder: |
+        - AGenUI version: e.g. 0.9.1
+        - Platform: e.g. Android 14 / iOS 17 / HarmonyOS 5.0
+        - Device: e.g. Pixel 8 / iPhone 15 / Mate 60
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Information
+      description: Any extra context that helps - logs, stack traces, screenshots, JSON snippets, etc.
+    validations:
+      required: false

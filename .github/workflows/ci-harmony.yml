@@ -1,0 +1,54 @@
+name: CI - HarmonyOS
+
+# HarmonyOS builds require DevEco Studio which is not available on GitHub-hosted runners.
+# This workflow is triggered manually or can be adapted for self-hosted runners with DevEco installed.
+on:
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: 'Build mode'
+        required: false
+        default: 'release'
+        type: choice
+        options:
+          - release
+          - debug
+
+concurrency:
+  group: ci-harmony-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: HarmonyOS Build
+    runs-on: ubuntu-latest
+    # NOTE: This job requires a self-hosted runner with DevEco Studio installed.
+    # To use self-hosted runners, change the line above to:
+    #   runs-on: [self-hosted, harmony]
+    # and ensure DEVECO_HOME is set in the runner environment.
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Check DevEco environment
+        run: |
+          if [ -z "${DEVECO_HOME:-}" ]; then
+            echo "::warning::DEVECO_HOME is not set. HarmonyOS builds require DevEco Studio."
+            echo "::warning::Please configure a self-hosted runner with DevEco Studio installed."
+            echo "::warning::Set DEVECO_HOME to the DevEco installation path."
+            exit 1
+          fi
+          echo "DevEco Studio found at: ${DEVECO_HOME}"
+
+      - name: Build HarmonyOS HAR
+        run: ./scripts/harmony/build.sh --mode ${{ inputs.build_mode || 'release' }}
+
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v7
+        with:
+          name: harmony-har-${{ github.sha }}
+          path: dist/harmony/
+          retention-days: 7

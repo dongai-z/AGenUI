@@ -1,0 +1,50 @@
+name: "Feature Request"
+description: "Suggest a new feature or improvement for AGenUI."
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion! Please search [existing issues](https://github.com/AGenUI/AGenUI/issues) first to avoid duplicates.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or Motivation
+      description: What problem does this feature solve? Why is it needed?
+      placeholder: "I'm always frustrated when..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like, if you have one in mind.
+      placeholder: "It would be great if AGenUI could..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Target Platform
+      description: Which platform(s) would this feature apply to?
+      multiple: true
+      options:
+        - Android
+        - iOS
+        - HarmonyOS
+        - C++ Core Engine
+        - All Platforms
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Anything else - mockups, code snippets, A2UI protocol examples, related issues, etc.
+    validations:
+      required: false
