@@ -1,0 +1,55 @@
+# GitHub Actions workflow template for the AGenUI C++ test suite.
+#
+# This file is NOT a live workflow until you copy it into the repo's
+# .github/workflows/ directory. Default open-source flow is:
+#
+#   cp tests/cpp/ci/github-actions.yml .github/workflows/cpp-tests.yml
+#   git add .github/workflows/cpp-tests.yml
+#
+# We keep it under tests/cpp/ci/ so adding C++ tests doesn't silently
+# enable a new workflow.
+
+name: cpp-tests
+
+on:
+  pull_request:
+    paths:
+      - "core/**"
+      - "tests/cpp/**"
+  push:
+    branches: [main]
+    paths:
+      - "core/**"
+      - "tests/cpp/**"
+  workflow_dispatch:
+
+jobs:
+  host-tests:
+    name: ${{ matrix.os }} / ${{ matrix.sanitizer }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, macos-14]
+        sanitizer: [asan, none]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: |
+          if [ "${{ matrix.sanitizer }}" = "asan" ]; then
+            FLAGS="-DAGENUI_TESTS_ENABLE_ASAN=ON"
+            BUILD=tests/cpp/build/host
+          else
+            FLAGS="-DAGENUI_TESTS_ENABLE_ASAN=OFF"
+            BUILD=tests/cpp/build/host
+          fi
+          cmake -S tests/cpp -B "$BUILD" $FLAGS
+          echo "BUILD=$BUILD" >> $GITHUB_ENV
+      - name: Build
+        run: cmake --build "$BUILD" -j 4
+      - name: Run agenui_unit_tests
+        run: "$BUILD/agenui_unit_tests --gtest_color=no --gtest_brief=1"
+      - name: Run agenui_stream_tests
+        run: "$BUILD/agenui_stream_tests --gtest_color=no --gtest_brief=1"
+      - name: Run agenui_concurrency_tests
+        run: "$BUILD/agenui_concurrency_tests --gtest_color=no --gtest_brief=1"
