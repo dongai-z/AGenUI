@@ -5,7 +5,7 @@
 
 #include "agenui_a2ui_attribute_converter.h"
 #include "agenui_component_snapshot.h"
-#include "a2ui/render/components/choicepicker_component_utils.h"
+#include "agenui_choicepicker_component_utils.h"
 #include "nlohmann/json.hpp"
 #include "surface/agenui_serializable_data_impl.h"
 
