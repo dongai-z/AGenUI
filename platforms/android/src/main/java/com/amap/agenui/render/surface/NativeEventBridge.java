@@ -101,7 +101,7 @@ public class NativeEventBridge implements IAGenUIMessageListener {
     public void onError(int code, String surfaceId, String message) {
         AGenUILogger.e(TAG, "onError: code=" + code + ", surfaceId=" + surfaceId + ", message=" + message);
         // Map to SDKInternal error type per design spec; message is reported as reason
-        mainHandler.post(() -> surfaceManager.notifyError("SDKInternal", code, message, surfaceId));
+        mainHandler.post(() -> surfaceManager.notifyError(code, message, surfaceId));
     }
 
     /**

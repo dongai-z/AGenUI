@@ -308,29 +308,6 @@ import UIKit
         surfaceBridge.endTextStream()
     }
 
-    /// Preset the size of an upcoming surface BEFORE its components are laid out.
-    ///
-    /// Background: the engine processes JSON on a dedicated background thread
-    /// in FIFO order, while `onCreateSurface` is delivered to the main thread
-    /// asynchronously (via `dispatch_async`). When a host streams
-    /// `createSurface` and `updateComponents` back-to-back, the engine may
-    /// finish laying out components with the default surface size (0) BEFORE
-    /// the main thread gets a chance to call `surface.updateSize(...)`,
-    /// causing a brief "narrow-width" flash on first paint.
-    ///
-    /// Calling this method between the two `receiveTextChunk` calls enqueues
-    /// the size on the same FIFO queue, so the engine has the correct surface
-    /// width when computing the very first Yoga layout pass — eliminating the
-    /// race without blocking either thread.
-    ///
-    /// Safe to call multiple times; the subsequent `surface.updateSize(...)`
-    /// from `onCreateSurface` remains the source of truth and will simply be a
-    /// no-op when the value matches.
-    ///
-    /// - Parameters:
-    ///   - surfaceId: Surface ID (must match the one in `createSurface` JSON)
-    ///   - width: Width in pt; pass `.infinity` for unconstrained
-    ///   - height: Height in pt; pass `.infinity` for unconstrained
     @objc public func presetSurfaceSize(surfaceId: String, width: CGFloat, height: CGFloat) {
         guard !surfaceId.isEmpty else { return }
         let widthCXX  = (width.isFinite  && width  > 0) ? Float(width)  : 0.0

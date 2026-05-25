@@ -204,16 +204,6 @@ Returns the native instance id assigned by the engine on creation.
 | iOS | `func getInstanceId() -> Int` |
 | HarmonyOS | `getInstanceId(): number` |
 
-#### presetSurfaceSize (iOS)
-
-Presets the Surface size **before** the `createSurface` JSON reaches the engine, eliminating the first-frame narrow-width flash.
-
-```swift
-surfaceManager.presetSurfaceSize(surfaceId: "main", width: view.bounds.width, height: .infinity)
-```
-
-Safe to call multiple times; subsequent `surface.updateSize(...)` remains the source of truth and is a no-op when the value matches.
-
 #### destroy
 
 | Platform | Method signature | Notes |
@@ -236,7 +226,8 @@ public interface ISurfaceManagerListener {
     void onDeleteSurface(Surface surface);
     default void onReceiveActionEvent(String event) {}
     default void onRootComponentUpdate(Surface surface, Map<String, String> props) {}
-    default void onError(String type, int code, String message, String surfaceId) {}
+    default void onError(Surface surface, int code, String message) {}
+    default void onBlankCheckResult(Surface surface, boolean isBlank) {}
 }
 ```
 

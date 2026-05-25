@@ -407,16 +407,15 @@ public class Surface {
             }
             int[] count = {0};
             traverseForLcpX(rootComponent, count, minCount);
-            if (count[0] < minCount) {
+            boolean isBlank = count[0] < minCount;
+            if (isBlank) {
                 AGenUILogger.w(TAG, "BlankCheck: componentCount=" + count[0]
                         + " < minCount=" + minCount + ", surfaceId=" + surfaceId);
-                componentEventDispatcher.onSurfaceError("BlankScreen", "componentCountInsufficient, real count: " + count[0], surfaceId);
-            } else {
-                if (AGenUILogger.isLoggingEnabled()) {
-                    AGenUILogger.d(TAG, "BlankCheck: pass, componentCount=" + count[0]
-                            + ", surfaceId=" + surfaceId);
-                }
+            } else if (AGenUILogger.isLoggingEnabled()) {
+                AGenUILogger.d(TAG, "BlankCheck: pass, componentCount=" + count[0]
+                        + ", surfaceId=" + surfaceId);
             }
+            componentEventDispatcher.onBlankCheckResult(surfaceId, isBlank);
         };
         if (mBlankCheckHandler == null) {
             mBlankCheckHandler = new Handler(Looper.getMainLooper());

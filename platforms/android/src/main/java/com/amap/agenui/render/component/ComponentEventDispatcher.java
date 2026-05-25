@@ -35,11 +35,11 @@ public interface ComponentEventDispatcher {
     void submitUIDataModel(String surfaceId, String componentId, String changeData);
 
     /**
-     * Reports a Surface-level error (e.g. blank-screen detection) to the Native / manager layer.
+     * Reports the result of a blank-screen check to the manager layer.
+     * Called for both pass ({@code isBlank = false}) and fail ({@code isBlank = true}) outcomes.
      *
-     * @param type      Error type, e.g. "BlankScreen"
-     * @param message    Error message, e.g. "componentCountInsufficient"
      * @param surfaceId Surface ID
+     * @param isBlank   {@code true} if the component count is below threshold; {@code false} if the check passed
      */
-    void onSurfaceError(String type, String message, String surfaceId);
+    void onBlankCheckResult(String surfaceId, boolean isBlank);
 }

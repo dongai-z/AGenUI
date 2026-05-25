@@ -651,10 +651,6 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
             surfaceManager.receiveTextChunk(createSurfaceJson)
             print("✅ [QR Code] Sent createSurface")
             
-            // Preset surface size between createSurface and updateComponents
-            // (same engine FIFO, so size is applied before component layout).
-            // See sendJSONData(...) for the full rationale on why this prevents
-            // the cross-thread layout race.
             if let sid = Self.extractSurfaceId(fromCreateSurface: createSurfaceJson) {
                 surfaceManager.presetSurfaceSize(surfaceId: sid,
                                                  width: self.view.bounds.width,

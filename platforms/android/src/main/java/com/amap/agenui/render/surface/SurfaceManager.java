@@ -2,7 +2,6 @@ package com.amap.agenui.render.surface;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
@@ -277,8 +276,8 @@ public class SurfaceManager {
                     }
 
                     @Override
-                    public void onSurfaceError(String type, String message, String sid) {
-                        notifyError(type, -1, message, sid);
+                    public void onBlankCheckResult(String sid, boolean isBlank) {
+                        notifyBlankCheckResult(getSurface(sid), isBlank);
                     }
                 },
                 new SurfaceLayoutDispatcher(
@@ -415,12 +414,23 @@ public class SurfaceManager {
         }
     }
 
-    void notifyError(String type, int code, String message, String surfaceId) {
+    void notifyError(int code, String message, String surfaceId) {
+        Surface surface = getSurface(surfaceId);
         for (ISurfaceManagerListener listener : listeners) {
             try {
-                listener.onError(type, code, message, surfaceId);
+                listener.onError(surface, code, message);
             } catch (Exception e) {
                 AGenUILogger.e(TAG, "notifyError: listener threw exception", e);
+            }
+        }
+    }
+
+    void notifyBlankCheckResult(Surface surface, boolean isBlank) {
+        for (ISurfaceManagerListener listener : listeners) {
+            try {
+                listener.onBlankCheckResult(surface, isBlank);
+            } catch (Exception e) {
+                AGenUILogger.e(TAG, "notifyBlankCheckResult: listener threw exception", e);
             }
         }
     }

@@ -53,13 +53,29 @@ public interface ISurfaceManagerListener {
 
     /**
      * Callback when a C++ execution error occurs.
+     * <p>
+     * Invoked for engine-level errors (e.g. DSL parse failures, surface not found).
+     * Blank-screen detection results are delivered separately via {@link #onBlankCheckResult}.
      *
-     * @param type      Error type: "SDKInternal" (engine error) or "BlankScreen" (blank screen detection)
-     * @param code      Error reason string (e.g. "DSL_parse_failed", "surfaceNotFound",
-     *                  "componentCountInsufficient")
-     * @param message
-     * @param surfaceId Surface identifier (empty if not yet parsed)
+     * @param surface The Surface associated with the error; {@code null} if the error cannot
+     *                be attributed to a specific Surface (e.g. Surface not yet created)
+     * @param code    Error code
+     * @param message Error description
      */
-    default void onError(String type, int code, String message, String surfaceId) {
+    default void onError(Surface surface, int code, String message) {
+    }
+
+    /**
+     * Callback when a blank-screen check completes for a Surface.
+     * <p>
+     * Fired for both outcomes: {@code isBlank = true} when the component count is below
+     * the configured threshold, {@code isBlank = false} when the check passes.
+     *
+     * @param surface The Surface on which the blank-screen check was performed;
+     *                may be {@code null} if the Surface has already been destroyed
+     * @param isBlank {@code true} if the screen is detected as blank;
+     *                {@code false} if the check passed
+     */
+    default void onBlankCheckResult(Surface surface, boolean isBlank) {
     }
 }

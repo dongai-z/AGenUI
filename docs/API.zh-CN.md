@@ -204,16 +204,6 @@ const surfaceManager = new SurfaceManager(context);
 | iOS | `func getInstanceId() -> Int` |
 | HarmonyOS | `getInstanceId(): number` |
 
-#### presetSurfaceSize（iOS）
-
-在 `createSurface` JSON 到达引擎**之前**预设 Surface 尺寸，消除首帧窄宽闪烁。
-
-```swift
-surfaceManager.presetSurfaceSize(surfaceId: "main", width: view.bounds.width, height: .infinity)
-```
-
-多次调用安全；后续 `surface.updateSize(...)` 仍为最终权威值，相同值时为 no-op。
-
 #### destroy
 
 | 平台 | 方法签名 | 说明 |
@@ -236,7 +226,8 @@ public interface ISurfaceManagerListener {
     void onDeleteSurface(Surface surface);
     default void onReceiveActionEvent(String event) {}
     default void onRootComponentUpdate(Surface surface, Map<String, String> props) {}
-    default void onError(String type, int code, String message, String surfaceId) {}
+    default void onError(Surface surface, int code, String message) {}
+    default void onBlankCheckResult(Surface surface, boolean isBlank) {}
 }
 ```
 
