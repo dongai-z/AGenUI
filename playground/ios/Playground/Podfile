@@ -2,10 +2,14 @@ platform :ios, '13.0'
 
 target 'Playground' do
 
-  pod 'AGenUI', :path => '../../../platforms/iOS/AGenUI_ForSDK.podspec'
+  pod 'AGenUI', :path => '../../../platforms/ios/AGenUI_ForSDK.podspec'
 
   pod 'MarkdownKit'
   pod 'DGCharts'
   pod 'lottie-ios'
+
+  target 'AGenUITests' do
+    inherit! :search_paths
+  end
 
 end
