@@ -161,6 +161,14 @@ static const char* const kBaseComponentSpecConfig = R"JSON({
         }
       }
     },
+    "Tabs": {
+      "styles": {
+        "default": {
+          "tab-font-color": {"call": "token", "args": {"name": "Color_Black"}},
+          "tab-font-color-selected": {"call": "token", "args": {"name": "Color_Text_Brand"}}
+        }
+      }
+    },
     "Table": {
       "headers": {"default": []},
       "rows": {"default": []},

@@ -26,8 +26,8 @@ static const char* g_component_styles = R"JSON({
     "indicator-radius": "4px",
     "tab-font-size": "32px",
     "tab-font-size-selected": "32px",
-    "tab-font-color": "#000000",
-    "tab-font-color-selected": "#2273F7",
+    "tab-font-color": {"call": "token", "args": {"name": "Color_Black"}},
+    "tab-font-color-selected": {"call": "token", "args": {"name": "Color_Text_Brand"}},
     "tab-font-weight": "normal",
     "tab-font-weight-selected": "bold"
   },

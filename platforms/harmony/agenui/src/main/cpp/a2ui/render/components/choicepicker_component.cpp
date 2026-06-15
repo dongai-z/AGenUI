@@ -5,7 +5,6 @@
 #include "log/a2ui_capi_log.h"
 #include "a2ui/measure/a2ui_platform_layout_bridge.h"
 #include "a2ui/utils/a2ui_unit_utils.h"
-#include "surface/token_parser/agenui_token_parser.h"
 #include <nlohmann/json.hpp>
 
 #include <cstdlib>
@@ -575,23 +574,7 @@ uint32_t ChoicePickerComponent::getStyleColor(const char* key, uint32_t fallback
     if (!m_styleConfig.is_object() || !m_styleConfig.contains(key)) {
         return fallbackValue;
     }
-    if (m_styleConfig[key].is_string()) {
-        return parseColor(m_styleConfig[key].get<std::string>());
-    } else if (m_styleConfig[key].is_object()) {
-        if (m_styleConfig[key].contains("call") && m_styleConfig[key]["call"].is_string()) {
-            std::string callType = m_styleConfig[key]["call"].get<std::string>();
-            if (callType == "token" && m_styleConfig[key].contains("args")) {
-                const auto& args = m_styleConfig[key]["args"];
-                if (args.contains("name") && args["name"].is_string()) {
-                    std::string tokenName = args["name"].get<std::string>();
-                    std::string resolvedColor = agenui::TokenParser::getInstance().resolve(tokenName);
-                    HM_LOGI("Resolved FunctionCall token '%s' to '%s'", tokenName.c_str(), resolvedColor.c_str());
-                    return parseColor(resolvedColor);
-                }
-            }
-        }
-    }
-    return fallbackValue;
+    return parseColorWithToken(m_styleConfig[key], fallbackValue);
 }
 
 std::string ChoicePickerComponent::getStyleString(const char* key, const std::string& fallbackValue) const {
