@@ -10,14 +10,14 @@ permissions:
 jobs:
   release-ios:
     name: Build & Publish iOS
-    runs-on: macos-latest
+    runs-on: macos-26
     # Only run when tag matches AGenUI-* format
     if: startsWith(github.event.release.tag_name, 'AGenUI-')
 
     steps:
       # ==================== Setup ====================
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Extract version from tag
         id: version
@@ -51,6 +51,9 @@ jobs:
           echo "✅ Version verified: base=${BASE_VERSION}, full=${TAG_VERSION}"
 
       # ==================== Build Environment ====================
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app/Contents/Developer
+
       - name: Print Xcode version
         run: |
           xcodebuild -version
