@@ -28,6 +28,11 @@ jobs:
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "Extracted version: ${VERSION} from tag: ${TAG}"
 
+          # Extract base version (x.y.z) - this is what pack-release.sh uses for zip naming
+          BASE_VERSION=$(echo "$VERSION" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
+          echo "base_version=${BASE_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Base version (for zip filename): ${BASE_VERSION}"
+
           # Determine if this is a stable release (x.y.z only, no suffix)
           if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "is_stable=true" >> "$GITHUB_OUTPUT"
@@ -40,15 +45,13 @@ jobs:
       - name: Verify version consistency
         run: |
           HEADER_VERSION=$(grep -o '#define AGENUI_VERSION "[^"]*"' core/include/agenui_version.h | sed 's/#define AGENUI_VERSION "//;s/"//')
-          TAG_VERSION="${{ steps.version.outputs.version }}"
-          # For pre-release tags like 1.0.2.beta1, check that the base version matches
-          BASE_VERSION=$(echo "$TAG_VERSION" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
+          BASE_VERSION="${{ steps.version.outputs.base_version }}"
           if [[ "$HEADER_VERSION" != "$BASE_VERSION" ]]; then
             echo "::error::Version mismatch! Tag base version: ${BASE_VERSION}, agenui_version.h: ${HEADER_VERSION}"
             echo "Please ensure the version in core/include/agenui_version.h matches the tag."
             exit 1
           fi
-          echo "✅ Version verified: base=${BASE_VERSION}, full=${TAG_VERSION}"
+          echo "✅ Version verified: header=${HEADER_VERSION}, tag base=${BASE_VERSION}"
 
       # ==================== Build Environment ====================
       - name: Select Xcode version
@@ -70,8 +73,8 @@ jobs:
 
       - name: Verify zip artifact
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          ZIP_PATH="dist/ios/publish/AGenUI-${VERSION}-ios.zip"
+          BASE_VERSION="${{ steps.version.outputs.base_version }}"
+          ZIP_PATH="dist/ios/publish/AGenUI-${BASE_VERSION}-ios.zip"
           if [[ ! -f "$ZIP_PATH" ]]; then
             echo "::error::Expected zip not found: ${ZIP_PATH}"
             ls -la dist/ios/publish/ 2>/dev/null || echo "dist/ios/publish/ does not exist"
@@ -88,9 +91,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
+          BASE_VERSION="${{ steps.version.outputs.base_version }}"
           TAG="${{ steps.version.outputs.tag }}"
-          ZIP_PATH="dist/ios/publish/AGenUI-${VERSION}-ios.zip"
+          ZIP_PATH="dist/ios/publish/AGenUI-${BASE_VERSION}-ios.zip"
           echo "Uploading ${ZIP_PATH} to release ${TAG}..."
           gh release upload "${TAG}" "${ZIP_PATH}" --clobber
           echo "✅ Upload complete"
