@@ -71,15 +71,18 @@ jobs:
         id: cache-clt
         uses: actions/cache@v4
         with:
-          path: command-line-tools
-          key: harmonyos-clt-linux-x64-${{ env.CLT_VERSION }}
+          path: ${{ env.CLT_FILENAME }}
+          key: harmonyos-clt-${{ env.CLT_FILENAME }}
 
       - name: Download HarmonyOS Command Line Tools
         if: steps.cache-clt.outputs.cache-hit != 'true'
         run: |
           curl -SL -O "https://huggingface.co/csukuangfj/harmonyos-commandline-tools/resolve/main/${CLT_FILENAME}"
-          unzip -q "${CLT_FILENAME}"
-          rm -f "${CLT_FILENAME}"
+
+      - name: Extract Command Line Tools
+        run: |
+          unzip -q "${CLT_FILENAME}" -d .
+          echo "Command Line Tools extracted"
 
       - name: Configure build environment
         run: |
