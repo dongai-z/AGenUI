@@ -1,8 +1,22 @@
 name: CI - HarmonyOS
 
-# HarmonyOS builds require DevEco Studio which is not available on GitHub-hosted runners.
-# This workflow is triggered manually or can be adapted for self-hosted runners with DevEco installed.
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'core/**'
+      - 'platforms/harmony/**'
+      - 'scripts/harmony/**'
+      - 'scripts/common/**'
+      - '.github/workflows/ci-harmony.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'core/**'
+      - 'platforms/harmony/**'
+      - 'scripts/harmony/**'
+      - 'scripts/common/**'
+      - '.github/workflows/ci-harmony.yml'
   workflow_dispatch:
     inputs:
       build_mode:
@@ -24,23 +38,38 @@ permissions:
 jobs:
   build:
     name: HarmonyOS Build
-    runs-on: ubuntu-latest
-    # NOTE: This job requires a self-hosted runner with DevEco Studio installed.
-    # To use self-hosted runners, change the line above to:
-    #   runs-on: [self-hosted, harmony]
-    # and ensure DEVECO_HOME is set in the runner environment.
+    runs-on: macos-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
 
-      - name: Check DevEco environment
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      - name: Setup HarmonyOS Command Line Tools
+        uses: harmonyos-dev/setup-harmonyos-sdk@0.2.1
+
+      - name: Install HarmonyOS SDK
         run: |
-          if [ -z "${DEVECO_HOME:-}" ]; then
-            echo "::warning::DEVECO_HOME is not set. HarmonyOS builds require DevEco Studio."
-            echo "::warning::Please configure a self-hosted runner with DevEco Studio installed."
-            echo "::warning::Set DEVECO_HOME to the DevEco installation path."
-            exit 1
-          fi
-          echo "DevEco Studio found at: ${DEVECO_HOME}"
+          # Set locale to CN so sdkmgr can reach Huawei's CDN
+          export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Duser.country=CN"
+
+          # Install HarmonyOS toolchains (compiler, native NDK, system libs)
+          sdkmgr install toolchains:9 OpenHarmony/toolchains:9 --accept-license
+
+      - name: Configure build environment
+        run: |
+          # Point DEVECO_HOME to the Command Line Tools root installed by the
+          # setup action so that build.sh can locate hvigorw / ohpm / node.
+          CLT_ROOT="$(dirname "$(dirname "$(which sdkmgr)")")"
+          echo "DEVECO_HOME=${CLT_ROOT}" >> $GITHUB_ENV
+          echo "DEVECO_SDK_HOME=${CLT_ROOT}/sdk" >> $GITHUB_ENV
+
+          # HOS_SDK_HOME is the conventional env var for the actual SDK
+          echo "HOS_SDK_HOME=${CLT_ROOT}/hwsdk" >> $GITHUB_ENV
 
       - name: Build HarmonyOS HAR
         run: ./scripts/harmony/build.sh --mode ${{ inputs.build_mode || 'release' }}
