@@ -49,27 +49,36 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
-      - name: Setup HarmonyOS Command Line Tools
-        uses: harmonyos-dev/setup-harmonyos-sdk@0.2.1
+      - name: Download HarmonyOS Command Line Tools
+        run: |
+          # Fetch the latest release asset URL from harmonyos-dev/hos-sdk
+          RELEASE_JSON=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/harmonyos-dev/hos-sdk/releases/latest)
+          ASSET_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | contains("commandline-tools-mac")) | .browser_download_url')
+          if [[ -z "$ASSET_URL" || "$ASSET_URL" == "null" ]]; then
+            echo "::error::Failed to find commandline-tools-mac asset from hos-sdk releases"
+            exit 1
+          fi
+          echo "Downloading: $ASSET_URL"
+          curl -L -o commandline-tools.zip "$ASSET_URL"
+          unzip -q commandline-tools.zip
+          echo "Command Line Tools downloaded and extracted"
 
       - name: Install HarmonyOS SDK
         run: |
           # Set locale to CN so sdkmgr can reach Huawei's CDN
           export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Duser.country=CN"
 
+          chmod +x command-line-tools/sdkmanager/bin/sdkmgr
           # Install HarmonyOS toolchains (compiler, native NDK, system libs)
-          sdkmgr install toolchains:9 OpenHarmony/toolchains:9 --accept-license
+          command-line-tools/sdkmanager/bin/sdkmgr install toolchains:9 OpenHarmony/toolchains:9 --accept-license
 
       - name: Configure build environment
         run: |
-          # Point DEVECO_HOME to the Command Line Tools root installed by the
-          # setup action so that build.sh can locate hvigorw / ohpm / node.
-          CLT_ROOT="$(dirname "$(dirname "$(which sdkmgr)")")"
+          CLT_ROOT="$(pwd)/command-line-tools"
           echo "DEVECO_HOME=${CLT_ROOT}" >> $GITHUB_ENV
           echo "DEVECO_SDK_HOME=${CLT_ROOT}/sdk" >> $GITHUB_ENV
-
-          # HOS_SDK_HOME is the conventional env var for the actual SDK
-          echo "HOS_SDK_HOME=${CLT_ROOT}/hwsdk" >> $GITHUB_ENV
+          echo "HOS_SDK_HOME=$(pwd)/hwsdk" >> $GITHUB_ENV
 
       - name: Build HarmonyOS HAR
         run: ./scripts/harmony/build.sh --mode ${{ inputs.build_mode || 'release' }}
