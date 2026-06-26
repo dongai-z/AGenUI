@@ -124,19 +124,12 @@ jobs:
           BASE_VERSION="${{ steps.version.outputs.base_version }}"
           TAG="${{ steps.version.outputs.tag }}"
 
-          # Rename artifacts with version for release
+          # Upload the full HAR (with all .so included)
           HAR_DEST="AGenUI-${BASE_VERSION}-harmony.har"
-          LITE_DEST="AGenUI-${BASE_VERSION}-harmony-lite.har"
-
           cp "dist/harmony/release/agenui.har" "${HAR_DEST}"
-          cp "dist/harmony/release/agenui-lite.har" "${LITE_DEST}"
 
           echo "Uploading ${HAR_DEST} to release ${TAG}..."
           gh release upload "${TAG}" "${HAR_DEST}" --clobber
-
-          echo "Uploading ${LITE_DEST} to release ${TAG}..."
-          gh release upload "${TAG}" "${LITE_DEST}" --clobber
-
           echo "✅ Upload complete"
 
       # ==================== Summary ====================
@@ -151,11 +144,10 @@ jobs:
           echo "|------|--------|" >> "$GITHUB_STEP_SUMMARY"
           echo "| Version | \`${VERSION}\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Release Type | $([ "$IS_STABLE" = 'true' ] && echo 'Stable' || echo 'Pre-release') |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| GitHub Release | HAR + lite HAR uploaded ✅ |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| GitHub Release | HAR uploaded ✅ |" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "### Uploaded Artifacts" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "| File | Description |" >> "$GITHUB_STEP_SUMMARY"
           echo "|------|-------------|" >> "$GITHUB_STEP_SUMMARY"
           echo "| \`AGenUI-${VERSION}-harmony.har\` | Full HAR (includes all .so) |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| \`AGenUI-${VERSION}-harmony-lite.har\` | Lite HAR (third-party .so stripped) |" >> "$GITHUB_STEP_SUMMARY"
