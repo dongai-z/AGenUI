@@ -38,8 +38,9 @@ permissions:
 env:
   # HarmonyOS Command Line Tools version (from HuggingFace mirror)
   # See: https://huggingface.co/csukuangfj/harmonyos-commandline-tools
-  CLT_VERSION: "5.0.5.200"
-  CLT_FILENAME: "commandline-tools-linux-x64-5.0.5.200.zip"
+  # Must match project's hvigor modelVersion (6.0.0 requires CLT 6.x)
+  CLT_VERSION: "6.0.1.251"
+  CLT_FILENAME: "commandline-tools-linux-x64-6.0.1.251.zip"
 
 jobs:
   build:
