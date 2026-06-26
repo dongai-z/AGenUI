@@ -35,10 +35,16 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # HarmonyOS Command Line Tools version (from HuggingFace mirror)
+  # See: https://huggingface.co/csukuangfj/harmonyos-commandline-tools
+  CLT_VERSION: "5.0.5.200"
+  CLT_FILENAME: "commandline-tools-linux-x64-5.0.5.200.zip"
+
 jobs:
   build:
     name: HarmonyOS Build
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
@@ -49,43 +55,47 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
+      - name: Cache HarmonyOS Command Line Tools
+        id: cache-clt
+        uses: actions/cache@v4
+        with:
+          path: command-line-tools
+          key: harmonyos-clt-linux-x64-${{ env.CLT_VERSION }}
+
       - name: Download HarmonyOS Command Line Tools
+        if: steps.cache-clt.outputs.cache-hit != 'true'
         run: |
-          # Fetch the latest release asset URL from harmonyos-dev/hos-sdk
-          RELEASE_JSON=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/harmonyos-dev/hos-sdk/releases/latest)
-          ASSET_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | contains("commandline-tools-mac")) | .browser_download_url')
-          if [[ -z "$ASSET_URL" || "$ASSET_URL" == "null" ]]; then
-            echo "::error::Failed to find commandline-tools-mac asset from hos-sdk releases"
-            exit 1
-          fi
-          echo "Downloading: $ASSET_URL"
-          curl -L -o commandline-tools.zip "$ASSET_URL"
-          unzip -q commandline-tools.zip
-          echo "Command Line Tools downloaded and extracted"
-
-      - name: Install HarmonyOS SDK
-        run: |
-          # Set locale to CN so sdkmgr can reach Huawei's CDN
-          export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Duser.country=CN"
-
-          chmod +x command-line-tools/sdkmanager/bin/sdkmgr
-          # Install HarmonyOS toolchains (compiler, native NDK, system libs)
-          command-line-tools/sdkmanager/bin/sdkmgr install toolchains:9 OpenHarmony/toolchains:9 --accept-license
+          curl -SL -O "https://huggingface.co/csukuangfj/harmonyos-commandline-tools/resolve/main/${CLT_FILENAME}"
+          unzip -q "${CLT_FILENAME}"
+          rm -f "${CLT_FILENAME}"
 
       - name: Configure build environment
         run: |
           CLT_ROOT="$(pwd)/command-line-tools"
           echo "DEVECO_HOME=${CLT_ROOT}" >> $GITHUB_ENV
           echo "DEVECO_SDK_HOME=${CLT_ROOT}/sdk" >> $GITHUB_ENV
-          echo "HOS_SDK_HOME=$(pwd)/hwsdk" >> $GITHUB_ENV
+          echo "HOS_SDK_HOME=${CLT_ROOT}/sdk" >> $GITHUB_ENV
+
+          # Add tool binaries to PATH
+          echo "${CLT_ROOT}/bin" >> $GITHUB_PATH
+          echo "${CLT_ROOT}/hvigor/bin" >> $GITHUB_PATH
+          echo "${CLT_ROOT}/ohpm/bin" >> $GITHUB_PATH
+          echo "${CLT_ROOT}/tool/node/bin" >> $GITHUB_PATH
+
+      - name: Verify toolchain
+        run: |
+          echo "DEVECO_HOME=${DEVECO_HOME}"
+          ls "${DEVECO_HOME}/" || true
+          which hvigorw || find "${DEVECO_HOME}" -name "hvigorw" 2>/dev/null || true
+          which ohpm || find "${DEVECO_HOME}" -name "ohpm" 2>/dev/null || true
+          which node || find "${DEVECO_HOME}" -name "node" -type f 2>/dev/null | head -5 || true
 
       - name: Build HarmonyOS HAR
         run: ./scripts/harmony/build.sh --mode ${{ inputs.build_mode || 'release' }}
 
       - name: Upload build artifacts
         if: success()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: harmony-har-${{ github.sha }}
           path: dist/harmony/
