@@ -42,25 +42,28 @@ struct UITestPage {
       surfaceId: string,
       nodeId: string,
       componentType: string,
-      viewStatePtr: bigint
+      viewStatePtr: bigint,
+      instanceId: number
     ): A2UIComponent => {
-      return new CustomMarkdownComponent(surfaceId, nodeId, componentType, viewStatePtr);
+      return new CustomMarkdownComponent(surfaceId, nodeId, componentType, viewStatePtr, instanceId);
     });
     AGenUI.registerComponent('Chart', (
       surfaceId: string,
       nodeId: string,
       componentType: string,
-      viewStatePtr: bigint
+      viewStatePtr: bigint,
+      instanceId: number
     ): A2UIComponent => {
-      return new CustomChartComponent(surfaceId, nodeId, componentType, viewStatePtr);
+      return new CustomChartComponent(surfaceId, nodeId, componentType, viewStatePtr, instanceId);
     });
     AGenUI.registerComponent('Lottie', (
       surfaceId: string,
       nodeId: string,
       componentType: string,
-      viewStatePtr: bigint
+      viewStatePtr: bigint,
+      instanceId: number
     ): A2UIComponent => {
-      return new CustomLottieComponent(surfaceId, nodeId, componentType, viewStatePtr);
+      return new CustomLottieComponent(surfaceId, nodeId, componentType, viewStatePtr, instanceId);
     });
 
     this.surfaceManager.addListener({
@@ -158,7 +161,7 @@ struct UITestPage {
         ForEach(
           this.currentSurfaceId ? [this.currentSurfaceId] : [],
           (surfaceId: string) => {
-            AGenUIContainer({ surfaceId: surfaceId })
+            AGenUIContainer({ surfaceId: surfaceId, instanceId: this.surfaceManager?.getInstanceId() ?? 0 })
               .width('100%')
           },
           (_surfaceId: string) => `agenui_${this.surfaceVersion}`

@@ -24,6 +24,7 @@ import Foundation
 
     /// Strong references to registered functions to prevent deallocation
     private static var registeredFunctions: [String: Function] = [:]
+    private static let fuctionsLock = NSLock()
 
     // MARK: - Global Configuration
 
@@ -207,7 +208,9 @@ import Foundation
         }
         
         // Retain the function object to prevent deallocation
+        fuctionsLock.lock()
         registeredFunctions[name] = function
+        fuctionsLock.unlock()
         
         engineBridge.registerFunction(name, config: configJson, callback: bridgeCallback)
         Logger.shared.info("FunctionCall registered: \(name)")
@@ -223,7 +226,9 @@ import Foundation
             return
         }
         
+        fuctionsLock.lock()
         registeredFunctions.removeValue(forKey: name)
+        fuctionsLock.unlock()
         engineBridge.unregisterFunction(name)
         Logger.shared.info("FunctionCall unregistered: \(name)")
     }

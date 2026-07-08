@@ -30,6 +30,19 @@ export interface ISurfaceListener {
    * @param properties JSON string of child's raw properties (use JSON.parse to access)
    */
   onComponentAppeared?: (surfaceId: string, parentComponentId: string, parentType: string, properties: string) => void;
+
+  /**
+   * Called when the root component's properties are updated (e.g. trackInfo arrives).
+   * @param surfaceId Surface identifier
+   * @param props JSON string of root component properties
+   */
+  onRootComponentUpdate?: (surfaceId: string, props: string) => void;
+
+  /**
+   * Called after receiveTextChunk completes when the C++ yoga layout has computed a
+   * non-zero content height. Used to break the height-zero deadlock.
+   */
+  onContentSizeChanged?: (surfaceId: string, width: number, height: number) => void;
 }
 
 /**
@@ -121,7 +134,7 @@ export const hybridFactoryGetAttribute: (ptr: bigint, key: string) => string;
 export const hybridFactoryGetPropertiesJson: (ptr: bigint) => string;
 
 /** Reports the rendered size of a component to the engine. Supports Markdown, Web, and other custom components. */
-export const reportComponentRenderSize: (surfaceId: string, nodeId: string, type: string, height: number, width: number, ptr: bigint) => void;
+export const reportComponentRenderSize: (instanceId: number, surfaceId: string, nodeId: string, type: string, height: number, width: number, ptr: bigint) => void;
 
 /** Measurement result returned by a component measurement callback. */
 export interface MeasureResult {
@@ -137,7 +150,7 @@ export const registerMeasurement: (instanceId: number, type: string, callback: (
 export const unregisterMeasurement: (instanceId: number, type: string) => void;
 
 /** Notifies the native layer that the surface size changed. */
-export const onSurfaceSizeChanged: (surfaceId: string, width: number, height: number) => void;
+export const onSurfaceSizeChanged: (instanceId: number, surfaceId: string, width: number, height: number) => void;
 
 /**
  * Sets the legacy theme config.
@@ -190,5 +203,11 @@ export const setImagePixelMap: (requestId: string, buffer: ArrayBuffer, width: n
 /** Reports image load failure or cancellation from ETS. */
 export const onImageLoadFailed: (requestId: string, isCancelled: boolean) => void;
 
-/** Looks up the instanceId corresponding to the given surfaceId. Returns 0 if not found. */
-export const findInstanceIdBySurfaceId: (surfaceId: string) => number;
+/** Re-evaluates host-backed function call values for all bound components in the instance. */
+export const invalidateFunctionCallValues: (instanceId: number) => void;
+
+/** Starts blank-screen detection on a specific surface with the given delay and component count threshold. */
+export const surfaceStartBlankCheck: (instanceId: number, surfaceId: string, delayMs: number, minComponentCount: number) => void;
+
+/** Cancels pending blank-screen detection on a specific surface. */
+export const surfaceCancelBlankCheck: (instanceId: number, surfaceId: string) => void;

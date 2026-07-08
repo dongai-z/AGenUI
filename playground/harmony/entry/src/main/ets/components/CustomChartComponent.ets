@@ -348,8 +348,8 @@ export class CustomChartComponent extends A2UIComponent {
   private renderTimerId: number = -1;
   private static readonly RENDER_DEBOUNCE_MS: number = 150;
 
-  constructor(surfaceId: string, nodeId: string, componentType: string, viewStatePtr: bigint) {
-    super(surfaceId, nodeId, componentType, viewStatePtr, wrapBuilder<[CustomView]>(buildCustomChart));
+  constructor(surfaceId: string, nodeId: string, componentType: string, viewStatePtr: bigint, instanceId: number = 0) {
+    super(surfaceId, nodeId, componentType, viewStatePtr, wrapBuilder<[CustomView]>(buildCustomChart), instanceId);
   }
 
   onUpdateViewFinished(): void {

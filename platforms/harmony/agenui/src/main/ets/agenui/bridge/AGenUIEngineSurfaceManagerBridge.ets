@@ -26,6 +26,9 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 const nativeBeginTextStream: Function = (internal_a2ui as Record<string, Function>).beginTextStream;
 const nativeEndTextStream: Function = (internal_a2ui as Record<string, Function>).endTextStream;
 const nativeReceiveTextChunk: Function = (internal_a2ui as Record<string, Function>).receiveTextChunk;
+const nativeInvalidateFunctionCallValues: Function = (internal_a2ui as Record<string, Function>).invalidateFunctionCallValues;
+const nativeSurfaceStartBlankCheck: Function = (internal_a2ui as Record<string, Function>).surfaceStartBlankCheck;
+const nativeSurfaceCancelBlankCheck: Function = (internal_a2ui as Record<string, Function>).surfaceCancelBlankCheck;
 
 /**
  * AGenUI per-instance SurfaceManager bridge.
@@ -88,6 +91,33 @@ export class AGenUIEngineSurfaceManagerBridge {
    */
   receiveTextChunk(data: string): void {
     nativeReceiveTextChunk(this.instanceId, data);
+  }
+
+  /**
+   * Forces host-backed function calls to re-evaluate.
+   */
+  invalidateFunctionCallValues(): void {
+    nativeInvalidateFunctionCallValues(this.instanceId);
+  }
+
+  /**
+   * Starts blank-screen detection on a specific surface.
+   * Aligns with Android Surface.startBlankCheck() API.
+   */
+  surfaceStartBlankCheck(surfaceId: string, delayMs: number, minComponentCount: number): void {
+    hilog.info(0x0000, 'SurfaceManager',
+      `AGenUIEngineSurfaceManagerBridge.surfaceStartBlankCheck instanceId=${this.instanceId} surfaceId=${surfaceId} delayMs=${delayMs} minComponentCount=${minComponentCount}`);
+    nativeSurfaceStartBlankCheck(this.instanceId, surfaceId, delayMs, minComponentCount);
+  }
+
+  /**
+   * Cancels pending blank-screen detection on a specific surface.
+   * Aligns with Android Surface.cancelBlankCheck() API.
+   */
+  surfaceCancelBlankCheck(surfaceId: string): void {
+    hilog.info(0x0000, 'SurfaceManager',
+      `AGenUIEngineSurfaceManagerBridge.surfaceCancelBlankCheck instanceId=${this.instanceId} surfaceId=${surfaceId}`);
+    nativeSurfaceCancelBlankCheck(this.instanceId, surfaceId);
   }
 
   /**

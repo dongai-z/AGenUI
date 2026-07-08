@@ -755,6 +755,33 @@ std::shared_ptr<StylesDataValue> DataValueParser::parseStylesDataValue(IDataValu
     return std::make_shared<StylesDataValue>(context, styles);
 }
 
+std::shared_ptr<AccessibilityDataValue> DataValueParser::parseAccessibilityDataValue(IDataValueContext* context, const std::string& valueJson) {
+    auto json = nlohmann::json::parse(valueJson, nullptr, false);
+
+    if (json.is_discarded() || !json.is_object()) {
+        return nullptr;
+    }
+
+    std::map<std::string, std::shared_ptr<DataValue>> fields;
+    for (auto it = json.begin(); it != json.end(); ++it) {
+        std::string fieldName = it.key();
+        std::string fieldValueJson = it.value().dump();
+        auto fieldValue = parseDataValue(context, fieldValueJson);
+
+        if (!fieldValue) {
+            continue;
+        }
+
+        fields[fieldName] = fieldValue;
+    }
+
+    if (fields.empty()) {
+        return nullptr;
+    }
+
+    return std::make_shared<AccessibilityDataValue>(context, fields);
+}
+
 std::shared_ptr<TabsDataValue> DataValueParser::parseTabsDataValue(IDataValueContext* context, const std::string& valueJson) {
     auto json = nlohmann::json::parse(valueJson, nullptr, false);
 

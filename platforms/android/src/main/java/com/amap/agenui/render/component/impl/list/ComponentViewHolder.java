@@ -10,12 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amap.agenui.render.component.A2UIComponent;
+import com.amap.agenui.render.layout.ShadowFrameLayout;
 
 /**
  * Thin RecyclerView holder that hosts an A2UIComponent's real Android view as its
  * single child.
  *
- * Why a holder + FrameLayout shell rather than using component.view directly as
+ * Why a holder + ShadowFrameLayout shell rather than using component.view directly as
  * itemView:
  * 1. RecyclerView mutates itemView's LayoutParams. We do NOT want that mutation
  *    to happen on component.view (which Component HAS-A and uses outside the RV
@@ -23,6 +24,8 @@ import com.amap.agenui.render.component.A2UIComponent;
  * 2. ViewHolder reuse: multiple A2UIComponents may pass through this same shell
  *    over the lifetime of the RV. attach()/detach() swaps the inner child without
  *    affecting the shell.
+ * 3. The shell is a ShadowFrameLayout so that item shadows (filter: drop-shadow)
+ *    are painted by the shell's drawChild, keeping sibling Z-order unaffected.
  *
  * The shell does NOT carry any per-component layout: child position inside the
  * RV is set by YogaLayoutManager.layoutDecorated(itemView, frame.left, frame.top,
@@ -34,7 +37,7 @@ public class ComponentViewHolder extends RecyclerView.ViewHolder {
     @Nullable
     private A2UIComponent current;
 
-    public ComponentViewHolder(@NonNull FrameLayout shell) {
+    public ComponentViewHolder(@NonNull ShadowFrameLayout shell) {
         super(shell);
     }
 
@@ -54,7 +57,7 @@ public class ComponentViewHolder extends RecyclerView.ViewHolder {
         if (current == component) {
             return;
         }
-        FrameLayout shell = (FrameLayout) itemView;
+        ShadowFrameLayout shell = (ShadowFrameLayout) itemView;
 
         // 1. Detach previous occupant from this holder.
         if (shell.getChildCount() > 0) {
@@ -74,8 +77,7 @@ public class ComponentViewHolder extends RecyclerView.ViewHolder {
 
         // 3. Fill the shell: the shell's own size is set by YogaLayoutManager
         //    (measureChildExactly + layoutDecorated → frame width × height), so
-        //    MATCH_PARENT makes the inner view match the yoga frame exactly —
-        //    equivalent to YogaAbsoluteLayout.onMeasure using EXACTLY(yogaW, yogaH).
+        //    MATCH_PARENT makes the inner view match the yoga frame exactly.
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
@@ -90,7 +92,7 @@ public class ComponentViewHolder extends RecyclerView.ViewHolder {
     /** Clear current binding. Called by adapter.onViewRecycled. */
     void detach() {
         current = null;
-        ((FrameLayout) itemView).removeAllViews();
+        ((ShadowFrameLayout) itemView).removeAllViews();
     }
 
     @Nullable

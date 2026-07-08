@@ -37,7 +37,9 @@ public class CardComponent extends A2UILayoutComponent {
         cardView.setLayoutParams(new ViewGroup.MarginLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
-        cardView.setCardElevation(0);
+        cardView.setCardElevation(0f);
+        cardView.setMaxCardElevation(0f);
+        cardView.setElevation(0f);
 
         contentContainer = new YogaAbsoluteLayout(context);
         cardView.addView(contentContainer, new CardView.LayoutParams(

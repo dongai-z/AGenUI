@@ -79,7 +79,8 @@ void ComponentModel::setAttribute(const std::string& key, std::shared_ptr<DataVa
         std::string mergedJson = nlohmann::json(existingText + chunkContent).dump();
         _attributes["text"] = std::make_shared<StaticDataValue>(mergedJson);
 
-        markDirty("text", false);
+        markDirty("text", true);
+        markDirty("textChunk", true);
     }
 }
 

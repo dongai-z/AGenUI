@@ -311,7 +311,8 @@ file(GLOB_RECURSE _UNIT_STREAM_SOURCES        stream/integration/*.cpp)
 file(GLOB_RECURSE _UNIT_STYLE_PARSER_SOURCES  style_parser/*.cpp)
 file(GLOB_RECURSE _UNIT_SURFACE_SOURCES       surface/*.cpp)
 file(GLOB_RECURSE _STRESS_SOURCES             stress/*.cpp)
-file(GLOB         _ASAN_SOURCES               sanitizer/memory_safety_test.cpp)
+file(GLOB         _ASAN_SOURCES               sanitizer/memory_safety_test.cpp
+                                              sanitizer/asan_stress_test.cpp)
 
 # HarmonyOS measure sources (only platform-independent ones)
 set(HARMONY_MEASURE_DIR "${AGENUI_REPO_ROOT}/platforms/harmony/agenui/src/main/cpp/a2ui/measure")

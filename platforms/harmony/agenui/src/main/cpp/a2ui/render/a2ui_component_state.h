@@ -69,7 +69,10 @@ public:
     const std::string& getSurfaceId() const { return m_surfaceId; }
     
     void setSurfaceId(const std::string& surfaceId) { m_surfaceId = surfaceId; }
-    
+
+    int getInstanceId() const { return m_instanceId; }
+    void setInstanceId(int instanceId) { m_instanceId = instanceId; }
+
     // Property management
     const nlohmann::json& getProperties() const { return m_properties; }
     
@@ -129,6 +132,7 @@ private:
     std::string m_id;
     std::string m_type;
     std::string m_surfaceId;
+    int m_instanceId = 0;
     nlohmann::json m_properties;
     
     ComponentState* m_parent = nullptr;

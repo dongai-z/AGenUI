@@ -65,7 +65,8 @@ napi_value BindSurface(napi_env env, napi_callback_info info);
 napi_value UnbindSurface(napi_env env, napi_callback_info info);
 napi_value Surface_onSizeChanged(napi_env env, napi_callback_info info);
 napi_value DestroySurface(napi_env env, napi_callback_info info);
-napi_value FindInstanceIdBySurfaceId(napi_env env, napi_callback_info info);
+napi_value Surface_startBlankCheck(napi_env env, napi_callback_info info);
+napi_value Surface_cancelBlankCheck(napi_env env, napi_callback_info info);
 
 // napi_measurement.cpp
 napi_value ReportComponentRenderSize(napi_env env, napi_callback_info info);

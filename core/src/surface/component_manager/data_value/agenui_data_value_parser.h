@@ -8,6 +8,7 @@
 #include "agenui_checks_data_value.h"
 #include "agenui_check_rule_data_value.h"
 #include "agenui_styles_data_value.h"
+#include "agenui_accessibility_data_value.h"
 #include "agenui_tabs_data_value.h"
 #include "agenui_event_action_data_value.h"
 #include "agenui_function_call_action_data_value.h"
@@ -45,6 +46,14 @@ public:
      * @return StylesDataValue smart pointer
      */
     static std::shared_ptr<StylesDataValue> parseStylesDataValue(IDataValueContext* context, const std::string& valueJson);
+
+    /**
+     * @brief Parse an accessibility data value
+     * @param context Data value context pointer
+     * @param valueJson JSON object string, e.g. {"label": "Submit", "description": {"path": "/desc"}}
+     * @return AccessibilityDataValue smart pointer
+     */
+    static std::shared_ptr<AccessibilityDataValue> parseAccessibilityDataValue(IDataValueContext* context, const std::string& valueJson);
 
     /**
      * @brief Parse a tabs data value

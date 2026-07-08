@@ -27,6 +27,7 @@ public:
     void addChild(A2UIComponent* child) override;
     void removeChild(A2UIComponent* child) override;
     bool shouldAutoAddChildView() const override { return false; }
+    bool shouldCreateChildView() const override { return !m_horizontal; }
 
     /**
      * The framework must not apply absolute (List-relative) y coordinates to

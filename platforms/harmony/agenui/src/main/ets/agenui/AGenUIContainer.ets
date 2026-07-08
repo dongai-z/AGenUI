@@ -17,7 +17,7 @@ export struct AGenUIContainer {
   // Width is sent to native only once; flag prevents redundant calls.
   private widthNotified: boolean = false;
   @Prop surfaceId: string = "";
-  // instanceId is resolved internally via native lookup; no longer required from callers.
+  @Prop instanceId: number = 0;
   private resolvedInstanceId: number = 0;
 
   /**
@@ -27,9 +27,7 @@ export struct AGenUIContainer {
   onDidBuild(): void {
     hilog.info(0x0000, 'agenui-ets', 'onDidBuild');
     AppStorage.setOrCreate<UIContext>("context", this.getUIContext());
-    // Resolve instanceId from surfaceId via native mapping (registered when surface was created).
-    this.resolvedInstanceId = internal_a2ui.findInstanceIdBySurfaceId(this.surfaceId);
-    // Pass nodeContent to C++ using the resolved instanceId.
+    this.resolvedInstanceId = this.instanceId;
     const success: boolean = internal_a2ui.bindSurface(this.resolvedInstanceId, this.surfaceId, this.nodeContent);
     if (success) {
       hilog.info(0x0000, 'agenui-ets', 'onDidBuild A2UI container bound to C++ successfully');
@@ -67,8 +65,8 @@ export struct AGenUIContainer {
 
       this.widthNotified = true;
       // Pass height 0 so the native side can resolve it with wrap_content semantics.
-      internal_a2ui.onSurfaceSizeChanged(this.surfaceId, newWidth, 0);
-      hilog.info(0x0000, 'agenui-ets', 'onSizeChange notified native - width: %{public}d', newWidth);
+      internal_a2ui.onSurfaceSizeChanged(this.resolvedInstanceId, this.surfaceId, newWidth, 0);
+      hilog.info(0x0000, 'agenui-ets', 'onSizeChange notified native - instanceId: %{public}d, width: %{public}d', this.resolvedInstanceId, newWidth);
     })
   }
 }

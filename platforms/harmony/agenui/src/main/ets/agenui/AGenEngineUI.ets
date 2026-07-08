@@ -59,6 +59,32 @@ export interface ISurfaceManagerListener {
    * cannot be bound to any Surface. Code definitions: agenui_errorcode_define.h.
    */
   onError?: (surface: Surface | null, code: number, message: string) => void;
+
+  /**
+   * Called after receiveTextChunk when C++ yoga layout computes a non-zero content height.
+   * Used to break the height-zero deadlock.
+   * @param surfaceId Surface ID
+   * @param width Content width
+   * @param height Content height
+   */
+  onContentSizeChanged?: (surfaceId: string, width: number, height: number) => void;
+
+  /**
+   * Called when the root component's properties are updated.
+   * Use this to extract trackInfo for first-render event gating.
+   * @param surface Surface instance
+   * @param props Root component properties as key-value pairs
+   */
+  onRootComponentUpdate?: (surface: Surface, props: Record<string, string>) => void;
+
+  /**
+   * Called when a component appears in a container (e.g. list item bound to viewport).
+   * @param surface Surface instance
+   * @param parentComponentId ID of the parent component
+   * @param parentType Type of the parent component
+   * @param properties Component properties as key-value pairs
+   */
+  onComponentAppeared?: (surface: Surface, parentComponentId: string, parentType: string, properties: Record<string, Object>) => void;
 }
 
 // ==================== Component ====================
@@ -158,6 +184,26 @@ export class Surface {
     const changeJson = JSON.stringify(change);
     this.surfaceManager?.syncState(this.surfaceId, componentId, changeJson);
   }
+
+  /**
+   * Starts blank-screen detection on this surface.
+   *
+   * Calling again before the previous detection fires will cancel the previous
+   * schedule and start a new one with the latest parameters.
+   *
+   * @param delayMs Delay in milliseconds before detection runs
+   * @param minComponentCount Threshold; if valid component count is lower, treated as blank
+   */
+  startBlankCheck(delayMs: number, minComponentCount: number): void {
+    this.surfaceManager?.surfaceStartBlankCheck(this.surfaceId, delayMs, minComponentCount);
+  }
+
+  /**
+   * Cancels pending blank-screen detection on this surface.
+   */
+  cancelBlankCheck(): void {
+    this.surfaceManager?.surfaceCancelBlankCheck(this.surfaceId);
+  }
 }
 
 // ==================== NativeSurfaceListenerWrapper ====================
@@ -170,17 +216,26 @@ class NativeSurfaceListenerWrapper implements ISurfaceListener {
   onDeleteSurface: (surfaceId: string) => void;
   onActionEventRouted?: (content: string) => void;
   onError?: (code: number, surfaceId: string, message: string) => void;
+  onComponentAppeared?: (surfaceId: string, parentComponentId: string, parentType: string, properties: string) => void;
+  onRootComponentUpdate?: (surfaceId: string, props: string) => void;
+  onContentSizeChanged?: (surfaceId: string, width: number, height: number) => void;
 
   constructor(
     onCreate: (surfaceId: string, messageId: string, rawProtocolContent: string) => void,
     onDelete: (surfaceId: string) => void,
     onAction?: (content: string) => void,
-    onError?: (code: number, surfaceId: string, message: string) => void
+    onError?: (code: number, surfaceId: string, message: string) => void,
+    onContentSizeChanged?: (surfaceId: string, width: number, height: number) => void,
+    onComponentAppeared?: (surfaceId: string, parentComponentId: string, parentType: string, properties: string) => void,
+    onRootComponentUpdate?: (surfaceId: string, props: string) => void
   ) {
     this.onCreateSurface = onCreate;
     this.onDeleteSurface = onDelete;
     this.onActionEventRouted = onAction;
     this.onError = onError;
+    this.onContentSizeChanged = onContentSizeChanged;
+    this.onComponentAppeared = onComponentAppeared;
+    this.onRootComponentUpdate = onRootComponentUpdate;
   }
 }
 
@@ -273,6 +328,31 @@ export class SurfaceManager {
       (code: number, surfaceId: string, message: string) => {
         const surface = surfaceId ? (this._surfaces.get(surfaceId) ?? null) : null;
         this._listeners.forEach(l => l.onError?.(surface, code, message));
+      },
+      (surfaceId: string, width: number, height: number) => {
+        this._listeners.forEach(l => l.onContentSizeChanged?.(surfaceId, width, height));
+      },
+      (surfaceId: string, parentComponentId: string, parentType: string, properties: string) => {
+        const surface = this._surfaces.get(surfaceId);
+        if (!surface) { return; }
+        let parsed: Record<string, Object> = {};
+        try {
+          parsed = JSON.parse(properties) as Record<string, Object>;
+        } catch (_e) {
+          // ignore parse failure
+        }
+        this._listeners.forEach(l => l.onComponentAppeared?.(surface, parentComponentId, parentType, parsed));
+      },
+      (surfaceId: string, props: string) => {
+        const surface = this._surfaces.get(surfaceId);
+        if (!surface) { return; }
+        let parsed: Record<string, string> = {};
+        try {
+          parsed = JSON.parse(props) as Record<string, string>;
+        } catch (_e) {
+          // ignore parse failure
+        }
+        this._listeners.forEach(l => l.onRootComponentUpdate?.(surface, parsed));
       }
     );
 
@@ -327,6 +407,31 @@ export class SurfaceManager {
    */
   public receiveTextChunk(dataString: string): void {
     this._surfaceBridge.receiveTextChunk(dataString);
+  }
+
+  /**
+   * Re-runs host-backed function calls for the current instance.
+   */
+  public invalidateFunctionCallValues(): void {
+    this._surfaceBridge.invalidateFunctionCallValues();
+  }
+
+  /**
+   * Starts blank-screen detection on a specific surface.
+   * @param surfaceId Target surface ID
+   * @param delayMs Delay in milliseconds before detection runs
+   * @param minComponentCount Threshold; if valid component count is lower, treated as blank
+   */
+  public surfaceStartBlankCheck(surfaceId: string, delayMs: number, minComponentCount: number): void {
+    this._surfaceBridge.surfaceStartBlankCheck(surfaceId, delayMs, minComponentCount);
+  }
+
+  /**
+   * Cancels pending blank-screen detection on a specific surface.
+   * @param surfaceId Target surface ID
+   */
+  public surfaceCancelBlankCheck(surfaceId: string): void {
+    this._surfaceBridge.surfaceCancelBlankCheck(surfaceId);
   }
 
   // MARK: - Surface Lookup

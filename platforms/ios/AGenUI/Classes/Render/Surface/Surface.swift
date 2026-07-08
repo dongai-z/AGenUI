@@ -56,6 +56,8 @@ import UIKit
     /// by another `startBlankCheck(...)` invocation.
     private var blankCheckWorkItem: DispatchWorkItem?
     
+    private var isNotifyingLayout = false
+    
     // MARK: - Initialization
     
     /// Initialize Surface
@@ -93,7 +95,10 @@ import UIKit
     
     // MARK: - Notification
     @objc internal func notifyLayoutChangedInternal() {
+        guard !isNotifyingLayout else{ return }
+        isNotifyingLayout = true
         notifyLayoutChangedInternalReal()
+        isNotifyingLayout = false
     }
     
     /// Notify layout change
@@ -195,6 +200,11 @@ import UIKit
             component.onPropertiesUpdate = { [weak self] props in
                 guard let self = self else { return }
                 self.surfaceManager?.notifyRootComponentUpdate(surface: self, props: props)
+            }
+
+            // Root gets no createView from attachChildView (such as imageComponent)
+            if !component.isViewCreated {
+                component.createView()
             }
         }
         

@@ -3,6 +3,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cstdint>
+#include <mutex>
+#include <thread>
+#include <chrono>
+#include <functional>
+#include <condition_variable>
 #include <nlohmann/json.hpp>
 #include <arkui/native_node.h>
 #include <arkui/native_node_napi.h>
@@ -80,12 +86,18 @@ public:
      * @param surfaceLayoutObservable Surface layout observer owned by SurfaceManager
      */
     A2UISurface(const std::string& surfaceId, ComponentRegistry* registry, bool animated = true,
+                int instanceId = 0,
+                std::function<void(const std::string&, uint64_t, int32_t)> blankCheckExecutor = nullptr,
+                std::function<void(const agenui::ErrorMessage&)> errorReporter = nullptr,
                 agenui::IComponentRenderObservable* componentRenderObservable = nullptr,
-                agenui::ISurfaceLayoutObservable* surfaceLayoutObservable = nullptr);
+                agenui::ISurfaceLayoutObservable* surfaceLayoutObservable = nullptr,
+                std::function<void(const std::string&, float, float)> contentSizeChangedCallback = nullptr,
+                std::function<void(const std::string&, const std::string&)> rootComponentUpdateCallback = nullptr);
     ~A2UISurface();
 
     // ---- Basic Information ----
     const std::string& getSurfaceId() const;
+    int getInstanceId() const { return instanceId_; }
     State getState() const;
     ComponentRegistry& getComponentRegistry();
 
@@ -159,6 +171,18 @@ public:
     A2UIComponent* getRootComponent() const;
 
     /**
+     * Notify ArkTS listener when root component height changes.
+     * Fires contentSizeChangedCallback_ with (surfaceId, width, height) in a2ui units.
+     */
+    void notifyRootContentSizeIfChanged();
+
+    /**
+     * Notify ArkTS listener when root component properties are updated.
+     * Fires rootComponentUpdateCallback_ with (surfaceId, propertiesJson).
+     */
+    void notifyRootComponentUpdate();
+
+    /**
      * Set the root component.
      */
     void setRootComponent(A2UIComponent* component);
@@ -185,6 +209,22 @@ public:
     int getComponentCount() const;
 
     /**
+     * Schedule a delayed blank-screen check for the current surface.
+     * Repeated calls replace the previous pending task, matching Android's behavior.
+     */
+    void startBlankCheck(int32_t delayMs, int32_t minComponentCount);
+
+    /**
+     * Cancel the pending blank-screen check, if any.
+     */
+    void cancelBlankCheck();
+
+    /**
+     * Execute the blank-screen check on the UI thread.
+     */
+    void performBlankCheckOnMainThread(uint64_t generation, int32_t minComponentCount);
+
+    /**
      * Destroy the surface
      * Tears down the surface by recursively destroying the component tree.
      */
@@ -207,15 +247,33 @@ private:
      */
     void tryMountOrphanChildren(A2UIComponent* parentComponent, const nlohmann::json& properties);
 
+    void blankCheckWorkerLoop();
+    void runBlankCheckOnMainThread(uint64_t generation, int32_t minComponentCount);
+    int countRenderableComponents(const A2UIComponent* component, int minCount) const;
+
     std::string surfaceId_;
+    int instanceId_ = 0;                                   // Owning SurfaceManager's instance ID
     State state_;
     ComponentRegistry* registry_;                          // Surface-specific registry
     A2UIComponent* rootComponent_;                         // Root component
     std::map<std::string, A2UIComponent*> componentTree_;  // Component tree (id -> component)
     ArkUI_NodeContentHandle contentHandle_;                // ArkTS container handle for native node mounting
     bool animated_;                                        // Whether components on the surface may animate
+    std::function<void(const std::string&, uint64_t, int32_t)> blankCheckExecutor_;
+    std::function<void(const agenui::ErrorMessage&)> errorReporter_;
+    std::function<void(const std::string&, float, float)> contentSizeChangedCallback_;
+    std::function<void(const std::string&, const std::string&)> rootComponentUpdateCallback_;
+    float lastNotifiedRootHeight_ = 0.0f;
     agenui::IComponentRenderObservable* componentRenderObservable_;  // Non-owning component render observer
     agenui::ISurfaceLayoutObservable* surfaceLayoutObservable_;       // Non-owning surface layout observer
+    std::mutex blankCheckMutex_;
+    std::condition_variable blankCheckCv_;
+    std::thread blankCheckWorker_;
+    bool blankCheckWorkerStop_ = false;
+    bool hasPendingBlankCheck_ = false;
+    std::chrono::steady_clock::time_point blankCheckDueTime_;
+    int32_t blankCheckMinComponentCount_ = 0;
+    uint64_t blankCheckGeneration_ = 0;
 };
 
 } // namespace a2ui

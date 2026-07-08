@@ -16,7 +16,8 @@ export type IComponentFactory = (
   surfaceId: string,
   nodeId: string,
   componentType: string,
-  viewStatePtr: bigint
+  viewStatePtr: bigint,
+  instanceId: number
 ) => A2UIComponent;
 
 class A2UIComponentProperty extends BaseProperty<A2UIComponent> {
@@ -38,10 +39,11 @@ export abstract class A2UIComponent extends HybridBaseView {
    * @param componentType Component type name
    * @param viewStatePtr C++ ViewState pointer
    * @param builder Builder wrapped by wrapBuilder() that defines the visual template
+   * @param instanceId SurfaceManager instance ID
    */
   constructor(surfaceId: string, nodeId: string, componentType: string,
-              viewStatePtr: bigint, builder: WrappedBuilder<[CustomView]>) {
-    super(componentType, surfaceId, nodeId, viewStatePtr);
+              viewStatePtr: bigint, builder: WrappedBuilder<[CustomView]>, instanceId: number = 0) {
+    super(componentType, surfaceId, nodeId, viewStatePtr, instanceId);
     this._builder = builder;
     this.customSurfaceId = surfaceId;
     this.customNodeId = nodeId;
@@ -147,7 +149,7 @@ export abstract class A2UIComponent extends HybridBaseView {
       return;
     }
     nativeModule.reportComponentRenderSize(
-      this.getContextId(), this.getNodeId(), this.customComponentType,
+      this.getInstanceId(), this.getContextId(), this.getNodeId(), this.customComponentType,
       height, width, this.getViewStatePtr()
     );
   }

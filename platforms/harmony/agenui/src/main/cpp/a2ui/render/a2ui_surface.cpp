@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <cmath>
 
 #include "a2ui_component.h"
 #include "log/a2ui_capi_log.h"
@@ -23,16 +24,29 @@ bool shouldPrepareAppearAnimation(A2UIComponent* parent) {
 }  // namespace
 
 A2UISurface::A2UISurface(const std::string& surfaceId, ComponentRegistry* registry, bool animated,
+                         int instanceId,
+                         std::function<void(const std::string&, uint64_t, int32_t)> blankCheckExecutor,
+                         std::function<void(const agenui::ErrorMessage&)> errorReporter,
                          agenui::IComponentRenderObservable* componentRenderObservable,
-                         agenui::ISurfaceLayoutObservable* surfaceLayoutObservable)
+                         agenui::ISurfaceLayoutObservable* surfaceLayoutObservable,
+                         std::function<void(const std::string&, float, float)> contentSizeChangedCallback,
+                         std::function<void(const std::string&, const std::string&)> rootComponentUpdateCallback)
     : surfaceId_(surfaceId)
+    , instanceId_(instanceId)
     , state_(State::CREATED)
     , registry_(registry)
     , rootComponent_(nullptr)
     , contentHandle_(nullptr)
     , animated_(animated)
+    , blankCheckExecutor_(std::move(blankCheckExecutor))
+    , errorReporter_(std::move(errorReporter))
+    , contentSizeChangedCallback_(std::move(contentSizeChangedCallback))
+    , rootComponentUpdateCallback_(std::move(rootComponentUpdateCallback))
     , componentRenderObservable_(componentRenderObservable)
     , surfaceLayoutObservable_(surfaceLayoutObservable) {
+    blankCheckWorker_ = std::thread([this]() {
+        blankCheckWorkerLoop();
+    });
     HM_LOGI("Created surface: %s, animated: %d", surfaceId_.c_str(), animated_);
 }
 
@@ -65,29 +79,32 @@ void A2UISurface::handleComponentAdd(const agenui::ComponentsAddMessage& msg) {
         componentJson = nlohmann::json::parse(msg.component);
     } catch (const nlohmann::json::exception& e) {
         RELEASE_ASSERT_WITHLOG(false,"Failed to parse component JSON: %s", e.what());
+        return;
     }
 
-    
     std::string componentId = componentJson.value("id", "");
     std::string componentType = componentJson.value("component", "");
 
     if (componentId.empty() || componentType.empty()) {
         RELEASE_ASSERT_WITHLOG(false,"id or component type is empty, abort");
+        return;
     }
 
     // Only the root component may omit parentId.
     if (msg.parentId.empty() && componentId != "root") {
         RELEASE_ASSERT_WITHLOG(false,"parentId is empty for non-root component: id=%s, abort", componentId.c_str());
+        return;
     }
 
-    // Abort when the component already exists.
     if (getComponent(componentId)) {
         RELEASE_ASSERT_WITHLOG(false,"Component already exists: id=%s, abort", componentId.c_str());
+        return;
     }
-    
+
     A2UIComponent* component = registry_->createComponent(getSurfaceId(), componentType, componentId, componentJson);
     if (!component) {
         RELEASE_ASSERT_WITHLOG(false,"Failed to create component: id=%s, type=%s, abort", componentId.c_str(), componentType.c_str());
+        return;
     }
 
     A2UIComponent* parent = nullptr;
@@ -111,13 +128,22 @@ void A2UISurface::handleComponentAdd(const agenui::ComponentsAddMessage& msg) {
     if (componentId == "root") {
         setRootComponent(component);
         mountRootNode();
+        if (!component->isViewCreated()) {
+            component->createView();
+        }
     }
 
     // Apply the initial properties to the native node.
     component->updateProperties(componentJson);
+
+    // Notify content size change when root height is resolved.
+    if (componentId == "root" && rootComponent_) {
+        notifyRootContentSizeIfChanged();
+    }
 }
 
 void A2UISurface::handleComponentsUpdate(const std::vector<agenui::ComponentsUpdateMessage>& msgs) {
+    bool rootUpdated = false;
     for (const auto& msg : msgs) {
         // Parse the component JSON.
         nlohmann::json componentJson;
@@ -138,7 +164,17 @@ void A2UISurface::handleComponentsUpdate(const std::vector<agenui::ComponentsUpd
         // Refresh all properties, including non-layout style fields.
         component->updateProperties(componentJson);
         
+        if (component == rootComponent_) {
+            rootUpdated = true;
+        }
+
         HM_LOGI("Updated component: id=%s", msg.componentId.c_str());
+    }
+
+    // Check root height change once after processing all updates in the batch.
+    if (rootUpdated) {
+        notifyRootContentSizeIfChanged();
+        notifyRootComponentUpdate();
     }
 }
 
@@ -204,6 +240,11 @@ void A2UISurface::handleComponentsRemove(const std::vector<agenui::ComponentsRem
         //    loader requests, …) recursively, then free the C++ object.
         component->destroy();
         delete component;
+    }
+
+    // Child removal may shrink the root's yoga height; notify ArkTS.
+    if (!msgs.empty()) {
+        notifyRootContentSizeIfChanged();
     }
 }
 
@@ -331,6 +372,33 @@ A2UIComponent* A2UISurface::getRootComponent() const {
     return rootComponent_;
 }
 
+void A2UISurface::notifyRootContentSizeIfChanged() {
+    if (!rootComponent_ || !contentSizeChangedCallback_) {
+        return;
+    }
+    float currentHeight = rootComponent_->getHeight();
+    if (currentHeight <= 0.0f) {
+        return;
+    }
+    // Only notify when height actually changes (avoid redundant callbacks during streaming).
+    if (std::abs(currentHeight - lastNotifiedRootHeight_) < 0.5f) {
+        return;
+    }
+    lastNotifiedRootHeight_ = currentHeight;
+    float currentWidth = rootComponent_->getWidth();
+    HM_LOGI("notifyRootContentSizeIfChanged: surfaceId=%s w=%.1f h=%.1f",
+            surfaceId_.c_str(), currentWidth, currentHeight);
+    contentSizeChangedCallback_(surfaceId_, currentWidth, currentHeight);
+}
+
+void A2UISurface::notifyRootComponentUpdate() {
+    if (!rootComponent_ || !rootComponentUpdateCallback_) {
+        return;
+    }
+    const auto& props = rootComponent_->getProperties();
+    rootComponentUpdateCallback_(surfaceId_, props.dump());
+}
+
 void A2UISurface::setRootComponent(A2UIComponent* component) {
     rootComponent_ = component;
 }
@@ -348,8 +416,9 @@ void A2UISurface::addComponent(const std::string& parentId, A2UIComponent* compo
         return;
     }
 
-    // 1. Set surfaceId on the component.
+    // 1. Set surfaceId and instanceId on the component.
     component->setSurfaceId(surfaceId_);
+    component->setInstanceId(instanceId_);
 
     // 2. Inject the render observer.
     component->setComponentRenderObservable(componentRenderObservable_);
@@ -381,6 +450,140 @@ int A2UISurface::getComponentCount() const {
     return static_cast<int>(componentTree_.size());
 }
 
+void A2UISurface::startBlankCheck(int32_t delayMs, int32_t minComponentCount) {
+    cancelBlankCheck();
+    if (delayMs <= 0 || minComponentCount <= 0 || state_ == State::DESTROYED) {
+        HM_LOGI("startBlankCheck skipped: surfaceId=%s delayMs=%d minComponentCount=%d state=%d",
+                surfaceId_.c_str(), delayMs, minComponentCount, static_cast<int>(state_));
+        return;
+    }
+
+    {
+        std::lock_guard<std::mutex> lock(blankCheckMutex_);
+        ++blankCheckGeneration_;
+        blankCheckDueTime_ = std::chrono::steady_clock::now() + std::chrono::milliseconds(delayMs);
+        blankCheckMinComponentCount_ = minComponentCount;
+        hasPendingBlankCheck_ = true;
+    }
+    blankCheckCv_.notify_all();
+    HM_LOGI("startBlankCheck scheduled: surfaceId=%s delayMs=%d minComponentCount=%d generation=%llu",
+            surfaceId_.c_str(), delayMs, minComponentCount,
+            static_cast<unsigned long long>(blankCheckGeneration_));
+}
+
+void A2UISurface::cancelBlankCheck() {
+    bool hadPending = false;
+    uint64_t generation = 0;
+    {
+        std::lock_guard<std::mutex> lock(blankCheckMutex_);
+        ++blankCheckGeneration_;
+        generation = blankCheckGeneration_;
+        hadPending = hasPendingBlankCheck_;
+        hasPendingBlankCheck_ = false;
+        blankCheckMinComponentCount_ = 0;
+    }
+    blankCheckCv_.notify_all();
+    HM_LOGI("cancelBlankCheck: surfaceId=%s hadPending=%d generation=%llu",
+            surfaceId_.c_str(), hadPending ? 1 : 0,
+            static_cast<unsigned long long>(generation));
+}
+
+void A2UISurface::blankCheckWorkerLoop() {
+    std::unique_lock<std::mutex> lock(blankCheckMutex_);
+    while (!blankCheckWorkerStop_) {
+        if (!hasPendingBlankCheck_) {
+            blankCheckCv_.wait(lock, [this]() {
+                return blankCheckWorkerStop_ || hasPendingBlankCheck_;
+            });
+            continue;
+        }
+
+        const auto dueTime = blankCheckDueTime_;
+        const int32_t minComponentCount = blankCheckMinComponentCount_;
+        const uint64_t generation = blankCheckGeneration_;
+        blankCheckCv_.wait_until(lock, dueTime);
+        if (blankCheckWorkerStop_) {
+            break;
+        }
+        if (!hasPendingBlankCheck_ || generation != blankCheckGeneration_ || dueTime != blankCheckDueTime_) {
+            continue;
+        }
+        if (dueTime > std::chrono::steady_clock::now()) {
+            continue;
+        }
+        hasPendingBlankCheck_ = false;
+        lock.unlock();
+        runBlankCheckOnMainThread(generation, minComponentCount);
+        lock.lock();
+    }
+}
+
+void A2UISurface::runBlankCheckOnMainThread(uint64_t generation, int32_t minComponentCount) {
+    if (!blankCheckExecutor_) {
+        HM_LOGW("runBlankCheckOnMainThread skipped: blankCheckExecutor missing, surfaceId=%s", surfaceId_.c_str());
+        return;
+    }
+    blankCheckExecutor_(surfaceId_, generation, minComponentCount);
+}
+
+void A2UISurface::performBlankCheckOnMainThread(uint64_t generation, int32_t minComponentCount) {
+    {
+        std::lock_guard<std::mutex> lock(blankCheckMutex_);
+        if (generation != blankCheckGeneration_) {
+            HM_LOGI("blankCheck aborted: generation changed, surfaceId=%s scheduled=%llu latest=%llu",
+                    surfaceId_.c_str(),
+                    static_cast<unsigned long long>(generation),
+                    static_cast<unsigned long long>(blankCheckGeneration_));
+            return;
+        }
+    }
+    if (state_ == State::DESTROYED) {
+        HM_LOGI("blankCheck skipped: surface destroyed, surfaceId=%s", surfaceId_.c_str());
+        return;
+    }
+
+    const int renderableComponentCount = countRenderableComponents(rootComponent_, minComponentCount);
+    if (renderableComponentCount >= minComponentCount) {
+        HM_LOGI("blankCheck pass: surfaceId=%s renderableComponentCount=%d minComponentCount=%d",
+                surfaceId_.c_str(), renderableComponentCount, minComponentCount);
+        return;
+    }
+
+    HM_LOGW("blankCheck fail: surfaceId=%s renderableComponentCount=%d minComponentCount=%d",
+            surfaceId_.c_str(), renderableComponentCount, minComponentCount);
+    if (errorReporter_) {
+        agenui::ErrorMessage msg;
+        msg.code = -1;
+        msg.surfaceId = surfaceId_;
+        msg.message = "BlankScreen:componentCountInsufficient";
+        errorReporter_(msg);
+    }
+}
+
+int A2UISurface::countRenderableComponents(const A2UIComponent* component, int minCount) const {
+    if (component == nullptr || minCount <= 0) {
+        return 0;
+    }
+
+    int count = 0;
+    const float width = component->getWidth();
+    const float height = component->getHeight();
+    if (std::isfinite(width) && std::isfinite(height) && width > 0.0f && height > 0.0f) {
+        ++count;
+        if (count >= minCount) {
+            return count;
+        }
+    }
+
+    for (const A2UIComponent* child : component->getChildren()) {
+        count += countRenderableComponents(child, minCount - count);
+        if (count >= minCount) {
+            return count;
+        }
+    }
+    return count;
+}
+
 // ---- Native UI Container Management ----
 
 void A2UISurface::setContentHandle(ArkUI_NodeContentHandle handle) {
@@ -409,6 +612,17 @@ void A2UISurface::unmountRootNode() {
 
 void A2UISurface::destroy() {
     HM_LOGI("Destroying surface: %s (components: %d)", surfaceId_.c_str(), getComponentCount());
+
+    {
+        std::lock_guard<std::mutex> lock(blankCheckMutex_);
+        ++blankCheckGeneration_;
+        hasPendingBlankCheck_ = false;
+        blankCheckWorkerStop_ = true;
+    }
+    blankCheckCv_.notify_all();
+    if (blankCheckWorker_.joinable()) {
+        blankCheckWorker_.join();
+    }
 
     // Unmount the native node first.
     unmountRootNode();

@@ -91,13 +91,15 @@ void ListComponent::addChild(A2UIComponent* child) {
 
     if (m_adapterActive) {
         // Adapter mode (horizontal list): do NOT eagerly create/mount the
-        // ListItem wrapper.  Just inform the adapter that the total item
-        // count increased — it will request the node via ON_ADD_NODE when
-        // the item scrolls into the viewport.
+        // ListItem wrapper.  Notify the adapter that a new item was inserted
+        // at this index and update the total count so it requests the node
+        // via ON_ADD_NODE when the item enters the viewport.
+        uint32_t insertedIndex = static_cast<uint32_t>(m_children.size() - 1);
+        OH_ArkUI_NodeAdapter_InsertItem(m_adapter, insertedIndex, 1);
         OH_ArkUI_NodeAdapter_SetTotalNodeCount(
             m_adapter, static_cast<uint32_t>(m_children.size()));
-        HM_LOGI("id=%s adapter addChild, total=%zu (lazy)",
-                m_id.c_str(), m_children.size());
+        HM_LOGI("id=%s adapter addChild, childId=%s, insertedIndex=%u, total=%zu (lazy)",
+                m_id.c_str(), child->getId().c_str(), insertedIndex, m_children.size());
         return;
     }
 
@@ -368,18 +370,8 @@ void ListComponent::applyStyles(const nlohmann::json& properties) {
         }
     }
 
-    // background-color
-    {
-        std::string bgStr;
-        if (styles.contains("background-color") && styles["background-color"].is_string()) {
-            bgStr = styles["background-color"].get<std::string>();
-        } else if (styles.contains("backgroundColor") && styles["backgroundColor"].is_string()) {
-            bgStr = styles["backgroundColor"].get<std::string>();
-        }
-        if (!bgStr.empty()) {
-            node.setBackgroundColor(parseColor(bgStr));
-        }
-    }
+    // background-color (supports gradient via base class)
+    applyBackgroundColor(properties);
 
     HM_LOGI("ListComponent::applyStyles applied, id=%s", m_id.c_str());
 }
@@ -681,6 +673,11 @@ void ListComponent::handleAdapterAddNode(uint32_t index, ArkUI_NodeAdapterEvent*
 
     HM_LOGI("ListComponent::handleAdapterAddNode - index=%u child=%s wrapped, id=%s",
             index, child->getId().c_str(), m_id.c_str());
+
+    // Materialize the child subtree now that it is bound to a viewport slot.
+    // Mirrors iOS HorizontalCollectionView.cellForItemAt calling
+    // child.createView() before child.notifyAppeared().
+    child->createView();
 
     // Fire exposure event: child is now bound to a viewport slot
     if (!child->getId().empty() && !child->getProperties().empty()) {

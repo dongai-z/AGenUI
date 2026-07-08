@@ -359,6 +359,34 @@ static napi_value SetMinLogLevel(napi_env env, napi_callback_info info) {
     NAPI_RETURN_UNDEFINED(env);
 }
 
+/**
+ * @brief Re-evaluate host-backed function call values.
+ * @param args[0] instanceId (number)
+ */
+static napi_value InvalidateFunctionCallValues(napi_env env, napi_callback_info info) {
+    size_t argc = 1;
+    napi_value args[1];
+    napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
+
+    if (argc < 1) {
+        HM_LOGE("InvalidateFunctionCallValues: Expected 1 argument, got %zu", argc);
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    int32_t instanceId = 0;
+    napi_get_value_int32(env, args[0], &instanceId);
+
+    auto* sm = findSurfaceManagerByInstanceId(instanceId);
+    if (!sm) {
+        HM_LOGE("InvalidateFunctionCallValues: SurfaceManager not found for instanceId=%d", instanceId);
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    sm->invalidateFunctionCallValues();
+    HM_LOGI("InvalidateFunctionCallValues: instanceId=%d success", instanceId);
+    NAPI_RETURN_UNDEFINED(env);
+}
+
 // ---------------------------------------------------------------------------
 // Module init and registration
 // ---------------------------------------------------------------------------
@@ -445,11 +473,13 @@ static napi_value Init(napi_env env, napi_value exports)
         { "setDayNightMode", nullptr, SetDayNightMode, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "beginTextStream", nullptr, BeginTextStream, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "endTextStream", nullptr, EndTextStream, nullptr, nullptr, nullptr, napi_default, nullptr },
+        { "invalidateFunctionCallValues", nullptr, InvalidateFunctionCallValues, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "registerComponent", nullptr, RegisterComponent, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "registerImageLoader", nullptr, RegisterImageLoader, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "setImagePixelMap", nullptr, SetImagePixelMap, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "onImageLoadFailed", nullptr, OnImageLoadFailed, nullptr, nullptr, nullptr, napi_default, nullptr },
-        { "findInstanceIdBySurfaceId", nullptr, FindInstanceIdBySurfaceId, nullptr, nullptr, nullptr, napi_default, nullptr },
+        { "surfaceStartBlankCheck", nullptr, Surface_startBlankCheck, nullptr, nullptr, nullptr, napi_default, nullptr },
+        { "surfaceCancelBlankCheck", nullptr, Surface_cancelBlankCheck, nullptr, nullptr, nullptr, napi_default, nullptr },
     };
     napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
     return exports;

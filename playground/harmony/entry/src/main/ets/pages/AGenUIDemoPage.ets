@@ -194,9 +194,10 @@ struct Index {
       surfaceId: string,
       nodeId: string,
       componentType: string,
-      viewStatePtr: bigint
+      viewStatePtr: bigint,
+      instanceId: number
     ) => {
-      return new CustomMarkdownComponent(surfaceId, nodeId, componentType, viewStatePtr);
+      return new CustomMarkdownComponent(surfaceId, nodeId, componentType, viewStatePtr, instanceId);
     });
 
     // Register the app-side Chart component that replaces the former built-in SDK implementation.
@@ -204,9 +205,10 @@ struct Index {
       surfaceId: string,
       nodeId: string,
       componentType: string,
-      viewStatePtr: bigint
+      viewStatePtr: bigint,
+      instanceId: number
     ) => {
-      return new CustomChartComponent(surfaceId, nodeId, componentType, viewStatePtr);
+      return new CustomChartComponent(surfaceId, nodeId, componentType, viewStatePtr, instanceId);
     });
 
     // Register the app-side Lottie component that replaces the former built-in SDK implementation.
@@ -214,9 +216,10 @@ struct Index {
       surfaceId: string,
       nodeId: string,
       componentType: string,
-      viewStatePtr: bigint
+      viewStatePtr: bigint,
+      instanceId: number
     ) => {
-      return new CustomLottieComponent(surfaceId, nodeId, componentType, viewStatePtr);
+      return new CustomLottieComponent(surfaceId, nodeId, componentType, viewStatePtr, instanceId);
     });
   }
 
@@ -296,7 +299,7 @@ struct Index {
     const registerWithMeasure = (
       type: string,
       measurement: MeasurementComponent,
-      componentFactory: (surfaceId: string, nodeId: string, componentType: string, viewStatePtr: bigint) => A2UIComponent
+      componentFactory: (surfaceId: string, nodeId: string, componentType: string, viewStatePtr: bigint, instanceId: number) => A2UIComponent
     ) => {
       this.measurementManager!.register(type, measurement.asMeasurementHandler());
       AGenUI.registerComponent(type, componentFactory);
@@ -839,7 +842,7 @@ struct Index {
             ForEach(
               this.currentSurfaceId ? [this.currentSurfaceId] : [],
               (surfaceId: string) => {
-                AGenUIContainer({ surfaceId: surfaceId })
+                AGenUIContainer({ surfaceId: surfaceId, instanceId: this.surfaceManager?.getInstanceId() ?? 0 })
                   .backgroundColor(this.isDarkMode ? COLOR_BG_DARK : COLOR_BG_LIGHT)
                   .width('100%')
               },

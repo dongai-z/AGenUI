@@ -1,8 +1,10 @@
 #include "textfield_component.h"
 #include "../a2ui_node.h"
+#include "../gradient_applier.h"
 #include "a2ui/utils/a2ui_color_palette.h"
 #include "a2ui/utils/a2ui_parse_utils.h"
 #include "a2ui/utils/a2ui_padding_utils.h"  // CSS padding shorthand parser
+#include "style_parser/agenui_color_parser.h"
 
 #include "log/a2ui_capi_log.h"
 
@@ -368,9 +370,19 @@ void TextFieldComponent::applyBackgroundColor(const nlohmann::json& styles) {
         return;
     }
 
-    const uint32_t color = A2UIComponent::parseColor(styles["background-color"].get<std::string>());
-    A2UINode(m_textInputHandle).setBackgroundColor(color);
-    HM_LOGI("id=%s, color=0x%X", m_id.c_str(), color);
+    const std::string raw = styles["background-color"].get<std::string>();
+    A2UINode textInputNode(m_textInputHandle);
+    agenui::ColorValue cv;
+    if (agenui::ColorParser::parse(raw, cv)) {
+        if (cv.type == agenui::ColorValueType::Gradient) {
+            textInputNode.setBackgroundColor(colors::kColorTransparent);
+            GradientApplier::apply(m_textInputHandle, cv.gradient, getWidth(), getHeight());
+        } else {
+            GradientApplier::reset(m_textInputHandle);
+            textInputNode.setBackgroundColor(cv.solidColor);
+        }
+    }
+    HM_LOGI("id=%s, bg=%s", m_id.c_str(), raw.c_str());
 }
 
 void TextFieldComponent::applyBorderWidth(const nlohmann::json& styles) {

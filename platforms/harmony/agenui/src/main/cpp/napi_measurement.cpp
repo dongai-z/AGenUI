@@ -6,28 +6,30 @@
 #include <condition_variable>
 
 napi_value ReportComponentRenderSize(napi_env env, napi_callback_info info) {
-    size_t argc = 6;
-    napi_value args[6];
+    size_t argc = 7;
+    napi_value args[7];
     napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
 
-    if (argc < 5) {
-        HM_LOGE("ReportComponentRenderSize: Expected 5 arguments, got %zu", argc);
+    if (argc < 6) {
+        HM_LOGE("ReportComponentRenderSize: Expected 6 arguments, got %zu", argc);
         NAPI_RETURN_UNDEFINED(env);
     }
 
-    std::string surfaceId   = napiGetString(env, args[0]);
-    std::string componentId = napiGetString(env, args[1]);
-    std::string type        = napiGetString(env, args[2]);
+    int32_t instanceId = 0;
+    napi_get_value_int32(env, args[0], &instanceId);
+
+    std::string surfaceId   = napiGetString(env, args[1]);
+    std::string componentId = napiGetString(env, args[2]);
+    std::string type        = napiGetString(env, args[3]);
 
     double height = 0.0;
-    napi_get_value_double(env, args[3], &height);
+    napi_get_value_double(env, args[4], &height);
 
     double width = 0.0;
-    napi_get_value_double(env, args[4], &width);
+    napi_get_value_double(env, args[5], &width);
 
-    HM_LOGI("ReportComponentRenderSize: surfaceId=%s, componentId=%s, type=%s, height=%f, width=%f", surfaceId.c_str(), componentId.c_str(), type.c_str(), height, width);
+    HM_LOGI("ReportComponentRenderSize: instanceId=%d, surfaceId=%s, componentId=%s, type=%s, height=%f, width=%f", instanceId, surfaceId.c_str(), componentId.c_str(), type.c_str(), height, width);
 
-    int instanceId = agenui::A2UIMessageListener::findInstanceIdBySurfaceId(surfaceId);
     auto* engine = agenui::getAGenUIEngine();
     if (!engine) {
         HM_LOGE("ReportComponentRenderSize: Engine not initialized");
@@ -35,7 +37,7 @@ napi_value ReportComponentRenderSize(napi_env env, napi_callback_info info) {
     }
     agenui::ISurfaceManager* sm = engine->findSurfaceManager(instanceId);
     if (!sm) {
-        HM_LOGE("ReportComponentRenderSize: SurfaceManager not found for surfaceId=%s", surfaceId.c_str());
+        HM_LOGE("ReportComponentRenderSize: SurfaceManager not found for instanceId=%d, surfaceId=%s", instanceId, surfaceId.c_str());
         NAPI_RETURN_UNDEFINED(env);
     }
 

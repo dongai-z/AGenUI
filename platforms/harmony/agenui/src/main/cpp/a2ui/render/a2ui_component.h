@@ -7,6 +7,7 @@
 #include "a2ui_component_types.h"
 #include "a2ui_node.h"
 #include "a2ui_component_state.h"
+#include "a2ui/utils/a2ui_animate_utils.h"
 #include "a2ui/a2ui_component_render_observable.h"
 
 namespace a2ui {
@@ -78,6 +79,17 @@ public:
         if (m_state) {
             m_state->setSurfaceId(surfaceId);
         }
+    }
+
+    void setInstanceId(int instanceId) {
+        m_instanceId = instanceId;
+        if (m_state) {
+            m_state->setInstanceId(instanceId);
+        }
+    }
+
+    int getInstanceId() const {
+        return m_instanceId;
     }
     
     // ---- State binding (new)----
@@ -156,6 +168,40 @@ public:
     void destroy();
     virtual bool shouldAutoAddChildView() const;
     virtual bool shouldApplyChildLayoutPosition(const A2UIComponent* child) const;
+
+    /**
+     * Whether this component's children should be created eagerly when
+     * addChild is called, or deferred until they actually become visible.
+     *
+     * Default: true. Lazy containers (e.g., horizontal List) override this
+     * to return false — mirroring iOS Component.shouldCreateChildView().
+     */
+    virtual bool shouldCreateChildView() const { return true; }
+
+    /**
+     * Walks up the parent chain to determine whether this component is
+     * allowed to create child views now.
+     * Mirrors iOS Component.canCreateChildViewConsideringParent().
+     */
+    bool canCreateChildViewConsideringParent() const;
+
+    /**
+     * Returns whether createView() has already executed.
+     * Mirrors iOS Component.isViewCreated.
+     */
+    bool isViewCreated() const { return m_viewCreated; }
+
+    /**
+     * Idempotent lifecycle hook: materializes the component and recursively
+     * materializes deferred children, then applies all stored properties.
+     *
+     * For HarmonyOS the ArkUI node is created in the component constructor,
+     * so createView() does NOT recreate the node — it applies stored
+     * properties and recursively creates children, matching the
+     * cross-platform createView() contract.
+     * Mirrors iOS Component.createView().
+     */
+    virtual void createView();
     /**
      * Whether to apply the child width and height computed by the parent container
      * to the child's ArkUI node.
@@ -296,6 +342,15 @@ protected:
      * @param properties Properties JSON object (contains "styles" field)
      */
     void applyBorderStyles(const nlohmann::json& properties);
+
+    /**
+     * Apply accessibility properties from DSL to the native ArkUI node.
+     * Maps "accessibility.label" to NODE_ACCESSIBILITY_TEXT and
+     * "accessibility.description" to NODE_ACCESSIBILITY_DESCRIPTION.
+     * Resets the attributes when the accessibility field is absent or empty.
+     * @param properties Properties JSON object (contains "accessibility" field)
+     */
+    void applyAccessibility(const nlohmann::json& properties);
     
     virtual float resolveAppearTargetOpacity(const nlohmann::json& properties) const;
     
@@ -313,6 +368,7 @@ protected:
     nlohmann::json m_properties;  // Retained for compatibility (used when State is unavailable)
     std::vector<A2UIComponent*> m_children;
     std::string m_surfaceId;
+    int m_instanceId = 0;
     
     ComponentState* m_state = nullptr;  // New: bound state
     A2UIComponent* m_parent = nullptr;
@@ -328,6 +384,8 @@ protected:
     float m_appearTargetOpacity = 1.0f;
     bool m_surfaceAnimated = true;  // Animation flag of the owning surface (injected by A2UISurface)
     agenui::IComponentRenderObservable* m_componentRenderObservable = nullptr;  // Component render completion observer (injected by A2UISurface, non-owning)
+    bool m_viewCreated = false;  // Whether createView() has executed (mirrors iOS Component.isViewCreated)
+    OpacityAnimatePayload* m_opacityAnimPayload = nullptr;  // Tracks the appear-opacity animator for cancellation on destroy
 };
 
 } // namespace a2ui

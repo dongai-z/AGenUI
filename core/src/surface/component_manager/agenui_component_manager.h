@@ -117,7 +117,11 @@ private:
      * @param componentJson Component JSON string
      * @return Component model smart pointer, or nullptr on failure
      */
-    std::shared_ptr<ComponentModel> parseComponent(const std::string& componentJson);
+    std::shared_ptr<ComponentModel> parseComponent(const nlohmann::json& json);
+
+    // Try to handle json as a streaming text chunk for an existing Text
+    // component. Returns true if handled, false to fall through to parseComponent.
+    bool tryApplyTextChunk(const nlohmann::json& json);
 
     /**
      * @brief Parse child components from JSON

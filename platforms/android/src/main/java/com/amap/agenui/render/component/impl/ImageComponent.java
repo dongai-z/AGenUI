@@ -2,7 +2,6 @@ package com.amap.agenui.render.component.impl;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -22,6 +21,7 @@ import com.amap.agenui.render.utils.ShimmerTransition;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Image component implementation - compliant with A2UI v0.9 protocol
@@ -47,8 +47,11 @@ public class ImageComponent extends A2UIComponent {
     // Currently loading requestId, used for cancellation and stale callback filtering.
     private String currentRequestId;
 
-    private float currentYogaWidth = 0f;
-    private float currentYogaHeight = 0f;
+    // Track last-applied URL and dimension values to avoid unnecessary reloads
+    // when styles is sent in full (key existence ≠ value change).
+    private String currentUrl = "";
+    private Object currentWidth;
+    private Object currentHeight;
 
     public ImageComponent(Context context, String id, Map<String, Object> properties) {
         super(id, "Image");
@@ -96,6 +99,19 @@ public class ImageComponent extends A2UIComponent {
             return;
         }
 
+        // styles is sent in full each time, so key-existence checks are always true.
+        // Compare actual values to avoid unnecessary image reloads.
+        boolean urlChanged = false;
+        boolean sizeChanged = false;
+        float yogaWidth = 0f;
+        float yogaHeight = 0f;
+
+        if (changedProps.containsKey("url")) {
+            String url = extractStringValue(changedProps.get("url"));
+            urlChanged = !url.equals(currentUrl);
+            currentUrl = url;
+        }
+
         // Update scale mode (A2UI v0.9 protocol: fit)
         if (changedProps.containsKey("fit")) {
             String fit = String.valueOf(changedProps.get("fit"));
@@ -105,42 +121,33 @@ public class ImageComponent extends A2UIComponent {
             imageView.setScaleType(parseFit(fit));
         }
 
-        boolean sizeFromReport = false;
-        boolean hasSizeChange = false;
-        float yogaWidth = 0f;
-        float yogaHeight = 0f;
-
         // Handle styles (read from styles)
         if (changedProps.containsKey("styles")) {
             @SuppressWarnings("unchecked")
             Map<String, Object> styles = (Map<String, Object>) changedProps.get("styles");
             if (styles != null) {
                 StyleHelper.applyCSSPadding(imageView, styles, context);
-                if (styles != null) {
-                    sizeFromReport = Boolean.TRUE.equals(styles.get("sizeFromReport"));
-                    hasSizeChange = styles.containsKey("width") || styles.containsKey("height");
-                    if (!sizeFromReport) {
-                        Object w = styles.get("width");
-                        Object h = styles.get("height");
-                        if (w instanceof Number) yogaWidth = ((Number) w).floatValue();
-                        if (h instanceof Number) yogaHeight = ((Number) h).floatValue();
-                        currentYogaWidth = yogaWidth;
-                        currentYogaHeight = yogaHeight;
-                    }
+
+                Object newWidth = styles.get("width");
+                Object newHeight = styles.get("height");
+                if (!Objects.equals(newWidth, currentWidth)
+                        || !Objects.equals(newHeight, currentHeight)) {
+                    sizeChanged = true;
+                    currentWidth = newWidth;
+                    currentHeight = newHeight;
                 }
+                if (newWidth instanceof Number) yogaWidth = ((Number) newWidth).floatValue();
+                if (newHeight instanceof Number) yogaHeight = ((Number) newHeight).floatValue();
             }
-        }
-        // Load image if url changed, or if size changed from CSS layout (not from our own report)
-        if (changedProps.containsKey("url") || (hasSizeChange && !sizeFromReport && properties.containsKey("url"))) {
-            String url = extractStringValue(changedProps.containsKey("url")
-                    ? changedProps.get("url")
-                    : properties.get("url"));
-            if (AGenUILogger.isLoggingEnabled()) {
-                AGenUILogger.d(TAG, "[ImageComponent] onUpdateProperties - loading image url: " + url);
-            }
-            loadImage(url, yogaWidth, yogaHeight);
         }
 
+        // Only reload when URL or size values actually changed
+        if (urlChanged || (sizeChanged && !currentUrl.isEmpty())) {
+            if (AGenUILogger.isLoggingEnabled()) {
+                AGenUILogger.d(TAG, "[ImageComponent] onUpdateProperties - loading image url: " + currentUrl);
+            }
+            loadImage(currentUrl, yogaWidth, yogaHeight);
+        }
     }
 
     /**
@@ -187,7 +194,6 @@ public class ImageComponent extends A2UIComponent {
                 }
                 currentRequestId = null;
                 imageView.setImageDrawable(result.drawable);
-                reportImageRenderSizeIfNeeded(result.drawable, yogaWidth, yogaHeight);
                 onImageLoadComplete(result.isFromCache);
             }
 
@@ -207,7 +213,6 @@ public class ImageComponent extends A2UIComponent {
                 if (placeholder != null) {
                     imageView.setImageDrawable(placeholder);
                 }
-                reportImageRenderSizeIfNeeded(null, yogaWidth, yogaHeight);
             }
         });
         requestIdHolder[0] = requestId;
@@ -294,51 +299,6 @@ public class ImageComponent extends A2UIComponent {
             }
         }
         return String.valueOf(value);
-    }
-
-    private void reportImageRenderSizeIfNeeded(Drawable drawable, float yogaWidth, float yogaHeight) {
-        if (yogaWidth != currentYogaWidth || yogaHeight != currentYogaHeight) {
-            return;
-        }
-
-        if (yogaWidth > 0 && yogaHeight > 0) {
-            notifyRenderFinish("Image", yogaWidth, yogaHeight);
-            return;
-        }
-
-        if (drawable == null) {
-            notifyRenderFinish("Image", yogaWidth, yogaHeight);
-            return;
-        }
-
-        int intrinsicW = drawable.getIntrinsicWidth();
-        int intrinsicH = drawable.getIntrinsicHeight();
-        if (intrinsicW <= 0 || intrinsicH <= 0) {
-            notifyRenderFinish("Image", yogaWidth, yogaHeight);
-            return;
-        }
-
-        float aspectRatio = (float) intrinsicW / intrinsicH;
-
-        if (yogaWidth > 0) {
-            float computedH = yogaWidth / aspectRatio;
-            notifyRenderFinish("Image", yogaWidth, computedH);
-            return;
-        }
-
-        if (yogaHeight > 0) {
-            float computedW = yogaHeight * aspectRatio;
-            notifyRenderFinish("Image", computedW, yogaHeight);
-            return;
-        }
-
-        float wPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, intrinsicW,
-                context.getResources().getDisplayMetrics());
-        float hPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, intrinsicH,
-                context.getResources().getDisplayMetrics());
-        if (wPx > 0 && hPx > 0) {
-            notifyRenderFinishFromPx("Image", wPx, hPx);
-        }
     }
 
     /**

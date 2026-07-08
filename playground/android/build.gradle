@@ -13,20 +13,35 @@ if (localPropsFile.exists()) {
 
 def agenuiSdkSource = (localProps.getProperty('agenui.sdk.source') ?: providers.gradleProperty('agenui.sdk.source').getOrElse('false')).toBoolean()
 def skipSdkBuild = (localProps.getProperty('agenui.skip.sdk.build') ?: providers.gradleProperty('agenui.skip.sdk.build').getOrElse('false')).toBoolean()
+def asanEnabled = (localProps.getProperty('agenui.enable.asan') ?: providers.gradleProperty('agenuiEnableAsan').getOrElse('false')).toBoolean()
 
 if (!agenuiSdkSource && !skipSdkBuild) {
     // AAR mode: build the SDK in platforms/android first, then copy the artifact to app/libs/
     tasks.register('buildSdkAar', GradleBuild) {
         dir = file('../../platforms/android')
-        tasks = ['assembleRelease']
+        // When ASan is enabled, build debug variant with ASan flags
+        if (asanEnabled) {
+            tasks = ['assembleDebug']
+            startParameter.projectProperties['agenuiEnableAsan'] = 'true'
+        } else {
+            tasks = ['assembleRelease']
+        }
     }
 
     tasks.register('copySdkAar', Copy) {
         dependsOn 'buildSdkAar'
-        from fileTree('../../platforms/android/build/outputs/aar') {
-            include '*-release.aar'
+        if (asanEnabled) {
+            from fileTree('../../platforms/android/build/outputs/aar') {
+                include '*-debug.aar'
+            }
+            into file('app/libs')
+            rename { 'AGenUI-Client-Android-release.aar' }
+        } else {
+            from fileTree('../../platforms/android/build/outputs/aar') {
+                include '*-release.aar'
+            }
+            into file('app/libs')
+            rename { 'AGenUI-Client-Android-release.aar' }
         }
-        into file('app/libs')
-        rename { 'AGenUI-Client-Android-release.aar' }
     }
 }

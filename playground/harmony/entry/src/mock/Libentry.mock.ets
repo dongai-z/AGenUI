@@ -289,10 +289,6 @@ export function registerMeasurement(instanceId: number, type: string, callback: 
 
 export function unregisterMeasurement(instanceId: number, type: string): void {}
 
-export function findInstanceIdBySurfaceId(surfaceId: string): number {
-  return 0;
-}
-
 // ---- Default export (used by SDK via `import internal_a2ui from 'liba2ui-capi.so'`) ----
 
 const NativeMock: Record<string, Object> = {
@@ -340,7 +336,6 @@ const NativeMock: Record<string, Object> = {
   'reportComponentRenderSize': reportComponentRenderSize as Object,
   'registerMeasurement': registerMeasurement as Object,
   'unregisterMeasurement': unregisterMeasurement as Object,
-  'findInstanceIdBySurfaceId': findInstanceIdBySurfaceId as Object,
 };
 
 export default NativeMock;

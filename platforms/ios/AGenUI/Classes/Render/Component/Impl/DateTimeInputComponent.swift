@@ -109,6 +109,11 @@ class DateTimeInputComponent: Component {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit{
+        customMaskView?.removeFromSuperview()
+        popupContainerView?.removeFromSuperview()
+    }
+    
     // MARK: - Measurement Override
     
     /// Measure the intrinsic size of the DateTimeInput component

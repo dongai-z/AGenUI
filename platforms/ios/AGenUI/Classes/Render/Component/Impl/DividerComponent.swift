@@ -5,7 +5,7 @@
 // Created on 2026/2/27.
 //
 
-#if AGENUI_SDK_BUILD
+
 import UIKit
 
 /// DividerComponent component implementation (compliant with A2UI v0.9 protocol)
@@ -42,4 +42,4 @@ class DividerComponent: Component {
     // MARK: - Private Methods
 }
 
-#endif // AGENUI_SDK_BUILD
+

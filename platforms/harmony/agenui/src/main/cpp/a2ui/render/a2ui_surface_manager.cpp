@@ -6,8 +6,9 @@
 
 namespace a2ui {
 
-A2UISurfaceManager::A2UISurfaceManager(ComponentRegistry* globalRegistry)
-    : globalRegistry_(globalRegistry) {
+A2UISurfaceManager::A2UISurfaceManager(ComponentRegistry* globalRegistry, int instanceId)
+    : globalRegistry_(globalRegistry)
+    , instanceId_(instanceId) {
     // Register self as the sole listener on internal observables. C++ render-layer
     // components (Tabs/Video/Image) publish render-finish events to these observables;
     // this class forwards them to the cross-platform ISurfaceManager set via
@@ -27,6 +28,22 @@ A2UISurfaceManager::~A2UISurfaceManager() {
 
 void A2UISurfaceManager::setCoreSurfaceManager(agenui::ISurfaceManager* coreSurfaceManager) {
     coreSurfaceManager_ = coreSurfaceManager;
+}
+
+void A2UISurfaceManager::setBlankCheckExecutor(const std::function<void(const std::string&, uint64_t, int32_t)>& executor) {
+    blankCheckExecutor_ = executor;
+}
+
+void A2UISurfaceManager::setErrorReporter(const std::function<void(const agenui::ErrorMessage&)>& reporter) {
+    errorReporter_ = reporter;
+}
+
+void A2UISurfaceManager::setContentSizeChangedCallback(const std::function<void(const std::string&, float, float)>& callback) {
+    contentSizeChangedCallback_ = callback;
+}
+
+void A2UISurfaceManager::setRootComponentUpdateCallback(const std::function<void(const std::string&, const std::string&)>& callback) {
+    rootComponentUpdateCallback_ = callback;
 }
 
 void A2UISurfaceManager::onRenderFinish(const agenui::ComponentRenderInfo& info) {
@@ -51,6 +68,7 @@ A2UISurface* A2UISurfaceManager::createSurface(const std::string& surfaceId, boo
     auto existingIt = surfaces_.find(surfaceId);
     if (existingIt != surfaces_.end()) {
         RELEASE_ASSERT_WITHLOG(false, "Surface already exists: %s", surfaceId.c_str());
+        return nullptr;
     }
 
     // 1. Create a per-surface ComponentRegistry.
@@ -59,7 +77,11 @@ A2UISurface* A2UISurfaceManager::createSurface(const std::string& surfaceId, boo
 
     // 2. Create the surface with immutable animation and observer state.
     auto surfaceOwner = std::make_unique<A2UISurface>(surfaceId, registryOwner.get(), animated,
-                                                      &componentRenderObservable_, &surfaceLayoutObservable_);
+                                                      instanceId_,
+                                                      blankCheckExecutor_, errorReporter_,
+                                                      &componentRenderObservable_, &surfaceLayoutObservable_,
+                                                      contentSizeChangedCallback_,
+                                                      rootComponentUpdateCallback_);
 
     // 3. Store the surface and registry (transfer ownership to the maps).
     A2UISurface* surface = surfaceOwner.release();

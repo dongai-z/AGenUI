@@ -1,13 +1,12 @@
 #pragma once
 
 #include "agenui_message_listener.h"
-#include "render/factory/a2ui_component_registry.h"
 #include "render/a2ui_surface_manager.h"
 #include <map>
 #include <memory>
 #include <vector>
-#include <mutex>
 #include <functional>
+#include <mutex>
 #include <napi/native_api.h>
 
 namespace agenui {
@@ -86,11 +85,12 @@ public:
                                    const std::string& properties);
 
     /**
-     * @brief Find message listener by surfaceId using static lookup.
+     * @brief Dispatch root component property update to ArkTS listeners.
      * @param surfaceId Surface ID
-     * @return Message listener pointer, or nullptr if not found
+     * @param propsJson Root component properties as JSON string
      */
-    static A2UIMessageListener* findListenerBySurfaceId(const std::string& surfaceId);
+    void dispatchRootComponentUpdate(const std::string& surfaceId,
+                                     const std::string& propsJson);
 
     /**
      * @brief Deprecated contentHandle-ready callback.
@@ -112,38 +112,17 @@ public:
      */
     void unregisterListener(napi_value listener);
 
-    // ==================== surfaceId -> instanceId Mapping ====================
+    // ==================== Instance-based Lookup ====================
 
     /**
-     * @brief Look up the instanceId associated with a surfaceId.
-     * @param surfaceId Unique surface identifier
-     * @return Matching instanceId, or 0 when not found
+     * @brief Look up a listener by its owning SurfaceManager's instance ID.
+     * @param instanceId SurfaceManager instance ID
+     * @return Matching listener, or nullptr when not found
      */
-    static int findInstanceIdBySurfaceId(const std::string& surfaceId);
+    static A2UIMessageListener* findListenerByInstanceId(int instanceId);
 
 private:
-    /**
-     * @brief Initialize the global component registry.
-     */
-    void initGlobalRegistry();
-
-    /**
-     * @brief Register a surfaceId -> instanceId mapping.
-     */
-    void registerSurfaceMapping(const std::string& surfaceId);
-
-    /**
-     * @brief Unregister a surfaceId -> instanceId mapping.
-     */
-    void unregisterSurfaceMapping(const std::string& surfaceId);
-
-    /**
-     * @brief Static helper used to unregister a surfaceId -> instanceId mapping.
-     */
-    static void unregisterSurfaceMappingStatic(const std::string& surfaceId);
-
     int instanceId_;                                  // Associated ISurfaceManager instance ID
-    a2ui::ComponentRegistry globalRegistry_;        // Global registry that owns all factories
     std::unique_ptr<a2ui::A2UISurfaceManager> surfaceManager_;  // Render-layer surface manager
     std::vector<napi_ref> listeners_;               // Registered ArkTS listeners
 
@@ -156,12 +135,7 @@ private:
      */
     void postToMainThread(MainThreadTask task);
 
-    // Shared surfaceId -> instanceId mapping across all instances.
-    // Leaked singleton to avoid static destruction order issues.
-    static std::map<std::string, int>& getSurfaceIdToInstanceIdMap();
-    static std::mutex s_mappingMutex_;
-
-    // instanceId -> A2UIMessageListener* lookup for exposure dispatch
+    // Shared instanceId -> A2UIMessageListener* lookup for exposure dispatch.
     static std::map<int, A2UIMessageListener*>& getInstanceToListenerMap();
     static std::mutex s_instanceMapMutex_;
 };

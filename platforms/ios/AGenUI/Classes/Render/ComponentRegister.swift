@@ -112,8 +112,8 @@ internal class ComponentRegister {
     }
     
     private func registerBuiltInComponents() {
-        // SDK trimming retains: Text / Row / Column / Button / Card / Image / List / Tabs (8 components)
-        // The remaining 14 components are gated behind AGENUI_SDK_BUILD; their register calls live inside the #if block below.
+        // SDK trimming retains: Text / Row / Column / Button / Card / Image / List / Tabs /Divider (9 components)
+        // The remaining 13 components are gated behind AGENUI_SDK_BUILD; their register calls live inside the #if block below.
 
         // Register TextComponent
         register("Text") { id, properties in
@@ -154,6 +154,11 @@ internal class ComponentRegister {
         register("Tabs") { id, properties in
             return TabsComponent(componentId: id, properties: properties)
         }
+        
+        // Register DividerComponent
+        register("Divider") { id, properties in
+            return DividerComponent(componentId: id, properties: properties)
+        }
 
 #if AGENUI_SDK_BUILD
         
@@ -161,12 +166,7 @@ internal class ComponentRegister {
         register("Table") { id, properties in
             return TableComponent(componentId: id, properties: properties)
         }
-        
-        // Register DividerComponent
-        register("Divider") { id, properties in
-            return DividerComponent(componentId: id, properties: properties)
-        }
-        
+          
         // Register AudioPlayerComponent
         register("AudioPlayer") { id, properties in
             return AudioPlayerComponent(componentId: id, properties: properties)

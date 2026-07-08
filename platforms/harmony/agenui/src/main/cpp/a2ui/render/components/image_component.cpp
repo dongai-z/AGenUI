@@ -34,6 +34,8 @@ ImageComponent::ImageComponent(const std::string& id, const nlohmann::json& prop
 }
 
 ImageComponent::~ImageComponent() {
+    cancelRevealAnimators();
+
     if (m_callbackPayload) {
         m_callbackPayload->component = nullptr;
     }
@@ -54,6 +56,8 @@ ImageComponent::~ImageComponent() {
 
 void ImageComponent::onDestroy() {
     HM_LOGI("ImageComponent::onDestroy - id=%s", m_id.c_str());
+
+    cancelRevealAnimators();
 
     if (m_callbackPayload) {
         m_callbackPayload->component = nullptr;
@@ -78,7 +82,35 @@ void ImageComponent::onDestroy() {
 
 }
 
+void ImageComponent::createView() {
+    // Delegates to base createView(): sets m_viewCreated, calls onCreateView(),
+    // recursively creates children, then applies stored properties via
+    // updateProperties() → onUpdateProperties() → applyUrl().
+    //
+    // In HarmonyOS the ArkUI image node is created in the constructor, so
+    // there is no node to create here.  The override exists to participate
+    // in the cross-platform createView() lifecycle — when a lazy container
+    // (e.g. horizontal List) defers this component, applyUrl() will not fire
+    // until createView() is invoked by the adapter.
+    // Mirrors iOS ImageComponent.createView() which sets up imageView before
+    // loadImage() can execute.
+    A2UIComponent::createView();
+
+    HM_LOGI("ImageComponent::createView completed, id=%s, url=%s",
+            m_id.c_str(), m_currentUrl.c_str());
+}
+
 void ImageComponent::onUpdateProperties(const nlohmann::json& properties) {
+    // Defer all property application until createView() has been called.
+    // For lazy containers (e.g. horizontal List), updateProperties may be
+    // called before createView() — properties are already stored in
+    // m_properties by the base class, and will be fully applied when
+    // createView() calls updateProperties(m_properties).
+    // Mirrors iOS Component.updateProperties() which guards on isViewCreated.
+    if (!isViewCreated()) {
+        return;
+    }
+
     if (!m_nodeHandle) {
         HM_LOGE( "handle is null, id=%s", m_id.c_str());
         return;
@@ -88,33 +120,41 @@ void ImageComponent::onUpdateProperties(const nlohmann::json& properties) {
     applyStyles(properties);
     applyBackgroundColor(properties);
 
-    bool sizeFromReport = false;
-    bool hasSizeChange = false;
     float yogaWidth = 0.0f;
     float yogaHeight = 0.0f;
+    bool urlChanged = false;
+    bool sizeChanged = false;
 
+    if (properties.contains("url")) {
+        std::string url = extractStringValue(properties["url"]);
+        urlChanged = (url != m_currentUrl);
+    }
+
+    // styles is sent in full each time, so key-existence checks are always true.
+    // Compare actual values to detect real size changes.
     if (properties.contains("styles") && properties["styles"].is_object()) {
         const auto& styles = properties["styles"];
-        if (styles.contains("sizeFromReport") && styles["sizeFromReport"].is_boolean()) {
-            sizeFromReport = styles["sizeFromReport"].get<bool>();
-        }
-        hasSizeChange = styles.contains("width") || styles.contains("height");
 
-        if (!sizeFromReport) {
-            if (styles.contains("width") && styles["width"].is_number()) {
-                yogaWidth = styles["width"].get<float>();
-            }
-            if (styles.contains("height") && styles["height"].is_number()) {
-                yogaHeight = styles["height"].get<float>();
-            }
-            m_currentYogaWidth = yogaWidth;
-            m_currentYogaHeight = yogaHeight;
+        nlohmann::json newWidth, newHeight;
+        if (styles.contains("width")) newWidth = styles["width"];
+        if (styles.contains("height")) newHeight = styles["height"];
+
+        if (newWidth != m_currentWidth || newHeight != m_currentHeight) {
+            sizeChanged = true;
+            m_currentWidth = newWidth;
+            m_currentHeight = newHeight;
+        }
+
+        if (styles.contains("width") && styles["width"].is_number()) {
+            yogaWidth = styles["width"].get<float>();
+        }
+        if (styles.contains("height") && styles["height"].is_number()) {
+            yogaHeight = styles["height"].get<float>();
         }
     }
 
-    if (properties.contains("url")) {
-        applyUrl(properties, yogaWidth, yogaHeight);
-    } else if (hasSizeChange && !sizeFromReport && !m_currentUrl.empty()) {
+    // Only reload when URL or size values actually changed.
+    if (urlChanged || (sizeChanged && !m_currentUrl.empty())) {
         applyUrl(properties, yogaWidth, yogaHeight);
     }
 
@@ -161,9 +201,6 @@ void ImageComponent::onUpdateProperties(const nlohmann::json& properties) {
         ImageLoaderBridge::getInstance().cancel(m_currentRequestId);
         m_currentRequestId.clear();
     }
-
-        m_callbackPayload->yogaWidth = yogaWidth;
-        m_callbackPayload->yogaHeight = yogaHeight;
 
     // Check whether an external loader exists
     if (ImageLoaderBridge::getInstance().hasLoader() && urlChanged) {
@@ -417,23 +454,6 @@ void ImageComponent::onImageCompleteCallback(ArkUI_NodeEvent* event) {
             A2UIImageNode(component->m_nodeHandle).setSrc(component->m_currentUrl);
         }
 
-        // Report size on failure — mirrors Android/iOS behavior
-        {
-            if (payload->yogaWidth != component->m_currentYogaWidth ||
-                    payload->yogaHeight != component->m_currentYogaHeight) {
-                return;
-            }
-            agenui::IComponentRenderObservable* observable = component->getComponentRenderObservable();
-            if (observable) {
-                agenui::ComponentRenderInfo info;
-                info.surfaceId = component->getSurfaceId();
-                info.componentId = component->getId();
-                info.type = component->getComponentType();
-                info.width = payload->yogaWidth;
-                info.height = payload->yogaHeight;
-                observable->notifyRenderFinish(info);
-            }
-        }
         return;
     }
 
@@ -448,48 +468,6 @@ void ImageComponent::onImageCompleteCallback(ArkUI_NodeEvent* event) {
 
     HM_LOGI("Image loaded successfully, id=%s, imageWidth=%f, imageHeight=%f",
         component->m_id.c_str(), data[1].f32, data[2].f32);
-
-    // Report size using the new logic
-    float imageWidth = data[1].f32;
-    float imageHeight = data[2].f32;
-    {
-        if (payload->yogaWidth != component->m_currentYogaWidth ||
-                payload->yogaHeight != component->m_currentYogaHeight) {
-            return;
-        }
-        agenui::IComponentRenderObservable* observable = component->getComponentRenderObservable();
-        if (observable) {
-            agenui::ComponentRenderInfo info;
-            info.surfaceId = component->getSurfaceId();
-            info.componentId = component->getId();
-            info.type = component->getComponentType();
-
-            if (payload->yogaWidth > 0.0f && payload->yogaHeight > 0.0f) {
-                info.width = payload->yogaWidth;
-                info.height = payload->yogaHeight;
-                observable->notifyRenderFinish(info);
-            } else if (imageWidth <= 0.0f || imageHeight <= 0.0f) {
-                info.width = payload->yogaWidth;
-                info.height = payload->yogaHeight;
-                observable->notifyRenderFinish(info);
-            } else {
-                float aspectRatio = imageWidth / imageHeight;
-                if (payload->yogaWidth > 0.0f) {
-                    info.width = payload->yogaWidth;
-                    info.height = payload->yogaWidth / aspectRatio;
-                    observable->notifyRenderFinish(info);
-                } else if (payload->yogaHeight > 0.0f) {
-                    info.width = payload->yogaHeight * aspectRatio;
-                    info.height = payload->yogaHeight;
-                    observable->notifyRenderFinish(info);
-                } else {
-                    info.width = UnitConverter::pxToA2ui(imageWidth);
-                    info.height = UnitConverter::pxToA2ui(imageHeight);
-                    observable->notifyRenderFinish(info);
-                }
-            }
-        }
-    }
 
     if (isImageFadeInEnabled() && component->m_surfaceAnimated) {
         float pw = component->getWidth();

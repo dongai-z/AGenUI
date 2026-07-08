@@ -3,12 +3,15 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cstdint>
+#include <functional>
 #include <napi/native_api.h>
 #include <arkui/native_node.h>
 #include "factory/a2ui_component_registry.h"
 #include "a2ui_surface_listener.h"
 #include "a2ui/a2ui_component_render_observable.h"
 #include "a2ui/a2ui_surface_layout_observable.h"
+#include "agenui_dispatcher_types.h"
 #include "agenui_surface_manager_interface.h"
 
 namespace a2ui {
@@ -34,8 +37,10 @@ public:
     /**
      * Constructor
      * @param globalRegistry Global component registry containing all registered factories
+     * @param instanceId Owning SurfaceManager's instance ID (used to route actions
+     *        when multiple SurfaceManagers share the same surfaceId)
      */
-    explicit A2UISurfaceManager(ComponentRegistry* globalRegistry);
+    explicit A2UISurfaceManager(ComponentRegistry* globalRegistry, int instanceId = 0);
     ~A2UISurfaceManager() override;
 
     /**
@@ -127,8 +132,14 @@ public:
      */
     agenui::ISurfaceLayoutObservable* getSurfaceLayoutObservable() { return &surfaceLayoutObservable_; }
 
+    void setBlankCheckExecutor(const std::function<void(const std::string&, uint64_t, int32_t)>& executor);
+    void setErrorReporter(const std::function<void(const agenui::ErrorMessage&)>& reporter);
+    void setContentSizeChangedCallback(const std::function<void(const std::string&, float, float)>& callback);
+    void setRootComponentUpdateCallback(const std::function<void(const std::string&, const std::string&)>& callback);
+
 private:
     ComponentRegistry* globalRegistry_;                    // Global registry (non-owning)
+    int instanceId_ = 0;                                    // Owning SurfaceManager's instance ID
     std::map<std::string, A2UISurface*> surfaces_;                 // surfaceId -> Surface
     std::map<std::string, ComponentRegistry*> registries_; // surfaceId -> independent registry (owning)
     std::map<std::string, ArkUI_NodeContentHandle> surfaceContentHandles_; // surfaceId -> contentHandle
@@ -138,6 +149,10 @@ private:
 
     // Forwarding target. Owned by AGenUIEngine; lifetime managed by napi layer.
     agenui::ISurfaceManager* coreSurfaceManager_ = nullptr;
+    std::function<void(const std::string&, uint64_t, int32_t)> blankCheckExecutor_;
+    std::function<void(const agenui::ErrorMessage&)> errorReporter_;
+    std::function<void(const std::string&, float, float)> contentSizeChangedCallback_;
+    std::function<void(const std::string&, const std::string&)> rootComponentUpdateCallback_;
 };
 
 } // namespace a2ui
