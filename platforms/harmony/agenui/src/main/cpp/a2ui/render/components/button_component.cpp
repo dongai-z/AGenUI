@@ -1,6 +1,8 @@
 #include "button_component.h"
 #include "../a2ui_node.h"
+#include "../gradient_applier.h"
 #include "../../utils/a2ui_color_palette.h"
+#include "style_parser/agenui_color_parser.h"
 #include "log/a2ui_capi_log.h"
 #include <cstdlib>
 #include <cstdio>
@@ -167,9 +169,18 @@ void ButtonComponent::applyStyles(const nlohmann::json& properties) {
         bgColorStr = styles[bgColorKey].get<std::string>();
     }
     if (!bgColorStr.empty()) {
-        node.setBackgroundColor(parseColor(bgColorStr));
+        agenui::ColorValue cv;
+        if (agenui::ColorParser::parse(bgColorStr, cv)) {
+            if (cv.type == agenui::ColorValueType::Gradient) {
+                node.setBackgroundColor(colors::kColorTransparent);
+                GradientApplier::apply(m_nodeHandle, cv.gradient, getWidth(), getHeight());
+            } else {
+                GradientApplier::reset(m_nodeHandle);
+                node.setBackgroundColor(cv.solidColor);
+            }
+        }
     } else {
-        // Default to a transparent background.
+        GradientApplier::reset(m_nodeHandle);
         node.setBackgroundColor(colors::kColorTransparent);
     }
 

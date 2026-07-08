@@ -2,7 +2,7 @@
 #include "a2ui/utils/a2ui_animate_utils.h"
 #include "log/a2ui_capi_log.h"
 #include <arkui/native_animate.h>
-#include <arkui/native_node_napi.h>
+#include <deviceinfo.h>
 
 namespace a2ui {
 
@@ -38,9 +38,9 @@ void ImageComponent::startShimmer() {
     m_shimmerPending = true;
 
     ArkUI_ContextHandle context = OH_ArkUI_GetContextByNode(m_nodeHandle);
-    if (context) {
+    if (context && OH_GetSdkApiVersion() >= 18) {
         auto* payloadRef = new std::shared_ptr<ImageCallbackPayload>(m_callbackPayload);
-        int32_t postResult = OH_ArkUI_PostFrameCallback(
+        int32_t postResult = postFrameCallbackCompat(
             context,
             payloadRef,
             [](uint64_t, uint32_t, void* userData) {
@@ -72,9 +72,9 @@ void ImageComponent::createShimmerLayerIfNeeded() {
 
     if (width <= 0.0f || height <= 0.0f) {
         ArkUI_ContextHandle context = OH_ArkUI_GetContextByNode(m_nodeHandle);
-        if (context) {
+        if (context && OH_GetSdkApiVersion() >= 18) {
             auto* payloadRef = new std::shared_ptr<ImageCallbackPayload>(m_callbackPayload);
-            int32_t postResult = OH_ArkUI_PostFrameCallback(
+            int32_t postResult = postFrameCallbackCompat(
                 context,
                 payloadRef,
                 [](uint64_t, uint32_t, void* userData) {

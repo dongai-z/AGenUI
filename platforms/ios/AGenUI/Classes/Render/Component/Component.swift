@@ -287,12 +287,51 @@ public enum MeasureMode: Int {
         accessibilityHint = properties.description
         #endif
 
+        // Apply accessibility attributes from DSL
+        applyAccessibility()
+
         // Notify properties update callback
         onPropertiesUpdate?(allProperties)
 
         state!.clearDirty()
     }
-    
+
+    // MARK: - Accessibility
+
+    /// Apply accessibility attributes from DSL `accessibility` property.
+    ///
+    /// Maps `label` to `accessibilityLabel` and `description` to `accessibilityHint`.
+    /// Only touches accessibility state when the `accessibility` field is present and non-empty;
+    /// otherwise resets to system defaults so that removing the field from DSL clears VoiceOver text.
+    private func applyAccessibility() {
+        guard let a11y = self.properties["accessibility"] as? [String: Any], !a11y.isEmpty else {
+            resetAccessibility()
+            return
+        }
+
+        // label -> accessibilityLabel
+        if let label = a11y["label"] as? String, !label.isEmpty {
+            self.accessibilityLabel = label
+            self.isAccessibilityElement = true
+        } else {
+            self.accessibilityLabel = nil
+        }
+
+        // description -> accessibilityHint
+        if let desc = a11y["description"] as? String, !desc.isEmpty {
+            self.accessibilityHint = desc
+        } else {
+            self.accessibilityHint = nil
+        }
+    }
+
+    /// Reset accessibility properties to their system default state.
+    private func resetAccessibility() {
+        self.isAccessibilityElement = false
+        self.accessibilityLabel = nil
+        self.accessibilityHint = nil
+    }
+
     // MARK: - Visual Style Hooks
     
     /// Called when border-radius is applied via CSS.

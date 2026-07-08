@@ -98,6 +98,11 @@ android {
                         && project.property('agenuiEmitDebugSymbols').toString().toBoolean()) {
                     cmakeArgs.add("-DAGENUI_EMIT_DEBUG_SYMBOLS=ON")
                 }
+                // ASan: enable AddressSanitizer via -PagenuiEnableAsan=true
+                if (project.hasProperty('agenuiEnableAsan')
+                        && project.property('agenuiEnableAsan').toString().toBoolean()) {
+                    cmakeArgs.add("-DAGENUI_ENABLE_ASAN=ON")
+                }
                 arguments(*cmakeArgs)
             }
         }

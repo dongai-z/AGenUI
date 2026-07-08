@@ -212,4 +212,5 @@ target_link_libraries(a2ui-capi PUBLIC
     libavplayer.so
     libnative_media_core.so
     pixelmap
+    libdeviceinfo_ndk.z.so
 )

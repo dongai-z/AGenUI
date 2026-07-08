@@ -1,8 +1,10 @@
 package com.amap.agenui.render.component;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import androidx.annotation.RestrictTo;
 
@@ -197,6 +199,7 @@ public abstract class A2UIComponent {
             if (properties != null && !properties.isEmpty()) {
                 applyYogaLayout(view, properties, parent, false);
                 applyCommonStyles(view, properties, parent);
+                applyAccessibility(view, properties.get("accessibility"));
             }
 
             // Set a generic click listener (A2UI v0.9 protocol: all components support the action property).
@@ -261,6 +264,13 @@ public abstract class A2UIComponent {
                 applyCommonStyles(view, changedProps);
             }
 
+            // Accessibility: handled independently from styles.
+            // Only processes when the "accessibility" key itself changed (diff-aware guard),
+            // reading the merged value from the full properties map to stay in sync.
+            if (changedProps.containsKey("accessibility")) {
+                applyAccessibility(view, properties.get("accessibility"));
+            }
+
             // Subclass diff hook
             onUpdateProperties(changedProps);
 
@@ -283,8 +293,7 @@ public abstract class A2UIComponent {
      * - Display:    display, opacity
      * - Background: background-color, background
      * - Border:     border-radius, border-color, border-width
-     * - Shadow:     box-shadow
-     * - Filter:     filter
+     * - Filter:     filter (drop-shadow)
      *
      * @param view       The component's View
      * @param properties Properties Map
@@ -624,6 +633,63 @@ public abstract class A2UIComponent {
             view.setOnClickListener(v -> handleClick());
             view.setClickable(true);
             view.setFocusable(true);
+        }
+    }
+
+    /**
+     * Applies accessibility attributes from the DSL {@code accessibility} property.
+     *
+     * Maps {@code label} to {@code contentDescription} and {@code description} to
+     * {@code AccessibilityNodeInfo.hintText} (API 26+).
+     *
+     * When the accessibility object is absent or empty, resets to system defaults so
+     * that removing the field from DSL clears TalkBack text. This method is
+     * diff-aware — only called when the "accessibility" key changed.
+     *
+     * @param view            The component's View
+     * @param accessibilityObj The accessibility object from properties (Map or null)
+     */
+    private void applyAccessibility(View view, Object accessibilityObj) {
+        if (!(accessibilityObj instanceof Map) || ((Map<?, ?>) accessibilityObj).isEmpty()) {
+            view.setContentDescription(null);
+            view.setAccessibilityDelegate(null);
+            view.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            return;
+        }
+
+        Map<?, ?> a11y = (Map<?, ?>) accessibilityObj;
+
+        // label -> contentDescription
+        final Object labelRaw = a11y.get("label");
+        final String label = labelRaw instanceof String ? (String) labelRaw : null;
+
+        if (label != null && !label.isEmpty()) {
+            view.setContentDescription(label);
+            // Mark as a focusable accessibility element so TalkBack can focus
+            // on this View directly (equivalent to iOS isAccessibilityElement = true).
+            view.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+        } else {
+            view.setContentDescription(null);
+            view.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        }
+
+        // description -> hintText (API 26+)
+        // Note: not stateDescription (that's for state values like "checked"),
+        // hintText is the "supplementary description", semantically matching iOS accessibilityHint
+        final Object descRaw = a11y.get("description");
+        final String desc = descRaw instanceof String ? (String) descRaw : null;
+
+        if (Build.VERSION.SDK_INT >= 26 && desc != null && !desc.isEmpty()) {
+            view.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+                @Override
+                public void onInitializeAccessibilityNodeInfo(View host,
+                        AccessibilityNodeInfo info) {
+                    super.onInitializeAccessibilityNodeInfo(host, info);
+                    info.setHintText(desc);
+                }
+            });
+        } else {
+            view.setAccessibilityDelegate(null);
         }
     }
 

@@ -10,6 +10,12 @@ import styleHelperTest from './tests/StyleHelperTest';
 import functionResultTest from './tests/FunctionResultTest';
 import imageLoaderDataTest from './tests/ImageLoaderDataTest';
 import reentrantDeadlockTest from './tests/ReentrantDeadlockTest';
+import stopLoggerUseAfterFreeTest from './tests/StopLoggerUseAfterFreeTest';
+import listAdapterTeardownUafTest from './tests/ListAdapterTeardownUafTest';
+import modalDestructorUafTest from './tests/ModalDestructorUafTest';
+import textChunkTypeMismatchTest from './tests/TextChunkTypeMismatchTest';
+import rawIdTypeMismatchTest from './tests/RawIdTypeMismatchTest';
+import streamPluginSurfaceIdCrashTest from './tests/StreamPluginSurfaceIdCrashTest';
 
 export default function testsuite() {
   abilityTest();
@@ -24,4 +30,10 @@ export default function testsuite() {
   functionResultTest();
   imageLoaderDataTest();
   reentrantDeadlockTest();
+  stopLoggerUseAfterFreeTest();
+  listAdapterTeardownUafTest();
+  modalDestructorUafTest();
+  textChunkTypeMismatchTest();
+  rawIdTypeMismatchTest();
+  streamPluginSurfaceIdCrashTest();
 }

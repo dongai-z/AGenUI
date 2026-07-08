@@ -14,14 +14,16 @@ export abstract class HybridBaseView {
   private ctxId: string = '';
   private nodeId: string = '';
   private viewStatePtr: bigint = BigInt(0);
+  private instanceId: number = 0;
   private arkUINode: ComponentContent<HybridBaseView> | null = null;
   protected baseProperty?: BaseProperty<HybridBaseView>;
 
-  constructor(viewTag: string, ctxId: string, nodeId: string, viewStatePtr: bigint) {
+  constructor(viewTag: string, ctxId: string, nodeId: string, viewStatePtr: bigint, instanceId: number = 0) {
     this.viewTag = viewTag;
     this.ctxId = ctxId;
     this.nodeId = nodeId;
     this.viewStatePtr = viewStatePtr;
+    this.instanceId = instanceId;
 
     this.baseProperty = this.createProperty();
   }
@@ -55,6 +57,10 @@ export abstract class HybridBaseView {
 
   getViewStatePtr(): bigint {
     return this.viewStatePtr;
+  }
+
+  getInstanceId(): number {
+    return this.instanceId;
   }
 
   getProperty(): BaseProperty<HybridBaseView> {
@@ -153,6 +159,6 @@ export abstract class HybridBaseView {
   }
 }
 
-export type HybridViewCreator = (viewTag: string, ctxId: string, nodeId: string, viewStatePtr: bigint) => HybridBaseView;
+export type HybridViewCreator = (viewTag: string, ctxId: string, nodeId: string, viewStatePtr: bigint, instanceId: number) => HybridBaseView;
 export type HybridInvokeValue = boolean | string | number | object | [] | Object | undefined | null;
 export type HybridInvokeCallback = (args: Array<HybridInvokeValue>) => HybridInvokeValue;

@@ -1,8 +1,10 @@
 #include "divider_component.h"
 #include "../a2ui_node.h"
+#include "../gradient_applier.h"
 #include "a2ui/measure/a2ui_platform_layout_bridge.h"
 #include "a2ui/utils/a2ui_color_palette.h"
 #include "a2ui/utils/a2ui_parse_utils.h"
+#include "style_parser/agenui_color_parser.h"
 #include "log/a2ui_capi_log.h"
 
 namespace a2ui {
@@ -122,13 +124,26 @@ void DividerComponent::applyStyles(const nlohmann::json& properties) {
         A2UINode(m_lineHandle).setBackgroundColor(m_color);
     }
 
-    // backgroundColor overrides background-color.
+    // backgroundColor overrides background-color (supports gradient).
+    std::string bgColorStr;
     if (styles.contains("backgroundColor") && styles["backgroundColor"].is_string()) {
-        m_color = parseColor(styles["backgroundColor"].get<std::string>());
-        A2UINode(m_lineHandle).setBackgroundColor(m_color);
+        bgColorStr = styles["backgroundColor"].get<std::string>();
     } else if (styles.contains("background-color") && styles["background-color"].is_string()) {
-        m_color = parseColor(styles["background-color"].get<std::string>());
-        A2UINode(m_lineHandle).setBackgroundColor(m_color);
+        bgColorStr = styles["background-color"].get<std::string>();
+    }
+    if (!bgColorStr.empty()) {
+        A2UINode lineNode(m_lineHandle);
+        agenui::ColorValue cv;
+        if (agenui::ColorParser::parse(bgColorStr, cv)) {
+            if (cv.type == agenui::ColorValueType::Gradient) {
+                lineNode.setBackgroundColor(colors::kColorTransparent);
+                GradientApplier::apply(m_lineHandle, cv.gradient, getWidth(), getHeight());
+            } else {
+                GradientApplier::reset(m_lineHandle);
+                m_color = cv.solidColor;
+                lineNode.setBackgroundColor(cv.solidColor);
+            }
+        }
     }
 
     // Explicit width.
@@ -185,6 +200,18 @@ void DividerComponent::applyStyles(const nlohmann::json& properties) {
             m_marginRight = mr;
             needsLayoutUpdate = true;
         }
+    }
+    // The base class applies border-radius to m_nodeHandle (outer STACK),
+    // but the visible bar is m_lineHandle — forward it here.
+    if(styles.contains("border-radius")){
+        float br = 0.0f;
+        if(styles["border-radius"].is_number()){
+            br = styles["border-radius"].get<float>();
+        } else if (styles["border-radius"].is_string()) {
+            br = parseFloat(styles["border-radius"].get<std::string>(), 0.0f);
+        }
+
+        A2UINode(m_lineHandle).setBorderRadius(br);
     }
 
     if (needsLayoutUpdate) {

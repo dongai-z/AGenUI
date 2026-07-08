@@ -34,29 +34,29 @@
 import UIKit
 
 /// Resolved CSS padding in iOS points. Edges are clamped to >= 0.
-struct CSSPadding {
-    let top: CGFloat
-    let right: CGFloat
-    let bottom: CGFloat
-    let left: CGFloat
+public struct CSSPadding {
+    public let top: CGFloat
+    public let right: CGFloat
+    public let bottom: CGFloat
+    public let left: CGFloat
 
-    static let zero = CSSPadding(top: 0, right: 0, bottom: 0, left: 0)
+    public static let zero = CSSPadding(top: 0, right: 0, bottom: 0, left: 0)
 
-    var hasAny: Bool {
+    public var hasAny: Bool {
         return top > 0 || right > 0 || bottom > 0 || left > 0
     }
 }
 
-enum CSSPaddingResolver {
+public enum CSSPaddingResolver {
 
     /// Same px -> pt scaling factor used by font-size and line-height
     /// elsewhere in the iOS render layer (see `TextComponent.BS_POINT_SCALE`).
-    static let pointScale: CGFloat = 0.5
+    public static let pointScale: CGFloat = 0.5
 
     /// Resolve a CSS `styles` dictionary into a 4-edge padding tuple.
     /// Returns `CSSPadding.zero` when no padding-* key is present so callers
     /// can rely on a non-nil result and decide whether to apply or skip.
-    static func resolve(_ styles: [String: Any]) -> CSSPadding {
+    public static func resolve(_ styles: [String: Any]) -> CSSPadding {
         var top: CGFloat = 0
         var right: CGFloat = 0
         var bottom: CGFloat = 0
@@ -87,7 +87,7 @@ enum CSSPaddingResolver {
     /// Returns true when the styles object carries any `padding*` key.
     /// Used by callers that want to skip touching edge constraints when the
     /// caller never asked for padding (avoids overwriting prior values).
-    static func hasAnyPaddingKey(_ styles: [String: Any]) -> Bool {
+    public static func hasAnyPaddingKey(_ styles: [String: Any]) -> Bool {
         return styles["padding"] != nil
             || styles["padding-top"] != nil
             || styles["padding-right"] != nil

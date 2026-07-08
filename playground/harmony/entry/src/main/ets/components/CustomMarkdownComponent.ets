@@ -74,8 +74,8 @@ export class CustomMarkdownComponent extends A2UIComponent {
   private lastContent: string = '';
   private lastSrc: string = '';
 
-  constructor(surfaceId: string, nodeId: string, componentType: string, viewStatePtr: bigint) {
-    super(surfaceId, nodeId, componentType, viewStatePtr, wrapBuilder<[CustomView]>(buildCustomMarkdown));
+  constructor(surfaceId: string, nodeId: string, componentType: string, viewStatePtr: bigint, instanceId: number = 0) {
+    super(surfaceId, nodeId, componentType, viewStatePtr, wrapBuilder<[CustomView]>(buildCustomMarkdown), instanceId);
     this.mdContext = this.getUIContext()?.getHostContext() as Context;
   }
 

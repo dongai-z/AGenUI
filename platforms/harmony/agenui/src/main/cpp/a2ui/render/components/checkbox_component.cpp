@@ -210,7 +210,8 @@ void CheckBoxComponent::applyContainerBorderStyles(const nlohmann::json& propert
     };
 
     if (styles.contains("background-color") && styles["background-color"].is_string()) {
-        containerNode.setBackgroundColor(parseColor(styles["background-color"].get<std::string>()));
+        // Use base class to support gradient (linear-gradient, etc.)
+        applyBackgroundColor(properties);
     }
     if (styles.contains("opacity") && (styles["opacity"].is_number() || styles["opacity"].is_string())) {
         float opacity = parseFloatVal(styles["opacity"]);

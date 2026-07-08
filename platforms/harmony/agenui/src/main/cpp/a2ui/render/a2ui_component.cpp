@@ -94,7 +94,9 @@ void A2UIComponent::updateProperties(const nlohmann::json& newProps) {
         }
         
         updateLayoutProperties(newProps);
-        
+
+        applyAccessibility(getProperties());
+
         onUpdateProperties(newProps);
         
         if (m_state->isDirty()) {
@@ -110,7 +112,9 @@ void A2UIComponent::updateProperties(const nlohmann::json& newProps) {
         }
         
         updateLayoutProperties(newProps);
-        
+
+        applyAccessibility(getProperties());
+
         setupClickListener();
         
         onUpdateProperties(newProps);
@@ -208,6 +212,15 @@ void A2UIComponent::addChild(A2UIComponent* child) {
         g_nodeAPI->addChild(m_nodeHandle, child->getNodeHandle());
     }
 
+    // Aligned with iOS Component.attachChildView gate: only create the child
+    // view when the parent allows eager creation and the parent chain permits
+    // it.  canCreateChildViewConsideringParent() walks up the parent chain,
+    // so a horizontal List (shouldCreateChildView=false) blocks creation of
+    // its children until the adapter explicitly calls child->createView().
+    if (shouldCreateChildView() && child->canCreateChildViewConsideringParent()) {
+        child->createView();
+    }
+
     HM_LOGI("Parent %s added child %s (autoAddView=%s)", m_id.c_str(), child->m_id.c_str(), shouldAutoAddChildView() ? "true" : "false");
 }
 
@@ -245,6 +258,9 @@ void A2UIComponent::removeChildById(const std::string& childId) {
 void A2UIComponent::destroy() {
     HM_LOGI("Destroying component %s (type: %s, children: %zu)", m_id.c_str(), m_componentType.c_str(), m_children.size());
 
+    // Cancel any running opacity animator before the node is freed.
+    cancelOpacityAnimator(m_opacityAnimPayload);
+
     onDestroy();
 
     for (A2UIComponent* child : m_children) {
@@ -280,6 +296,38 @@ void A2UIComponent::destroy() {
 
 bool A2UIComponent::shouldAutoAddChildView() const {
     return true;
+}
+
+bool A2UIComponent::canCreateChildViewConsideringParent() const {
+    if (!shouldCreateChildView()) {
+        return false;
+    }
+    if (m_parent && !m_parent->canCreateChildViewConsideringParent()) {
+        return false;
+    }
+    return true;
+}
+
+void A2UIComponent::createView() {
+    if (m_viewCreated) {
+        return;
+    }
+    m_viewCreated = true;
+
+    // Recursively materialize children — mirrors iOS createChildViews().
+    // Lazy containers (e.g. horizontal List) have shouldCreateChildView()=false,
+    // so canCreateChildViewConsideringParent() returns false in addChild(),
+    // preventing createView() from being called on them.  Their children are
+    // materialized on demand by the adapter (handleAdapterAddNode).
+    for (A2UIComponent* child : m_children) {
+        if (child) {
+            child->createView();
+        }
+    }
+
+    // Apply all stored properties — mirrors iOS updateProperties(self.properties)
+    // called at the end of createView().
+    updateProperties(m_properties);
 }
 
 bool A2UIComponent::shouldApplyChildLayoutPosition(const A2UIComponent* child) const {
@@ -345,7 +393,7 @@ void A2UIComponent::playAppearAnimationIfNeeded() {
     }
     m_pendingAppearAnimation = false;
     m_hasPlayedAppearAnimation = true;
-    animateNodeOpacityAfterMount(m_nodeHandle, m_appearTargetOpacity, kDefaultAppearDurationMs);
+    animateNodeOpacityAfterMount(m_nodeHandle, m_appearTargetOpacity, kDefaultAppearDurationMs, &m_opacityAnimPayload);
 }
 
 void A2UIComponent::onUpdateProperty(const std::string& key, const nlohmann::json& value) {
@@ -422,21 +470,20 @@ void A2UIComponent::dispatchAction(const nlohmann::json& actionDef) {
 
     HM_LOGI("surfaceId=%s, componentId=%s, context=%s", m_surfaceId.c_str(), m_id.c_str(), actionMessage.contextJson.c_str());
 
-    int instanceId = agenui::A2UIMessageListener::findInstanceIdBySurfaceId(m_surfaceId);
-    if (instanceId != 0) {
-        auto* engine = agenui::getAGenUIEngine();
-        if (engine) {
-            auto* sm = engine->findSurfaceManager(instanceId);
-            if (sm) {
-                sm->submitUIAction(actionMessage);
-            } else {
-                HM_LOGE("ISurfaceManager not found for instanceId=%d", instanceId);
-            }
+    if (m_instanceId == 0) {
+        HM_LOGE("instanceId not set, surfaceId=%s, componentId=%s", m_surfaceId.c_str(), m_id.c_str());
+        return;
+    }
+    auto* engine = agenui::getAGenUIEngine();
+    if (engine) {
+        auto* sm = engine->findSurfaceManager(m_instanceId);
+        if (sm) {
+            sm->submitUIAction(actionMessage);
         } else {
-            HM_LOGE("AGenUI Engine is null");
+            HM_LOGE("ISurfaceManager not found for instanceId=%d", m_instanceId);
         }
     } else {
-        HM_LOGE("instanceId not found for surfaceId=%s", m_surfaceId.c_str());
+        HM_LOGE("AGenUI Engine is null");
     }
 }
 
@@ -450,9 +497,10 @@ void A2UIComponent::notifyAppeared(const std::string& parentType, const nlohmann
     }
 
     agenui::A2UIMessageListener* listener =
-        agenui::A2UIMessageListener::findListenerBySurfaceId(m_surfaceId);
+        agenui::A2UIMessageListener::findListenerByInstanceId(m_instanceId);
     if (!listener) {
-        HM_LOGW("notifyAppeared: listener not found for surfaceId=%s", m_surfaceId.c_str());
+        HM_LOGW("notifyAppeared: listener not found for instanceId=%d, surfaceId=%s",
+                m_instanceId, m_surfaceId.c_str());
         return;
     }
 
@@ -479,21 +527,20 @@ void A2UIComponent::syncState(const nlohmann::json& changeJson) {
     HM_LOGI("surfaceId=%s, componentId=%s, change=%s",
             m_surfaceId.c_str(), m_id.c_str(), syncMessage.change.c_str());
 
-    int instanceId = agenui::A2UIMessageListener::findInstanceIdBySurfaceId(m_surfaceId);
-    if (instanceId != 0) {
-        auto* engine = agenui::getAGenUIEngine();
-        if (engine) {
-            auto* sm = engine->findSurfaceManager(instanceId);
-            if (sm) {
-                sm->submitUIDataModel(syncMessage);
-            } else {
-                HM_LOGE("ISurfaceManager not found for instanceId=%d", instanceId);
-            }
+    if (m_instanceId == 0) {
+        HM_LOGE("instanceId not set, surfaceId=%s, componentId=%s", m_surfaceId.c_str(), m_id.c_str());
+        return;
+    }
+    auto* engine = agenui::getAGenUIEngine();
+    if (engine) {
+        auto* sm = engine->findSurfaceManager(m_instanceId);
+        if (sm) {
+            sm->submitUIDataModel(syncMessage);
         } else {
-            HM_LOGE("AGenUI Engine is null");
+            HM_LOGE("ISurfaceManager not found for instanceId=%d", m_instanceId);
         }
     } else {
-        HM_LOGE("instanceId not found for surfaceId=%s", m_surfaceId.c_str());
+        HM_LOGE("AGenUI Engine is null");
     }
 }
 
@@ -841,6 +888,47 @@ void A2UIComponent::applyBorderStyles(const nlohmann::json& properties) {
             uint32_t color = parseColor(styles[bcKey].get<std::string>());
             node.setBorderColor(color);
         }
+    }
+}
+
+void A2UIComponent::applyAccessibility(const nlohmann::json& properties) {
+    if (!m_nodeHandle) {
+        return;
+    }
+
+    if (properties.contains("accessibility") && properties["accessibility"].is_object()
+        && !properties["accessibility"].empty()) {
+        const auto& a11y = properties["accessibility"];
+
+        // label -> NODE_ACCESSIBILITY_TEXT
+        if (a11y.contains("label") && a11y["label"].is_string()) {
+            const std::string& label = a11y["label"].get<std::string>();
+            if (!label.empty()) {
+                ArkUI_AttributeItem item = {nullptr, 0, label.c_str()};
+                g_nodeAPI->setAttribute(m_nodeHandle, NODE_ACCESSIBILITY_TEXT, &item);
+            } else {
+                g_nodeAPI->resetAttribute(m_nodeHandle, NODE_ACCESSIBILITY_TEXT);
+            }
+        } else {
+            g_nodeAPI->resetAttribute(m_nodeHandle, NODE_ACCESSIBILITY_TEXT);
+        }
+
+        // description -> NODE_ACCESSIBILITY_DESCRIPTION
+        if (a11y.contains("description") && a11y["description"].is_string()) {
+            const std::string& desc = a11y["description"].get<std::string>();
+            if (!desc.empty()) {
+                ArkUI_AttributeItem item = {nullptr, 0, desc.c_str()};
+                g_nodeAPI->setAttribute(m_nodeHandle, NODE_ACCESSIBILITY_DESCRIPTION, &item);
+            } else {
+                g_nodeAPI->resetAttribute(m_nodeHandle, NODE_ACCESSIBILITY_DESCRIPTION);
+            }
+        } else {
+            g_nodeAPI->resetAttribute(m_nodeHandle, NODE_ACCESSIBILITY_DESCRIPTION);
+        }
+    } else {
+        // Accessibility field is absent or empty -> reset to system defaults
+        g_nodeAPI->resetAttribute(m_nodeHandle, NODE_ACCESSIBILITY_TEXT);
+        g_nodeAPI->resetAttribute(m_nodeHandle, NODE_ACCESSIBILITY_DESCRIPTION);
     }
 }
 

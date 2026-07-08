@@ -276,26 +276,28 @@ napi_value UnbindSurface(napi_env env, napi_callback_info info) {
 }
 
 napi_value Surface_onSizeChanged(napi_env env, napi_callback_info info) {
-    size_t argc = 3;
-    napi_value args[3];
+    size_t argc = 4;
+    napi_value args[4];
     napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
 
-    if (argc < 3) {
-        HM_LOGE("OnSurfaceSizeChanged: Expected 3 arguments, got %zu", argc);
+    if (argc < 4) {
+        HM_LOGE("OnSurfaceSizeChanged: Expected 4 arguments, got %zu", argc);
         NAPI_RETURN_UNDEFINED(env);
     }
 
-    std::string surfaceId = napiGetString(env, args[0]);
+    int32_t instanceId = 0;
+    napi_get_value_int32(env, args[0], &instanceId);
+
+    std::string surfaceId = napiGetString(env, args[1]);
 
     double width = 0.0;
-    napi_get_value_double(env, args[1], &width);
+    napi_get_value_double(env, args[2], &width);
 
     double height = 0.0;
-    napi_get_value_double(env, args[2], &height);
+    napi_get_value_double(env, args[3], &height);
 
-    HM_LOGI("OnSurfaceSizeChanged: surfaceId=%s, width=%f, height=%f", surfaceId.c_str(), width, height);
+    HM_LOGI("OnSurfaceSizeChanged: instanceId=%d, surfaceId=%s, width=%f, height=%f", instanceId, surfaceId.c_str(), width, height);
 
-    int instanceId = agenui::A2UIMessageListener::findInstanceIdBySurfaceId(surfaceId);
     auto* engine = agenui::getAGenUIEngine();
     if (!engine) {
         HM_LOGE("OnSurfaceSizeChanged: Engine not initialized");
@@ -303,7 +305,7 @@ napi_value Surface_onSizeChanged(napi_env env, napi_callback_info info) {
     }
     agenui::ISurfaceManager* sm = engine->findSurfaceManager(instanceId);
     if (!sm) {
-        HM_LOGE("OnSurfaceSizeChanged: SurfaceManager not found for surfaceId=%s", surfaceId.c_str());
+        HM_LOGE("OnSurfaceSizeChanged: SurfaceManager not found for instanceId=%d, surfaceId=%s", instanceId, surfaceId.c_str());
         NAPI_RETURN_UNDEFINED(env);
     }
 
@@ -345,24 +347,89 @@ napi_value DestroySurface(napi_env env, napi_callback_info info) {
     NAPI_RETURN_UNDEFINED(env);
 }
 
-napi_value FindInstanceIdBySurfaceId(napi_env env, napi_callback_info info) {
-    size_t argc = 1;
-    napi_value args[1];
+napi_value Surface_startBlankCheck(napi_env env, napi_callback_info info) {
+    size_t argc = 4;
+    napi_value args[4];
     napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
 
-    if (argc < 1) {
-        HM_LOGE("FindInstanceIdBySurfaceId: Expected 1 argument, got %zu", argc);
-        napi_value result;
-        napi_create_int32(env, 0, &result);
-        return result;
+    if (argc < 4) {
+        HM_LOGE("Surface_startBlankCheck: Expected 4 arguments, got %zu", argc);
+        NAPI_RETURN_UNDEFINED(env);
     }
 
-    std::string surfaceId = napiGetString(env, args[0]);
-    int instanceId = agenui::A2UIMessageListener::findInstanceIdBySurfaceId(surfaceId);
+    int32_t instanceId = 0;
+    napi_get_value_int32(env, args[0], &instanceId);
 
-    HM_LOGI("FindInstanceIdBySurfaceId: surfaceId=%s -> instanceId=%d", surfaceId.c_str(), instanceId);
+    std::string surfaceId = napiGetString(env, args[1]);
 
-    napi_value result;
-    napi_create_int32(env, instanceId, &result);
-    return result;
+    int32_t delayMs = 0;
+    napi_get_value_int32(env, args[2], &delayMs);
+
+    int32_t minComponentCount = 0;
+    napi_get_value_int32(env, args[3], &minComponentCount);
+
+    HM_LOGI("Surface_startBlankCheck: instanceId=%d, surfaceId=%s, delayMs=%d, minCount=%d",
+            instanceId, surfaceId.c_str(), delayMs, minComponentCount);
+
+    auto* listener = findMessageListenerByInstanceId(instanceId);
+    if (!listener) {
+        HM_LOGE("Surface_startBlankCheck: listener not found for instanceId=%d", instanceId);
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    auto* surfaceManager = listener->getSurfaceManager();
+    if (!surfaceManager) {
+        HM_LOGE("Surface_startBlankCheck: surfaceManager not found for instanceId=%d", instanceId);
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    auto* surface = surfaceManager->getSurface(surfaceId);
+    if (!surface) {
+        HM_LOGE("Surface_startBlankCheck: surface not found for surfaceId=%s", surfaceId.c_str());
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    surface->startBlankCheck(delayMs, minComponentCount);
+
+    NAPI_RETURN_UNDEFINED(env);
+}
+
+napi_value Surface_cancelBlankCheck(napi_env env, napi_callback_info info) {
+    size_t argc = 2;
+    napi_value args[2];
+    napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
+
+    if (argc < 2) {
+        HM_LOGE("Surface_cancelBlankCheck: Expected 2 arguments, got %zu", argc);
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    int32_t instanceId = 0;
+    napi_get_value_int32(env, args[0], &instanceId);
+
+    std::string surfaceId = napiGetString(env, args[1]);
+
+    HM_LOGI("Surface_cancelBlankCheck: instanceId=%d, surfaceId=%s", instanceId, surfaceId.c_str());
+
+    auto* listener = findMessageListenerByInstanceId(instanceId);
+    if (!listener) {
+        HM_LOGE("Surface_cancelBlankCheck: listener not found for instanceId=%d", instanceId);
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    auto* surfaceManager = listener->getSurfaceManager();
+    if (!surfaceManager) {
+        HM_LOGE("Surface_cancelBlankCheck: surfaceManager not found for instanceId=%d", instanceId);
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    auto* surface = surfaceManager->getSurface(surfaceId);
+    if (!surface) {
+        HM_LOGE("Surface_cancelBlankCheck: surface not found for surfaceId=%s", surfaceId.c_str());
+        NAPI_RETURN_UNDEFINED(env);
+    }
+
+    surface->cancelBlankCheck();
+
+    NAPI_RETURN_UNDEFINED(env);
 }

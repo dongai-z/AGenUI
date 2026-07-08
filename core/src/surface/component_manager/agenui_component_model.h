@@ -11,6 +11,7 @@
 #include "data_value/agenui_data_binding_data_value.h"
 #include "data_value/agenui_tabs_data_value.h"
 #include "data_value/agenui_styles_data_value.h"
+#include "data_value/agenui_accessibility_data_value.h"
 #include "data_value/agenui_event_action_data_value.h"
 #include "data_value/agenui_function_call_action_data_value.h"
 #include "data_value/agenui_idata_value_context.h"

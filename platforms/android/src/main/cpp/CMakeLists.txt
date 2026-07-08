@@ -22,6 +22,21 @@ project("amap_AGenUI")
 option(AGENUI_EMIT_DEBUG_SYMBOLS
        "Emit lib*.so.debug companion files alongside stripped .so for release builds" OFF)
 
+# ---------------------------------------------------------------------------
+# AddressSanitizer (opt-in)
+# ---------------------------------------------------------------------------
+# When AGENUI_ENABLE_ASAN=ON:
+#   - Compile with -fsanitize=address -fno-omit-frame-pointer
+#   - Link with -fsanitize=address
+#   - The hosting APK must bundle libclang_rt.asan-*-android.so from the NDK
+#     toolchain AND provide a wrap.sh that sets LD_PRELOAD.
+#   See playground/android/app/src/main/resources/lib/arm64-v8a/wrap.sh.
+# When AGENUI_ENABLE_HWASAN=ON (arm64 only, requires HWASan-enabled device):
+#   - Uses -fsanitize=hwaddress (ARM TBI). No LD_PRELOAD needed.
+# Defaults to OFF; enable via Gradle: -PagenuiEnableAsan=true / -PagenuiEnableHwasan=true
+option(AGENUI_ENABLE_ASAN "Enable AddressSanitizer for memory error detection" OFF)
+option(AGENUI_ENABLE_HWASAN "Enable HWAddressSanitizer (arm64 only, needs HWASan device)" OFF)
+
 function(agenui_split_debug_symbols target)
     if(NOT AGENUI_EMIT_DEBUG_SYMBOLS)
         return()
@@ -157,6 +172,21 @@ else()
     add_definitions(-D_DEBUG)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -fPIC -g")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -fPIC -g")
+endif()
+
+# ---------------------------------------------------------------------------
+# ASan / HWASan flags (applied to both Debug and Release when enabled)
+# ---------------------------------------------------------------------------
+if(AGENUI_ENABLE_HWASAN AND CMAKE_ANDROID_ARCH_ABI STREQUAL "arm64-v8a")
+    message(STATUS "[HWASan] HardwareAddressSanitizer ENABLED (arm64)")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=hwaddress -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=hwaddress -fno-omit-frame-pointer")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=hwaddress")
+elseif(AGENUI_ENABLE_ASAN)
+    message(STATUS "[ASan] AddressSanitizer ENABLED")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address")
 endif()
 
 # ============ Path to C++ core (monorepo) ============

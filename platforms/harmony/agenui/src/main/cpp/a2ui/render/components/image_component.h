@@ -9,6 +9,10 @@ typedef struct ArkUI_Animator* ArkUI_AnimatorHandle;
 
 namespace a2ui {
 
+// Forward declarations for reveal animation payloads (defined in image_component_reveal.cpp)
+struct RevealPayload;
+struct ScalePayload;
+
 constexpr float kImageFadeInStartScale = 0.98f;
 
 /**
@@ -33,6 +37,20 @@ public:
 
 protected:
     void onUpdateProperties(const nlohmann::json& properties) override;
+
+    /**
+     * Override createView() to participate in the cross-platform lazy-loading
+     * lifecycle.  The base implementation sets m_viewCreated, calls
+     * onCreateView(), recursively creates children, then applies stored
+     * properties via updateProperties() — which triggers applyUrl().
+     *
+     * For components inside a lazy container (e.g. horizontal List), this
+     * method is not called until the adapter binds the component to a
+     * viewport slot, deferring image loading until the component is visible.
+     * Mirrors iOS ImageComponent which overrides createView() to set up
+     * imageView before loadImage() can execute.
+     */
+    void createView() override;
 
 private:
     /** Apply the image URL. */
@@ -91,10 +109,13 @@ private:
 private:
     // Current image source and fade state
     std::string m_currentUrl;
-    bool m_pendingFadeIn = false;
 
-    float m_currentYogaWidth = 0.0f;
-    float m_currentYogaHeight = 0.0f;
+    // Track last-applied dimension values to detect real changes
+    // (styles is sent in full each time, so key-existence ≠ value change).
+    nlohmann::json m_currentWidth;
+    nlohmann::json m_currentHeight;
+
+    bool m_pendingFadeIn = false;
 
     // Current external loader request ID. Empty means no external loader is in use.
     std::string m_currentRequestId;
@@ -114,8 +135,6 @@ private:
      */
     struct ImageCallbackPayload {
         ImageComponent* component = nullptr;
-        float yogaWidth = 0.0f;
-        float yogaHeight = 0.0f;
     };
 
     // The payload is owned by shared_ptr for the lifetime of the component.
@@ -126,6 +145,19 @@ private:
 
     // MagicReveal mask node, created during playMagicReveal and cleaned up when the animation ends.
     ArkUI_NodeHandle m_revealMaskNode = nullptr;
+
+    // Reveal animation state for safe cleanup on component destruction.
+    // Stores animator handles and payload pointers so cancelRevealAnimators()
+    // can cancel them before the ArkUI node is freed, preventing use-after-free
+    // in Animator onFrame callbacks.
+    RevealPayload* m_revealPayload = nullptr;
+    ScalePayload* m_scalePayload = nullptr;
+    ArkUI_AnimatorHandle m_revealMaskAnim = nullptr;
+    ArkUI_AnimatorHandle m_revealGlassAnim = nullptr;
+    ArkUI_AnimatorHandle m_revealScaleAnim = nullptr;
+
+    /** Cancel all running reveal animators. Call from onDestroy/destructor. */
+    void cancelRevealAnimators();
 };
 
 } // namespace a2ui

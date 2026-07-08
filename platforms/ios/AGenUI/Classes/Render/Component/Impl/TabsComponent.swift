@@ -407,8 +407,8 @@ open class TabsComponent: Component {
         // Yoga positions Tabs children as absolute (top=48pt) relative to Tabs,
         // but child lives inside contentView which is already below tabBar.
         // Reset origin after each engine layout push to fix the coordinate space mismatch.
-        child.onPropertiesUpdate = { [weak self] _ in
-            guard let self = self else { return }
+        child.onPropertiesUpdate = { [weak self, weak child] _ in
+            guard let self = self ,let child = child else { return }
             var childFrame = child.frame
             childFrame.origin = .zero
             child.frame = childFrame

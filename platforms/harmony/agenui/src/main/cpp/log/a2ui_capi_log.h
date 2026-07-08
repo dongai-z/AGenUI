@@ -127,6 +127,7 @@ inline void a2ui_capi_assert_log_format(LogLevel level, const char* file, const 
  *
  * Output: [a2ui-capi][filename:line][functionName] assertion failure
  */
+#if defined(APP_BUILD_TYPE_TEST) || defined(APP_BUILD_TYPE_INSPECT) || defined(APP_BUILD_TYPE_ASAN)
 #define RELEASE_ASSERT_WITHLOG(expr, format, ...) \
     do { \
         if(!(expr)) { \
@@ -142,3 +143,18 @@ inline void a2ui_capi_assert_log_format(LogLevel level, const char* file, const 
             abort(); \
         } \
     } while(0)
+#else
+#define RELEASE_ASSERT_WITHLOG(expr, format, ...) \
+    do { \
+        if(!(expr)) { \
+            a2ui_capi_assert_log_format(LOG_FATAL, __FILE__, __FUNCTION__, __LINE__, "Assertion failed: %s " format, #expr, ##__VA_ARGS__); \
+        } \
+    } while(0)
+
+#define RELEASE_ASSERT(expr) \
+    do { \
+        if(!(expr)) { \
+            a2ui_capi_assert_log_format(LOG_FATAL, __FILE__, __FUNCTION__, __LINE__, "Assertion failed: %s", #expr); \
+        } \
+    } while(0)
+#endif

@@ -198,7 +198,7 @@ export class HybridWebView extends HybridBaseView {
 
     // Report rendered size to C++ through reportComponentRenderSize using the shared NAPI entry point.
     nativeModule.reportComponentRenderSize(
-      this.getContextId(), this.getNodeId(), 'Web',
+      this.getInstanceId(), this.getContextId(), this.getNodeId(), 'Web',
       finalH,
       property.getViewWidth() > 0 ? property.getViewWidth() : 0,
       this.getViewStatePtr()

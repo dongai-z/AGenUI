@@ -7,9 +7,9 @@ import { UpdateState } from './ViewState';
 import { HybridInvokeCallback, HybridBaseView, HybridViewCreator, HYBRID_VIEW_TAG } from './HybridBaseView';
 import { HybridWebView } from './HybridWebView';
 
-export function createHybridView(viewTag: string, ctxId: string, nodeId: string, viewStatePtr: bigint): ComponentContent<HybridBaseView> | null {
-  hilog.debug(0, HYBRID_VIEW_TAG, "createHybridView(viewTag:%{public}s,ctxId:%{public}s,nodeId:%{public}s)", viewTag, ctxId, nodeId);
-  return HybridViewManager.getInstance().createArkTsView(viewTag, ctxId, nodeId, viewStatePtr);
+export function createHybridView(viewTag: string, ctxId: string, nodeId: string, viewStatePtr: bigint, instanceId: number): ComponentContent<HybridBaseView> | null {
+  hilog.debug(0, HYBRID_VIEW_TAG, "createHybridView(viewTag:%{public}s,ctxId:%{public}s,nodeId:%{public}s,instanceId:%{public}d)", viewTag, ctxId, nodeId, instanceId);
+  return HybridViewManager.getInstance().createArkTsView(viewTag, ctxId, nodeId, viewStatePtr, instanceId);
 }
 
 export function updateHybridView(nodeId: string, updateStates: UpdateState[]) {
@@ -66,20 +66,21 @@ export class HybridViewManager {
    * @param ctxId Context ID
    * @param nodeId Node ID
    * @param viewStatePtr Pointer to the matching C++ ViewState
+   * @param instanceId SurfaceManager instance ID
    * @return ComponentContent
    */
-  public createArkTsView(viewTag: string, ctxId: string, nodeId: string, viewStatePtr: bigint): ComponentContent<HybridBaseView> | null {
+  public createArkTsView(viewTag: string, ctxId: string, nodeId: string, viewStatePtr: bigint, instanceId: number): ComponentContent<HybridBaseView> | null {
     let hybridView: HybridBaseView | null = null;
     switch (viewTag) {
       case 'Web': { // Built-in Web component
-        hybridView = new HybridWebView(viewTag, ctxId, nodeId, viewStatePtr);
+        hybridView = new HybridWebView(viewTag, ctxId, nodeId, viewStatePtr, instanceId);
       }
         break;
     }
     if (hybridView === null) {
       let creator: HybridViewCreator | undefined = this.viewCreatorRegistry.get(viewTag);
       if (creator) {
-        hybridView = creator(ctxId, nodeId, viewTag, viewStatePtr);
+        hybridView = creator(ctxId, nodeId, viewTag, viewStatePtr, instanceId);
       }
     }
     if (hybridView) {

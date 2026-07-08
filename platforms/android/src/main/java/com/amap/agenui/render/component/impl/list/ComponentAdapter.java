@@ -2,12 +2,12 @@ package com.amap.agenui.render.component.impl.list;
 
 import android.content.Context;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amap.agenui.render.component.A2UIComponent;
+import com.amap.agenui.render.layout.ShadowFrameLayout;
 
 import java.util.List;
 
@@ -58,9 +58,10 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentViewHolder> 
     @NonNull
     @Override
     public ComponentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Shell is just a transparent FrameLayout; LayoutManager.layoutDecorated
-        // will set the shell's frame inside the RV viewport.
-        FrameLayout shell = new FrameLayout(parent.getContext());
+        // Shell is a ShadowFrameLayout so that item shadows (filter: drop-shadow)
+        // can be painted by the shell's drawChild without changing the Z-order of sibling items.
+        // LayoutManager.layoutDecorated will set the shell's frame inside the RV viewport.
+        ShadowFrameLayout shell = new ShadowFrameLayout(parent.getContext());
         shell.setLayoutParams(new RecyclerView.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -76,7 +77,7 @@ public class ComponentAdapter extends RecyclerView.Adapter<ComponentViewHolder> 
         // runs onCreateView exactly once per component, regardless of how many
         // RV bind passes hit it.
         if (!child.isViewCreated()) {
-            child.createView(context, (FrameLayout) holder.itemView);
+            child.createView(context, (ShadowFrameLayout) holder.itemView);
         }
         holder.attach(child);
 

@@ -46,8 +46,8 @@ declare -a TARGET_FILES=(
     "${PLATFORMS_DIR}/android/gradle.properties"
     "${AGENUI_ROOT}/AGenUI.podspec"
     "${AGENUI_ROOT}/AGenUI_ForSDK.podspec"
-    "${PLATFORMS_DIR}/ios/publish/AGenUI.podspec"
     "${PLATFORMS_DIR}/ios/AGenUI_ForSDK.podspec"
+    "${PLATFORMS_DIR}/ios/publish/AGenUI.podspec"
     "${PLATFORMS_DIR}/harmony/agenui/oh-package.json5"
 )
 
@@ -151,8 +151,8 @@ update_gradle_properties "${PLATFORMS_DIR}/android/gradle.properties"
 # iOS podspecs
 update_podspec "${AGENUI_ROOT}/AGenUI.podspec"
 update_podspec "${AGENUI_ROOT}/AGenUI_ForSDK.podspec"
-update_podspec "${PLATFORMS_DIR}/ios/publish/AGenUI.podspec"
 update_podspec "${PLATFORMS_DIR}/ios/AGenUI_ForSDK.podspec"
+update_podspec "${PLATFORMS_DIR}/ios/publish/AGenUI.podspec"
 
 # HarmonyOS
 update_oh_package_json5 "${PLATFORMS_DIR}/harmony/agenui/oh-package.json5"

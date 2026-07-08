@@ -27,7 +27,8 @@ enum class DataType {
     StylesData,                    // Style data
     TabsData,                      // Tabs data
     EventActionData,               // Event action data
-    FunctionCallActionData         // Function-call action data
+    FunctionCallActionData,        // Function-call action data
+    AccessibilityData              // Accessibility data
 };
 
 /**

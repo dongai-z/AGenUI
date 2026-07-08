@@ -75,7 +75,14 @@ void resolveUserPadding(const nlohmann::json& styles,
 
 TextComponent::TextComponent(const std::string& id, const nlohmann::json& properties) : A2UIComponent(id, "Text") {
     m_nodeHandle = g_nodeAPI->createNode(ARKUI_NODE_TEXT);
-    
+
+    // ArkUI Text vertically centers content by default; CSS block text is top-aligned.
+    {
+        ArkUI_NumberValue alignVal[] = {{.i32 = ARKUI_ALIGNMENT_TOP_START}};
+        ArkUI_AttributeItem alignItem = {alignVal, 1, nullptr, nullptr};
+        g_nodeAPI->setAttribute(m_nodeHandle, NODE_ALIGNMENT, &alignItem);
+    }
+
     // Merge initial properties.
     if (!properties.is_null() && properties.is_object()) {
         for (auto it = properties.begin(); it != properties.end(); ++it) {
@@ -155,6 +162,7 @@ void TextComponent::applyStyles(const nlohmann::json& properties) {
         return;
     }
     const auto& styles = properties["styles"];
+    applyBackgroundColor(properties);
     float fontSize = applyFontStyles(styles);
     applyTextLayoutStyles(properties, styles, fontSize);
     applyBorderDecorationStyles(styles, fontSize);
@@ -164,18 +172,6 @@ void TextComponent::applyStyles(const nlohmann::json& properties) {
 
 float TextComponent::applyFontStyles(const nlohmann::json& styles) {
     A2UITextNode node(m_nodeHandle);
-
-    {
-        std::string bgColorStr;
-        if (styles.find("background-color") != styles.end() && styles["background-color"].is_string()) {
-            bgColorStr = styles["background-color"].get<std::string>();
-        } else if (styles.find("backgroundColor") != styles.end() && styles["backgroundColor"].is_string()) {
-            bgColorStr = styles["backgroundColor"].get<std::string>();
-        }
-        if (!bgColorStr.empty()) {
-            node.setBackgroundColor(parseColor(bgColorStr));
-        }
-    }
 
     if (styles.find("color") != styles.end() && styles["color"].is_string()) {
         uint32_t color = parseColor(styles["color"].get<std::string>());

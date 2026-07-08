@@ -428,23 +428,11 @@ class CSSPropertyApplier {
         // iOS shadowRadius is blur radius, CSS blur is diameter, so divide by 2
         view.layer.shadowRadius = shadow.blur / 2.0
         
-        // Set shadow color
+        // Set shadowcolor
         view.layer.shadowColor = shadow.color.cgColor
         
-        // Set shadow opacity from color's alpha channel
-        var alpha: CGFloat = 0
-        if shadow.color.getRed(nil, green: nil, blue: nil, alpha: &alpha) {
-            view.layer.shadowOpacity = Float(alpha)
-        } else {
-            // Fallback for grayscale colors
-            var white: CGFloat = 0
-            if shadow.color.getWhite(&white, alpha: &alpha) {
-                view.layer.shadowOpacity = Float(alpha)
-            } else {
-                // Default fully opaque
-                view.layer.shadowOpacity = 1.0
-            }
-        }
+        //shadowColor includes alpha
+        view.layer.shadowOpacity = 1.0
         
         // Handle spread parameter (only used by box-shadow)
         if includeSpread, let spread = shadow.spread {

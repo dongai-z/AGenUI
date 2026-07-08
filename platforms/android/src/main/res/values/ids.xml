@@ -2,4 +2,7 @@
 <resources>
     <item name="agenui_border_overlay" type="id" />
     <item name="agenui_border_color_override" type="id" />
+    <item name="agenui_shadow_config" type="id" />
+    <item name="agenui_shadow_bitmap" type="id" />
+    <item name="agenui_overflow_hidden" type="id" />
 </resources>

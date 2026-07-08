@@ -582,7 +582,7 @@ class TextFieldComponent: Component {
     /// Check if TextView is showing placeholder
     private func isTextViewShowingPlaceholder() -> Bool {
         guard let textView = textView else { return false }
-        return textView.textColor == placeholderColor && textView.text == placeholderText
+        return textView.textColor == placeholderColor
     }
     
     // MARK: - Private Methods - Error Display

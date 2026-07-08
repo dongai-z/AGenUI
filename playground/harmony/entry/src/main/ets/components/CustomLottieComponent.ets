@@ -61,8 +61,8 @@ export class CustomLottieComponent extends A2UIComponent {
   private sourceVersion: number = 0;
   private requestedSource: string = '';
 
-  constructor(surfaceId: string, nodeId: string, componentType: string, viewStatePtr: bigint) {
-    super(surfaceId, nodeId, componentType, viewStatePtr, wrapBuilder<[CustomView]>(buildCustomLottie));
+  constructor(surfaceId: string, nodeId: string, componentType: string, viewStatePtr: bigint, instanceId: number = 0) {
+    super(surfaceId, nodeId, componentType, viewStatePtr, wrapBuilder<[CustomView]>(buildCustomLottie), instanceId);
     this.lottieId = `a2ui_lottie_${surfaceId}_${nodeId}`;
     this.controller.lottieId = this.lottieId;
     this.listener = new LottieListener({

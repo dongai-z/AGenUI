@@ -92,7 +92,7 @@ public class CustomStrikethroughSpan implements LineBackgroundSpan {
         }
 
         // Calculate strikethrough position (slightly above the text middle)
-        float lineY = baseline - (baseline - top) * 0.4f;
+        float lineY = baseline + (paint.ascent() + paint.descent()) / 2;
 
         // Draw the decoration line starting from the actual text position
         switch (style) {

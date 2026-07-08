@@ -8,18 +8,34 @@
 import UIKit
 
 /// Image loader global configuration
-class ImageLoaderConfiguration {
+@objc public class ImageLoaderConfiguration: NSObject {
     
     /// Singleton
-    static let shared = ImageLoaderConfiguration()
+    @objc public static let shared = ImageLoaderConfiguration()
     
+    private let lock = NSLock()
+    private var _loader: ImageLoader
+
     /// Current image loader
     /// - Replace this property to take effect globally
     /// - Default uses DefaultImageLoader (based on URLSession + memory cache)
-    var loader: ImageLoader
-    
+    @objc public var loader: ImageLoader {
+        get {
+            lock.lock()
+            let result = _loader
+            lock.unlock()
+            return result
+        }
+        set {
+            lock.lock()
+            _loader = newValue
+            lock.unlock()
+        }
+    }
+
     /// Private initialization
-    private init() {
-        self.loader = DefaultImageLoader()
+    private override init() {
+        self._loader = DefaultImageLoader()
+        super.init()
     }
 }

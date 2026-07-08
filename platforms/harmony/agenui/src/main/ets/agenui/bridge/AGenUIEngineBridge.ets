@@ -212,7 +212,7 @@ export class AGenUIEngineBridge {
                   pd.bytes.byteOffset,
                   pd.bytes.byteOffset + pd.bytes.byteLength
                 ) as ArrayBuffer;
-                const srcFmt: number = 4; // PIXEL_FORMAT_BGRA_8888 (OH_PixelFormat enum value 4); matches the format produced by the host's IImageLoader
+                const srcFmt: number = pd.pixelFormat as number;
                 setImagePixelMap(requestId, buf, pd.width, pd.height, srcFmt, pd.alphaType as number);
               } catch (e) {
                 hilog.error(0x0000, 'AGenUIBridge', 'setImagePixelMap failed: %{public}s', `${e}`);

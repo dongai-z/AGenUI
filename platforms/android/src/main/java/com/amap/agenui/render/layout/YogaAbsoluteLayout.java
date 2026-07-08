@@ -1,9 +1,12 @@
 package com.amap.agenui.render.layout;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.amap.agenui.render.drawable.ShadowPainter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -228,6 +231,12 @@ public class YogaAbsoluteLayout extends ViewGroup {
     }
 
     @Override
+    public void onViewRemoved(View child) {
+        super.onViewRemoved(child);
+        ShadowPainter.clearBitmap(child);
+    }
+
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
@@ -300,6 +309,12 @@ public class YogaAbsoluteLayout extends ViewGroup {
     public void setOverflowHidden(boolean hidden) {
         setClipChildren(hidden);
         setClipToPadding(hidden);
+    }
+
+    @Override
+    protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+        ShadowPainter.drawIfNeeded(canvas, child);
+        return super.drawChild(canvas, child, drawingTime);
     }
 
     /**

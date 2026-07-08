@@ -2,6 +2,20 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+// ===== ASan Configuration =====
+// Enable via: ./gradlew assembleDebug -PagenuiEnableAsan=true
+// or set agenui.enable.asan=true in local.properties
+def localPropsForAsan = new Properties()
+def localPropsFileForAsan = rootProject.file('local.properties')
+if (localPropsFileForAsan.exists()) {
+    localPropsForAsan.load(localPropsFileForAsan.newDataInputStream())
+}
+def asanEnabled = (localPropsForAsan.getProperty('agenui.enable.asan') ?:
+    providers.gradleProperty('agenuiEnableAsan').getOrElse('false')).toBoolean()
+if (asanEnabled) {
+    logger.lifecycle("[ASan] AddressSanitizer build ENABLED for playground app")
+}
+
 android {
     namespace 'com.amap.agenuiplayground'
     compileSdk 35
@@ -14,6 +28,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // ASan: pass to CMake if this app has native code
+        if (asanEnabled) {
+            externalNativeBuild {
+                cmake {
+                    arguments "-DAGENUI_ENABLE_ASAN=ON"
+                }
+            }
+        }
     }
     
     // Configure source sets to include assets from multiple sources
@@ -26,6 +49,10 @@ android {
                     file('../../../tests/integration/fixtures').absolutePath,  // test_fixtures/
                     file('../../../tests/stability/fixtures').absolutePath,    // stability_fixtures/
                 ]
+            }
+            // ASan: include wrap.sh and ASan runtime .so from resources/lib/
+            if (asanEnabled) {
+                jniLibs.srcDirs += ['src/main/resources/lib']
             }
         }
     }

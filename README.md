@@ -22,17 +22,14 @@ English | [中文](README.zh-CN.md)
 
 ---
 
-## What's New in v1.1.0
+## What's New in v1.2.0
 
-> Released on 2026-06-26
+> Released on 2026-07-08
 
-- **List Lazy Loading & Exposure Tracking**: Implemented horizontal List lazy loading on all three platforms (iOS `UICollectionView` / Android `RecyclerView` / Harmony cell reuse), with direction-based rendering path separation. Added List Item exposure tracking for impression analytics.
-- **Properties Incremental Update**: Replaced full-style re-rendering with properties-based incremental update on Android and iOS. Protocol adds `id` field, removes `styles` dependency.
-- **Component Lifecycle Events**: Aligned lifecycle across three platforms; introduced `onDestroy` on HarmonyOS.
-- **Button Child-Component Centering**: Button child components now use centered layout by default, aligning root-view behavior across platforms.
-- **Image Auto-Sizing Consistency**: Unified Image measurement logic across three platforms — synchronous measurement returns constraint value for EXACTLY/AT_MOST modes and 0 for UNDEFINED; asynchronous size reporting triggers only when style width or height is unspecified.
-- **CSS `gap` Property Support**: Engine now supports the CSS `gap` property for Flex layouts, enabling spacing between child items without manual margins.
-- **Text Rendering Consistency**: Fixed text drawing being clipped at view boundaries and `padding` not taking effect, ensuring consistent line-height and spacing across platforms.
+- **A2UI Accessibility Support**: Added `accessibility` field and its sub-fields parsing with data binding support across the Core engine, Android, iOS, and HarmonyOS — enabling screen reader compatibility and semantic annotations.
+- **List Item Appear Event & First Render Tracking**: Exposed list item appear event and first-render trackInfo to the integration layer for analytics and performance monitoring.
+- **Padding Parsing API**: Opened the padding parsing interface for external use, allowing integrators to access parsed padding values directly.
+- **linear-gradient Background Support**: Text, Button, List, Checkbox, Divider, and TextField components now support `linear-gradient` backgrounds via a unified base class method.
 
 ---
 

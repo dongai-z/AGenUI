@@ -76,7 +76,8 @@ A2UIHybridView* A2UIHybridFactory::createHybridView(ComponentState* state) {
     
     const std::string& componentType = state->getType();
     std::string surfaceId = state->getSurfaceId();
-    napi_value compContent = HMHelper::callArkTSFunction(tsObject, componentType, surfaceId, state->getId(), state);
+    int instanceId = state->getInstanceId();
+    napi_value compContent = HMHelper::callArkTSFunction(tsObject, componentType, surfaceId, state->getId(), state, instanceId);
     ArkUI_NodeHandle handle = nullptr;
     // Read the node handle created on the ArkTS side.
     OH_ArkUI_GetNodeHandleFromNapiValue(tsObject.env, compContent, &handle);

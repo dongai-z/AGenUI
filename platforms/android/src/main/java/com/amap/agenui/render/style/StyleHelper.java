@@ -31,6 +31,7 @@ import com.amap.a2ui_sdk.R;
 import com.amap.agenui.AGenUI;
 import com.amap.agenui.ColorValue;
 import com.amap.agenui.EdgeInsetsValue;
+import com.amap.agenui.render.drawable.ShadowPainter;
 import com.amap.agenui.render.image.ImageCallback;
 import com.amap.agenui.render.image.ImageLoadOptionsKey;
 import com.amap.agenui.render.image.ImageLoadResult;
@@ -38,7 +39,9 @@ import com.amap.agenui.render.image.ImageLoaderConfig;
 import com.amap.agenui.render.image.ImageLoaderError;
 import com.amap.agenui.render.utils.AGenUILogger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -84,9 +87,9 @@ public class StyleHelper {
             int halfBefore = extra / 2;
             int halfAfter = extra - halfBefore;
             fm.ascent  -= halfBefore;
-            fm.top     -= halfBefore;
+            fm.top      = fm.ascent;
             fm.descent += halfAfter;
-            fm.bottom  += halfAfter;
+            fm.bottom   = fm.descent;
         }
     }
 
@@ -499,62 +502,77 @@ public class StyleHelper {
 
     /**
      * Applies filter styles: currently only drop-shadow is supported.
-     * Supports: filter (drop-shadow).
+     *
+     * <p>The shadow config is attached to the view via {@link ShadowPainter} and painted
+     * by the parent container's {@code drawChild}, so it never changes the Z-order.
+     *
+     * <p>For {@code TextComponent}, {@link #applyTextStyles} subsequently overrides this
+     * with a per-glyph text shadow and clears the box shadow config. Other TextView-based
+     * components (e.g. RichText) keep the box shadow set here.
      */
-    public static void applyFilter(View view, Map<String, Object> properties) {
-        if (view == null || properties == null) return;
+    public static void applyFilter(View view, Map<String, Object> styles) {
+        if (view == null || styles == null) {
+            return;
+        }
+        ShadowPainter.ShadowConfig config = parseDropShadowConfig(view.getContext(), styles);
+        ShadowPainter.setConfig(view, config);
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (properties.containsKey("filter")) {
-                String filter = String.valueOf(properties.get("filter")).trim();
+    /**
+     * Parses {@code filter: drop-shadow(offsetX offsetY blur color)} combined with
+     * {@code border-radius} into a complete {@link ShadowPainter.ShadowConfig}.
+     *
+     * @return config or {@code null} if no drop-shadow filter is present.
+     */
+    static ShadowPainter.ShadowConfig parseDropShadowConfig(Context context,
+                                                             Map<String, Object> styles) {
+        if (!styles.containsKey("filter")) {
+            return null;
+        }
+        String filter = String.valueOf(styles.get("filter")).trim();
+        if (!filter.startsWith("drop-shadow(") || !filter.endsWith(")")) {
+            return null;
+        }
+        String params = filter.substring(12, filter.length() - 1).trim();
+        if (params.isEmpty()) {
+            return null;
+        }
 
-                // Parse drop-shadow
-                if (filter.startsWith("drop-shadow(")) {
-                    Context context = view.getContext();
-                    try {
-                        // Format: drop-shadow(offset-x offset-y blur-radius color)
-                        // Example: drop-shadow(2px 2px 4px rgba(0,0,0,0.3))
-                        String params = filter.substring(12, filter.length() - 1).trim();
-                        String[] parts = params.split("\\s+");
-
-                        if (parts.length >= 3) {
-                            // Parse offset and blur radius
-                            float dx = parseDimensionFloat(parts[0], context);
-                            float dy = parseDimensionFloat(parts[1], context);
-                            float radius = parseDimensionFloat(parts[2], context);
-
-                            // Note: Android's View.setElevation() does not support custom shadow colors;
-                            // shadow color is determined by the system theme, so the color parameter is
-                            // not parsed or used here. To use a custom shadow color, a custom Drawable
-                            // or Canvas drawing approach is needed.
-
-                            // Apply shadow (use elevation to approximate blur-radius)
-                            // elevation should be the blur-radius value, not radius directly
-                            view.setElevation(radius / 4f);
-
-                            // Use translation to simulate shadow offset.
-                            // Note: translation affects the actual position of the View and may not be ideal.
-                            // A better approach is to reserve space for the shadow via padding or margin.
-                            view.setTranslationX(dx);
-                            view.setTranslationY(dy);
-
-                            // To prevent the shadow from being clipped, ensure the parent container
-                            // does not clip child Views. This typically requires setting
-                            // clipChildren=false and clipToPadding=false on the parent.
-                            if (view.getParent() instanceof ViewGroup) {
-                                ViewGroup parent = (ViewGroup) view.getParent();
-                                parent.setClipChildren(false);
-                                parent.setClipToPadding(false);
-                            }
-
-                        }
-                    } catch (Exception e) {
-                        if (AGenUILogger.isLoggingEnabled()) {
-                            AGenUILogger.w(TAG, "Failed to parse drop-shadow: " + filter, e);
-                        }
-                    }
-                }
+        String[] rawParts = params.split("\\s+");
+        List<String> lengthTokens = new ArrayList<>(3);
+        StringBuilder colorBuilder = new StringBuilder();
+        for (String part : rawParts) {
+            if (lengthTokens.size() < 3
+                    && (part.endsWith("px") || part.matches("-?\\d+(\\.\\d+)?"))) {
+                lengthTokens.add(part);
+            } else {
+                if (colorBuilder.length() > 0) colorBuilder.append(' ');
+                colorBuilder.append(part);
             }
+        }
+        if (lengthTokens.size() < 3) {
+            return null;
+        }
+
+        try {
+            int offsetX = Math.round(parseDimensionFloat(lengthTokens.get(0), context));
+            int offsetY = Math.round(parseDimensionFloat(lengthTokens.get(1), context));
+            int blurRadius = Math.max(0, Math.round(parseDimensionFloat(lengthTokens.get(2), context)));
+            String colorStr = colorBuilder.toString().trim();
+            if (colorStr.isEmpty()) {
+                return null;
+            }
+            int color = parseColor(colorStr);
+            if ((color >>> 24) == 0) {
+                return null;
+            }
+            int cornerRadius = parseDimensionOrZero(styles.get("border-radius"), context);
+            return new ShadowPainter.ShadowConfig(color, offsetX, offsetY, blurRadius, cornerRadius);
+        } catch (Exception e) {
+            if (AGenUILogger.isLoggingEnabled()) {
+                AGenUILogger.w(TAG, "Failed to parse drop-shadow: " + filter, e);
+            }
+            return null;
         }
     }
 
@@ -597,6 +615,7 @@ public class StyleHelper {
                 case "hidden":
                     viewGroup.setClipChildren(true);
                     viewGroup.setClipToPadding(true);
+                    viewGroup.setTag(R.id.agenui_overflow_hidden, Boolean.TRUE);
                     if (properties.containsKey("border-radius")) {
                         final int radiusPx = parseDimension(properties.get("border-radius"),
                                 viewGroup.getContext());
@@ -614,6 +633,7 @@ public class StyleHelper {
                 case "visible":
                     viewGroup.setClipChildren(false);
                     viewGroup.setClipToPadding(false);
+                    viewGroup.setTag(R.id.agenui_overflow_hidden, null);
                     break;
                 case "scroll":
                 case "auto":
@@ -803,43 +823,18 @@ public class StyleHelper {
         // double-count with Yoga's padding.
         applyTextPadding(textView, styles, context);
 
-        // 9. filter: drop-shadow -> TextView.setShadowLayer
-        // setShadowLayer is the correct API for text shadow on Android;
-        // it requires a software layer to render properly.
-        if (styles.containsKey("filter")) {
-            String filter = String.valueOf(styles.get("filter")).trim();
-            if (filter.startsWith("drop-shadow(")) {
-                try {
-                    String params = filter.substring(12, filter.length() - 1).trim();
-                    // Split on whitespace but keep rgba(...) intact by using a smarter split.
-                    // Strategy: tokenise by spaces, then re-join rgba tokens.
-                    String[] rawParts = params.split("\\s+");
-                    // Collect numeric length tokens (offsetX, offsetY, blur) then color.
-                    java.util.List<String> lengthTokens = new java.util.ArrayList<>();
-                    StringBuilder colorBuilder = new StringBuilder();
-                    for (String part : rawParts) {
-                        if (part.endsWith("px") || part.matches("-?\\d+(\\.\\d+)?")) {
-                            lengthTokens.add(part);
-                        } else {
-                            if (colorBuilder.length() > 0) colorBuilder.append(' ');
-                            colorBuilder.append(part);
-                        }
-                    }
-                    if (lengthTokens.size() >= 3) {
-                        float dx = parseDimensionFloat(lengthTokens.get(0), context);
-                        float dy = parseDimensionFloat(lengthTokens.get(1), context);
-                        float radius = parseDimensionFloat(lengthTokens.get(2), context);
-                        String colorStr = colorBuilder.toString().trim();
-                        int shadowColor = colorStr.isEmpty() ? Color.BLACK : parseColor(colorStr);
-                        textView.setShadowLayer(radius, dx, dy, shadowColor);
-                        textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                    }
-                } catch (Exception e) {
-                    if (AGenUILogger.isLoggingEnabled()) {
-                        AGenUILogger.w(TAG, "Failed to parse drop-shadow for TextView: " + filter, e);
-                    }
-                }
-            }
+        // 9. filter: drop-shadow -> per-glyph text shadow via setShadowLayer.
+        // Clear box shadow set by applyFilter() so the parent does not paint a redundant
+        // rectangular shadow behind the text view.
+        ShadowPainter.setConfig(textView, null);
+        ShadowPainter.ShadowConfig shadowConfig = parseDropShadowConfig(context, styles);
+        if (shadowConfig != null) {
+            textView.setShadowLayer(shadowConfig.blurRadius, shadowConfig.offsetX,
+                    shadowConfig.offsetY, shadowConfig.shadowColor);
+            textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        } else {
+            textView.setShadowLayer(0, 0, 0, Color.TRANSPARENT);
+            textView.setLayerType(View.LAYER_TYPE_NONE, null);
         }
     }
 
