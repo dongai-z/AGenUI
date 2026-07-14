@@ -119,6 +119,8 @@ void TextComponent::applyTextContent(const nlohmann::json& properties) {
 
         if (chunkValue.is_string()) {
             chunkContent = chunkValue.get<std::string>();
+        } else if (chunkValue.is_number()) {
+            chunkContent = chunkValue.dump();
         } else if (chunkValue.is_object()) {
             auto litIt = chunkValue.find("literalString");
             if (litIt != chunkValue.end() && litIt->is_string()) {
@@ -148,6 +150,10 @@ void TextComponent::applyTextContent(const nlohmann::json& properties) {
         // Format 2: {"text": "Hello"}
         else if (textValue.is_string()) {
             textContent = textValue.get<std::string>();
+        }
+        // Format 3: {"text": 1} — number type, convert to string
+        else if (textValue.is_number()) {
+            textContent = textValue.dump();
         }
 
         if (!textContent.empty()) {

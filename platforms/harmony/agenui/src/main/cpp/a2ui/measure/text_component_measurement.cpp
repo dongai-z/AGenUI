@@ -81,8 +81,13 @@ bool TextComponentMeasurement::buildParam(const nlohmann::json& j,
 
     // ---- Extract text content (attributes flattened at root level: text / label) ----
     // stringify() flattens attributes to root level without "attrs" wrapper
-    if (j.contains("text") && j["text"].is_string()) {
-        outText = j["text"].get<std::string>();
+    if (j.contains("text")) {
+        const auto& textVal = j["text"];
+        if (textVal.is_string()) {
+            outText = textVal.get<std::string>();
+        } else if (textVal.is_number()) {
+            outText = textVal.dump();
+        }
     } else if (j.contains("label") && j["label"].is_string()) {
         outText = j["label"].get<std::string>();
     }
