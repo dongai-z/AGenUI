@@ -40,9 +40,10 @@ rsync -a \
 # --- copy playground/__init__.py (package marker) ---
 cp "${REPO_ROOT}/playground/__init__.py" "${STAGE_DIR}/playground/"
 
-# --- copy samples ---
-echo "[pack-studio] Copying samples/ ..."
-rsync -a "${REPO_ROOT}/samples/" "${STAGE_DIR}/samples/"
+# --- copy samples (protocols only) ---
+echo "[pack-studio] Copying samples/protocols/ ..."
+mkdir -p "${STAGE_DIR}/samples/protocols"
+rsync -a "${REPO_ROOT}/samples/protocols/" "${STAGE_DIR}/samples/protocols/"
 
 # --- copy required skill directory (prompt builder + validator) ---
 echo "[pack-studio] Copying skills/a2ui-generation/ ..."
