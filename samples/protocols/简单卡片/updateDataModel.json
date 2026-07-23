@@ -1,0 +1,32 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "a2ui_protocol_card",
+    "path": "/card",
+    "value": {
+      "title": "A2UI Protocol",
+      "subtitle": "Agent-to-UI Rendering Protocol",
+      "version": "v0.9",
+      "summary": "A unified protocol enabling AI agents to generate structured UI components rendered natively across <font color='#6C5CE7'><b>iOS</b></font>, <font color='#00CEC9'><b>Android</b></font>, and <font color='#6C5CE7'><b>HarmonyOS</b></font> — with shared C++ core and <font color='#6C5CE7'><b>Agent Skill</b></font> integration.",
+      "metrics": {
+        "platform": {
+          "value": "3",
+          "label": "Platforms"
+        },
+        "architecture": {
+          "value": "DTO",
+          "label": "Separation"
+        },
+        "agent": {
+          "value": "AI",
+          "label": "Native"
+        }
+      },
+      "tags": [
+        "Structured UI",
+        "Cross-Platform",
+        "Agent-Driven"
+      ]
+    }
+  }
+}

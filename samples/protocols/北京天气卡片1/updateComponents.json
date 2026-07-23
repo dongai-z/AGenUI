@@ -1,0 +1,625 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "assistant-mrvgsopi-7ois",
+    "components": [
+      {
+        "id": "root_c0_0_c0_1_c0_2_c0_3",
+        "component": "Icon",
+        "name": "map-pin",
+        "styles": {
+          "color": "#e8eef7",
+          "width": "16px",
+          "height": "16px"
+        }
+      },
+      {
+        "id": "root_c0_0_c0_1_c0_2_c1_4",
+        "component": "Text",
+        "text": "北京",
+        "styles": {
+          "color": "#f4f7fc",
+          "font-size": "34px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c0_0_c0_1_c0_2",
+        "component": "Row",
+        "children": [
+          "root_c0_0_c0_1_c0_2_c0_3",
+          "root_c0_0_c0_1_c0_2_c1_4"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "5px"
+        }
+      },
+      {
+        "id": "root_c0_0_c0_1_c1_5",
+        "component": "Text",
+        "text": {
+          "path": "/today/obsLabel"
+        },
+        "styles": {
+          "color": "#c5d0e0",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c0_0_c0_1",
+        "component": "Row",
+        "children": [
+          "root_c0_0_c0_1_c0_2",
+          "root_c0_0_c0_1_c1_5"
+        ],
+        "align": "center",
+        "justify": "spaceBetween",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c0_7_c0_8_c0_9",
+        "component": "Text",
+        "text": {
+          "path": "/today/temp"
+        },
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "144px",
+          "font-weight": "200",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c0_7_c0_8_c1_10",
+        "component": "Text",
+        "text": "°",
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "80px",
+          "font-weight": "200",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c0_7_c0_8",
+        "component": "Row",
+        "children": [
+          "root_c0_0_c1_6_c0_7_c0_8_c0_9",
+          "root_c0_0_c1_6_c0_7_c0_8_c1_10"
+        ],
+        "align": "flexStart",
+        "styles": {
+          "gap": "2px"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c0_7_c1_11",
+        "component": "Text",
+        "text": {
+          "path": "/today/feelsLabel"
+        },
+        "styles": {
+          "color": "#cdd8e8",
+          "font-size": "28px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c0_7",
+        "component": "Column",
+        "children": [
+          "root_c0_0_c1_6_c0_7_c0_8",
+          "root_c0_0_c1_6_c0_7_c1_11"
+        ],
+        "styles": {
+          "gap": "2px"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c1_12_c0_13",
+        "component": "Text",
+        "text": "🌧️",
+        "styles": {
+          "font-size": "92px",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c1_12_c1_14",
+        "component": "Text",
+        "text": {
+          "path": "/today/cond"
+        },
+        "styles": {
+          "color": "#f4f7fc",
+          "font-size": "36px",
+          "font-weight": "600",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c1_12_c2_15",
+        "component": "Text",
+        "text": {
+          "path": "/today/range"
+        },
+        "styles": {
+          "color": "#cdd8e8",
+          "font-size": "26px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6_c1_12",
+        "component": "Column",
+        "children": [
+          "root_c0_0_c1_6_c1_12_c0_13",
+          "root_c0_0_c1_6_c1_12_c1_14",
+          "root_c0_0_c1_6_c1_12_c2_15"
+        ],
+        "align": "flexEnd",
+        "styles": {
+          "gap": "4px"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_6",
+        "component": "Row",
+        "children": [
+          "root_c0_0_c1_6_c0_7",
+          "root_c0_0_c1_6_c1_12"
+        ],
+        "align": "center",
+        "justify": "spaceBetween",
+        "styles": {
+          "gap": "12px"
+        }
+      },
+      {
+        "id": "root_c0_0",
+        "component": "Column",
+        "children": [
+          "root_c0_0_c0_1",
+          "root_c0_0_c1_6"
+        ],
+        "styles": {
+          "padding": "22px 22px 18px 22px",
+          "gap": "14px"
+        }
+      },
+      {
+        "id": "root_c1_16_c0_17_c0_18",
+        "component": "Text",
+        "text": "湿度",
+        "styles": {
+          "color": "#bcc8da",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_16_c0_17_c1_19",
+        "component": "Text",
+        "text": {
+          "path": "/today/humidity"
+        },
+        "styles": {
+          "color": "#f4f7fc",
+          "font-size": "34px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_16_c0_17",
+        "component": "Column",
+        "children": [
+          "root_c1_16_c0_17_c0_18",
+          "root_c1_16_c0_17_c1_19"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_16_c1_20_c0_21",
+        "component": "Text",
+        "text": {
+          "path": "/today/windDir"
+        },
+        "styles": {
+          "color": "#bcc8da",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_16_c1_20_c1_22",
+        "component": "Text",
+        "text": {
+          "path": "/today/windScale"
+        },
+        "styles": {
+          "color": "#f4f7fc",
+          "font-size": "34px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_16_c1_20",
+        "component": "Column",
+        "children": [
+          "root_c1_16_c1_20_c0_21",
+          "root_c1_16_c1_20_c1_22"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_16_c2_23_c0_24",
+        "component": "Text",
+        "text": "降水",
+        "styles": {
+          "color": "#bcc8da",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_16_c2_23_c1_25",
+        "component": "Text",
+        "text": {
+          "path": "/today/precip"
+        },
+        "styles": {
+          "color": "#f4f7fc",
+          "font-size": "34px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_16_c2_23",
+        "component": "Column",
+        "children": [
+          "root_c1_16_c2_23_c0_24",
+          "root_c1_16_c2_23_c1_25"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_16_c3_26_c0_27",
+        "component": "Text",
+        "text": "能见度",
+        "styles": {
+          "color": "#bcc8da",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_16_c3_26_c1_28",
+        "component": "Text",
+        "text": {
+          "path": "/today/vis"
+        },
+        "styles": {
+          "color": "#f4f7fc",
+          "font-size": "34px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_16_c3_26",
+        "component": "Column",
+        "children": [
+          "root_c1_16_c3_26_c0_27",
+          "root_c1_16_c3_26_c1_28"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_16",
+        "component": "Row",
+        "children": [
+          "root_c1_16_c0_17",
+          "root_c1_16_c1_20",
+          "root_c1_16_c2_23",
+          "root_c1_16_c3_26"
+        ],
+        "styles": {
+          "background-color": "rgba(20,30,46,0.28)",
+          "padding": "14px 16px",
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_29_c0_30",
+        "component": "Text",
+        "text": "未来三天",
+        "styles": {
+          "color": "#dbe3f0",
+          "font-size": "26px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c1_31_c0_32",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/0/day"
+        },
+        "styles": {
+          "color": "#eef3fa",
+          "min-width": "44px",
+          "font-size": "28px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c1_31_c1_33",
+        "component": "Text",
+        "text": "��️",
+        "styles": {
+          "min-width": "24px",
+          "font-size": "36px",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c2_29_c1_31_c2_34",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/0/cond"
+        },
+        "styles": {
+          "color": "#cdd8e8",
+          "flex-grow": 1,
+          "font-size": "26px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c1_31_c3_35",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/0/range"
+        },
+        "styles": {
+          "color": "#f4f7fc",
+          "min-width": "66px",
+          "font-size": "28px",
+          "font-weight": "600",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c1_31",
+        "component": "Row",
+        "children": [
+          "root_c2_29_c1_31_c0_32",
+          "root_c2_29_c1_31_c1_33",
+          "root_c2_29_c1_31_c2_34",
+          "root_c2_29_c1_31_c3_35"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_29_c2_36",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "rgba(255,255,255,0.10)"
+        }
+      },
+      {
+        "id": "root_c2_29_c3_37_c0_38",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/1/day"
+        },
+        "styles": {
+          "color": "#eef3fa",
+          "min-width": "44px",
+          "font-size": "28px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c3_37_c1_39",
+        "component": "Text",
+        "text": "🌩️",
+        "styles": {
+          "min-width": "24px",
+          "font-size": "36px",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c2_29_c3_37_c2_40",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/1/cond"
+        },
+        "styles": {
+          "color": "#cdd8e8",
+          "flex-grow": 1,
+          "font-size": "26px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c3_37_c3_41",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/1/range"
+        },
+        "styles": {
+          "color": "#f4f7fc",
+          "min-width": "66px",
+          "font-size": "28px",
+          "font-weight": "600",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c3_37",
+        "component": "Row",
+        "children": [
+          "root_c2_29_c3_37_c0_38",
+          "root_c2_29_c3_37_c1_39",
+          "root_c2_29_c3_37_c2_40",
+          "root_c2_29_c3_37_c3_41"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_29_c4_42",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "rgba(255,255,255,0.10)"
+        }
+      },
+      {
+        "id": "root_c2_29_c5_43_c0_44",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/2/day"
+        },
+        "styles": {
+          "color": "#eef3fa",
+          "min-width": "44px",
+          "font-size": "28px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c5_43_c1_45",
+        "component": "Text",
+        "text": "⛅",
+        "styles": {
+          "min-width": "24px",
+          "font-size": "36px",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c2_29_c5_43_c2_46",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/2/cond"
+        },
+        "styles": {
+          "color": "#cdd8e8",
+          "flex-grow": 1,
+          "font-size": "26px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c5_43_c3_47",
+        "component": "Text",
+        "text": {
+          "path": "/forecast/2/range"
+        },
+        "styles": {
+          "color": "#f4f7fc",
+          "min-width": "66px",
+          "font-size": "28px",
+          "font-weight": "600",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_29_c5_43",
+        "component": "Row",
+        "children": [
+          "root_c2_29_c5_43_c0_44",
+          "root_c2_29_c5_43_c1_45",
+          "root_c2_29_c5_43_c2_46",
+          "root_c2_29_c5_43_c3_47"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_29",
+        "component": "Column",
+        "children": [
+          "root_c2_29_c0_30",
+          "root_c2_29_c1_31",
+          "root_c2_29_c2_36",
+          "root_c2_29_c3_37",
+          "root_c2_29_c4_42",
+          "root_c2_29_c5_43"
+        ],
+        "styles": {
+          "background-color": "rgba(15,22,36,0.42)",
+          "padding": "16px 20px 20px 20px",
+          "gap": "10px"
+        }
+      },
+      {
+        "id": "root_body_48",
+        "component": "Column",
+        "children": [
+          "root_c0_0",
+          "root_c1_16",
+          "root_c2_29"
+        ],
+        "styles": {
+          "gap": "0px"
+        }
+      },
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "root_body_48",
+        "styles": {
+          "background-color": "linear-gradient(160deg,#3a4a63 0%,#556784 55%,#6b7f9e 100%)",
+          "border": "1px solid #7c8fac",
+          "border-radius": "22px",
+          "padding": "0px",
+          "gap": "0px"
+        }
+      }
+    ]
+  }
+}

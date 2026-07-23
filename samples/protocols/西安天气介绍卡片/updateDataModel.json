@@ -1,0 +1,34 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "assistant-mrvi3jw4-vx8b",
+    "path": "/",
+    "value": {
+      "current": {
+        "temp": "30°",
+        "summary": "晴 · 体感 31°",
+        "obsLabel": "11:02  实时",
+        "humidity": "54%",
+        "wind": "东北风3级",
+        "uv": "11"
+      },
+      "forecast": [
+        {
+          "day": "今天",
+          "cond": "多云",
+          "range": "24° / 37°"
+        },
+        {
+          "day": "周四",
+          "cond": "晴",
+          "range": "25° / 37°"
+        },
+        {
+          "day": "周五",
+          "cond": "晴",
+          "range": "26° / 37°"
+        }
+      ]
+    }
+  }
+}

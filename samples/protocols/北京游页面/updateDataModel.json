@@ -1,0 +1,96 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "beijing_travel_page",
+    "path": "/page",
+    "value": {
+      "hero": {
+        "title": "<font color='#8B6F4E'><b>北京</b></font>旅游攻略",
+        "subtitle": "千年古都 · 皇城根下的岁月",
+        "tags": [
+          {"text": "建议 3-5 天"},
+          {"text": "最佳秋季"},
+          {"text": "人均 ¥3000+"}
+        ],
+        "summary": "从故宫的红墙金瓦到长城的雄关漫道，从胡同里的豆汁焦圈到三里屯的霓虹闪烁——这座三千年的古都，值得你慢慢走、细细品。"
+      },
+      "schedule": {
+        "day1": {
+          "morning": "故宫博物院 — 从午门进入，沿中轴线参观太和殿、乾清宫、御花园，感受紫禁城的恢弘气势。建议提前网上预约门票，预留 3-4 小时。",
+          "afternoon": "景山公园 — 从神武门出故宫后步行至景山，登顶万春亭俯瞰故宫全景。随后漫步南锣鼓巷，感受老北京胡同文化。",
+          "evening": "王府井步行街 — 品尝东华门夜市小吃，逛王府井百货，感受京城繁华夜色。"
+        },
+        "day2": {
+          "morning": "八达岭长城 — 早起出发（建议 7:00 前），乘高铁或旅游专线前往。攀登北八楼为最高点，全程约 3 小时，建议穿运动鞋。",
+          "afternoon": "奥林匹克公园 — 返回市区后参观鸟巢、水立方，外观拍照即可。傍晚可步行至附近新奥购物中心用餐。",
+          "evening": "三里屯太古里 — 京城潮流地标，各式餐厅酒吧林立，适合年轻人夜生活。"
+        },
+        "day3": {
+          "morning": "颐和园 — 从东宫门入园，沿昆明湖长廊漫步，登万寿山俯瞰湖光山色，感受皇家园林的精妙。建议预留 3 小时。",
+          "afternoon": "圆明园遗址 + 五道营胡同 — 上午游览西洋楼遗址，下午逛五道营胡同的文艺小店和咖啡馆，体验北京慢生活。",
+          "evening": "国家大剧院 — 如有演出可购票欣赏，建筑本身就是一件艺术品。或前往前门大街品尝老字号美食。"
+        }
+      },
+      "attractions": [
+        {
+          "name": "故宫博物院",
+          "description": "明清两代皇家宫殿，世界现存规模最大、保存最完整的木质结构古建筑群。",
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Forbidden_City_12.2012.jpg/640px-Forbidden_City_12.2012.jpg",
+          "tags": [
+            {"text": "世界遗产"},
+            {"text": "必去"},
+            {"text": "室内"}
+          ]
+        },
+        {
+          "name": "长城",
+          "description": "万里长城之代表，八达岭段最为经典，雄伟壮观，不到长城非好汉。",
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Great_Wall_of_China_at_Jinshanling_edit.jpg/640px-The_Great_Wall_of_China_at_Jinshanling_edit.jpg",
+          "tags": [
+            {"text": "世界遗产"},
+            {"text": "户外"},
+            {"text": "全天"}
+          ]
+        },
+        {
+          "name": "颐和园",
+          "description": "中国古典园林之首，昆明湖碧波荡漾，万寿山古木参天。",
+          "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Summer_Palace%2C_Beijing_-_panoramio_%282%29.jpg/640px-Summer_Palace%2C_Beijing_-_panoramio_%282%29.jpg",
+          "tags": [
+            {"text": "世界遗产"},
+            {"text": "园林"},
+            {"text": "半日"}
+          ]
+        }
+      ],
+      "foods": [
+        {
+          "name": "北京烤鸭",
+          "description": "皮脆肉嫩，配甜面酱、葱丝、黄瓜条卷入薄饼食用，京城头牌美食。",
+          "priceText": "<font color='#C4945A'><b>¥128-298</b></font>/只"
+        },
+        {
+          "name": "老北京炸酱面",
+          "description": "手擀面配黄豆炸酱和八样菜码，家常却最见老北京功底。",
+          "priceText": "<font color='#C4945A'><b>¥25-45</b></font>/碗"
+        },
+        {
+          "name": "铜锅涮羊肉",
+          "description": "老北京铜锅炭火涮肉，鲜嫩羊肉配麻酱小料，冬日最暖。",
+          "priceText": "<font color='#C4945A'><b>¥88-168</b></font>/人"
+        }
+      ],
+      "tips": {
+        "columns": ["项目", "建议"],
+        "rows": [
+          ["最佳季节", "9-10月秋高气爽，4-5月春暖花开"],
+          ["交通方式", "地铁覆盖主要景点，公交方便，打车推荐网约车"],
+          ["住宿区域", "王府井/前门/三里屯，交通便利、餐饮丰富"],
+          ["门票预约", "故宫/国博等需提前 1-7 天网上实名预约"],
+          ["预算参考", "经济型 ¥300-500/天，舒适型 ¥800-1500/天"],
+          ["穿着建议", "舒适运动鞋，长城需登山鞋，秋冬带防风外套"]
+        ]
+      }
+    }
+  }
+}

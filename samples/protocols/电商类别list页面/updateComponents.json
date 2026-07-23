@@ -1,0 +1,699 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "homefeed",
+    "designWidth": 750,
+    "components": [
+      {
+        "id": "root",
+        "component": "Column",
+        "children": [
+          "tc-root",
+          "sl-root"
+        ],
+        "align": "center",
+        "styles": {
+          "padding": "16px",
+          "background-color": "#F5F5F5"
+        }
+      },
+      {
+        "id": "tc-root",
+        "component": "Row",
+        "children": [
+          "tc-card-left",
+          "tc-card-right"
+        ],
+        "align": "stretch",
+        "justify": "spaceBetween",
+        "styles": {
+          "width": "726px"
+        }
+      },
+      {
+        "id": "tc-card-left",
+        "component": "Column",
+        "children": [
+          "tc-left-title-row",
+          "tc-left-content-row"
+        ],
+        "styles": {
+          "border-radius": "16px",
+          "background-color": "#FFFFFF",
+          "padding": "20px",
+          "width": "350px"
+        }
+      },
+      {
+        "id": "tc-left-title-row",
+        "component": "Row",
+        "children": [
+          "tc-left-title"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "tc-left-title",
+        "component": "Text",
+        "text": "热门商品",
+	"variant": "h1",
+        "styles": {
+          "font-size": "26px",
+          "font-weight": "bold",
+          "color": "rgba(0,0,0,0.87)"
+        }
+      },
+      {
+        "id": "tc-left-content-row",
+        "component": "Row",
+        "children": [
+          "tc-left-text-col",
+          "tc-left-img"
+        ],
+        "justify": "spaceBetween",
+        "align": "center"
+      },
+      {
+        "id": "tc-left-text-col",
+        "component": "Column",
+        "children": [
+          "tc-left-subtitle",
+          "tc-left-count-row",
+          "tc-left-tip"
+        ],
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "tc-left-subtitle",
+        "component": "Text",
+        "text": "低价货源",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.4)"
+        }
+      },
+      {
+        "id": "tc-left-count-row",
+        "component": "Row",
+        "children": [
+          "tc-left-count",
+          "tc-left-unit"
+        ],
+        "align": "end",
+        "styles": {
+          "gap": "4px"
+        }
+      },
+      {
+        "id": "tc-left-count",
+        "component": "Text",
+        "text": "10",
+        "styles": {
+          "font-size": "40px",
+          "font-weight": "bold",
+          "color": "rgba(0,0,0,0.87)"
+        }
+      },
+      {
+        "id": "tc-left-unit",
+        "component": "Text",
+        "text": "款",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.4)"
+        }
+      },
+      {
+        "id": "tc-left-tip",
+        "component": "Text",
+        "text": "去查看",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.4)"
+        }
+      },
+      {
+        "id": "tc-left-img",
+        "component": "Image",
+        "url": "https://cbu01.alicdn.com/img/ibank/O1CN01UVOvP426XNJIBrJdT_!!2219548817671-0-cib.jpg",
+        "styles": {
+          "width": "116px",
+          "height": "116px",
+          "border-radius": "8px"
+        }
+      },
+      {
+        "id": "tc-card-right",
+        "component": "Column",
+        "children": [
+          "tc-right-title-row",
+          "tc-right-content-row"
+        ],
+        "styles": {
+          "border-radius": "16px",
+          "background-color": "#FFFFFF",
+          "padding": "20px",
+          "width": "350px"
+        }
+      },
+      {
+        "id": "tc-right-title-row",
+        "component": "Row",
+        "children": [
+          "tc-right-title"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "tc-right-title",
+        "component": "Text",
+        "text": "快速出单",
+        "styles": {
+          "font-size": "26px",
+          "font-weight": "bold",
+          "color": "rgba(0,0,0,0.87)"
+        }
+      },
+      {
+        "id": "tc-right-content-row",
+        "component": "Row",
+        "children": [
+          "tc-right-text-col",
+          "tc-right-img"
+        ],
+        "justify": "spaceBetween",
+        "align": "center"
+      },
+      {
+        "id": "tc-right-text-col",
+        "component": "Column",
+        "children": [
+          "tc-right-subtitle",
+          "tc-right-count-row",
+          "tc-right-tip"
+        ],
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "tc-right-subtitle",
+        "component": "Text",
+        "text": "老商上新",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.4)"
+        }
+      },
+      {
+        "id": "tc-right-count-row",
+        "component": "Row",
+        "children": [
+          "tc-right-count",
+          "tc-right-unit"
+        ],
+        "align": "end",
+        "styles": {
+          "gap": "4px"
+        }
+      },
+      {
+        "id": "tc-right-count",
+        "component": "Text",
+        "text": "8",
+        "styles": {
+          "font-size": "40px",
+          "font-weight": "bold",
+          "color": "rgba(0,0,0,0.87)"
+        }
+      },
+      {
+        "id": "tc-right-unit",
+        "component": "Text",
+        "text": "款",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.4)"
+        }
+      },
+      {
+        "id": "tc-right-tip",
+        "component": "Text",
+        "text": "去查看",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.4)"
+        }
+      },
+      {
+        "id": "tc-right-img",
+        "component": "Image",
+        "url": "https://cbu01.alicdn.com/img/ibank/O1CN011ZD63Q26XNJUfueYW_!!2219548817671-0-cib.jpg",
+        "styles": {
+          "width": "116px",
+          "height": "116px",
+          "border-radius": "8px"
+        }
+      },
+      {
+        "id": "sl-root",
+        "component": "List",
+        "direction": "horizontal",
+        "children": [
+          "sl-item-0",
+          "sl-item-1",
+          "sl-item-2",
+          "sl-item-3",
+          "sl-item-4",
+          "sl-item-5",
+          "sl-item-6",
+          "sl-item-7",
+          "sl-item-8",
+          "sl-item-9",
+          "sl-item-10",
+          "sl-item-11"
+        ],
+        "styles": {
+          "width": "726px",
+          "height": "136px",
+          "background-color": "#FFFFFF",
+          "border-radius": "8px",
+          "padding": "16px 0 24px 0",
+          "margin-top": "12px",
+          "margin-bottom": "12px",
+          "overflow": "scroll"
+        }
+      },
+      {
+        "id": "sl-item-0",
+        "component": "Column",
+        "children": [
+          "sl-img-0",
+          "sl-text-0"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-0",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i4/O1CN01cuclbI1Hq751oMCaZ_!!6000000000808-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-0",
+        "component": "Text",
+        "text": "服饰上新",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-1",
+        "component": "Column",
+        "children": [
+          "sl-img-1",
+          "sl-text-1"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-1",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i3/O1CN01zA865n1BvFpcQr3Yg_!!6000000000007-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-1",
+        "component": "Text",
+        "text": "热卖榜",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-2",
+        "component": "Column",
+        "children": [
+          "sl-img-2",
+          "sl-text-2"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-2",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i1/O1CN01Ql3BlQ1LMa0HqNCXV_!!6000000001285-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-2",
+        "component": "Text",
+        "text": "元宝工厂",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-3",
+        "component": "Column",
+        "children": [
+          "sl-img-3",
+          "sl-text-3"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-3",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i3/O1CN01RKLgJC1uu1Tb5GyZF_!!6000000006096-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-3",
+        "component": "Text",
+        "text": "跨境专供",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-4",
+        "component": "Column",
+        "children": [
+          "sl-img-4",
+          "sl-text-4"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-4",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i2/O1CN01kjeBfb1gJvdub89cq_!!6000000004122-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-4",
+        "component": "Text",
+        "text": "直播",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-5",
+        "component": "Column",
+        "children": [
+          "sl-img-5",
+          "sl-text-5"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-5",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i3/O1CN01xKqoOy1WrEHZaYhPL_!!6000000002841-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-5",
+        "component": "Text",
+        "text": "哇噢定制",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-6",
+        "component": "Column",
+        "children": [
+          "sl-img-6",
+          "sl-text-6"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-6",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i1/O1CN01XvNqkY1rKoB1GZryz_!!6000000005613-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-6",
+        "component": "Text",
+        "text": "一件代发",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-7",
+        "component": "Column",
+        "children": [
+          "sl-img-7",
+          "sl-text-7"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-7",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i1/O1CN01IZ90KO23nujg4ZZFc_!!6000000007301-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-7",
+        "component": "Text",
+        "text": "会员店",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-8",
+        "component": "Column",
+        "children": [
+          "sl-img-8",
+          "sl-text-8"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-8",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i3/O1CN01OIFpO31GAbZOFICHb_!!6000000000582-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-8",
+        "component": "Text",
+        "text": "行家选",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-9",
+        "component": "Column",
+        "children": [
+          "sl-img-9",
+          "sl-text-9"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-9",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i2/O1CN01GfVRv51n8CobUL0fd_!!6000000005044-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-9",
+        "component": "Text",
+        "text": "必采好店",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-10",
+        "component": "Column",
+        "children": [
+          "sl-img-10",
+          "sl-text-10"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-10",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i3/O1CN01jhIRSp1gteXGjHpEx_!!6000000004200-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-10",
+        "component": "Text",
+        "text": "严选",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "sl-item-11",
+        "component": "Column",
+        "children": [
+          "sl-img-11",
+          "sl-text-11"
+        ],
+        "align": "center",
+        "styles": {
+          "width": "96px",
+          "height": "96px",
+          "margin": "0 8px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "sl-img-11",
+        "component": "Image",
+        "url": "https://gw.alicdn.com/imgextra/i3/O1CN013YeN1I1KD8Da7vA51_!!6000000001129-2-tps-136-136.png",
+        "styles": {
+          "width": "68px",
+          "height": "68px"
+        }
+      },
+      {
+        "id": "sl-text-11",
+        "component": "Text",
+        "text": "小店进货",
+        "styles": {
+          "font-size": "22px",
+          "color": "rgba(0,0,0,0.6)",
+          "text-align": "center"
+        }
+      }
+    ]
+  }
+}

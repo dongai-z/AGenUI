@@ -1,0 +1,609 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "assistant-mrvhsv3w-l6e6",
+    "components": [
+      {
+        "id": "root_c0_0_c0_1_c0_2",
+        "component": "Text",
+        "text": " 世界文化遗产 · 5A景区",
+        "styles": {
+          "background-color": "rgba(30,70,60,0.55)",
+          "color": "#eaf4ee",
+          "border-radius": "20px",
+          "padding": "3px 10px",
+          "font-size": "24px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c0_0_c0_1",
+        "component": "Row",
+        "children": [
+          "root_c0_0_c0_1_c0_2"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_3",
+        "component": "Text",
+        "text": "杭州西湖",
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "68px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c2_4",
+        "component": "Text",
+        "text": "三面云山一面城，湖光山色相映成趣",
+        "styles": {
+          "color": "#e2efe8",
+          "font-size": "28px",
+          "font-weight": "500",
+          "line-height": "1.4",
+          "line-clamp": 0
+        }
+      },
+      {
+        "id": "root_c0_0",
+        "component": "Column",
+        "children": [
+          "root_c0_0_c0_1",
+          "root_c0_0_c1_3",
+          "root_c0_0_c2_4"
+        ],
+        "justify": "flex-end",
+        "styles": {
+          "border-radius": "20px 20px 0 0",
+          "padding": "16px",
+          "height": "210px",
+          "gap": "6px",
+          "background-image": "url(http://store.is.autonavi.com/showpic/e2bda1f3737e11d428a2869726275953)",
+          "background-color": "linear-gradient(to bottom, rgba(0,0,0,0) 45%, rgba(0,0,0,0.85))"
+        }
+      },
+      {
+        "id": "root_c1_5_c0_6_c0_7",
+        "component": "Text",
+        "text": {
+          "path": "/overview/rating"
+        },
+        "styles": {
+          "color": "#1f6f5c",
+          "font-size": "40px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_5_c0_6_c1_8",
+        "component": "Text",
+        "text": "评分",
+        "styles": {
+          "color": "#7b8f88",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_5_c0_6_body_9",
+        "component": "Column",
+        "children": [
+          "root_c1_5_c0_6_c0_7",
+          "root_c1_5_c0_6_c1_8"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "2px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_5_c0_6",
+        "component": "Card",
+        "child": "root_c1_5_c0_6_body_9",
+        "styles": {
+          "background-color": "#ffffff",
+          "border": "1px solid #dde9e3",
+          "border-radius": "14px",
+          "padding": "10px 6px",
+          "gap": "2px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_5_c1_10_c0_11",
+        "component": "Text",
+        "text": {
+          "path": "/overview/areaValue"
+        },
+        "styles": {
+          "color": "#1f6f5c",
+          "font-size": "40px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_5_c1_10_c1_12",
+        "component": "Text",
+        "text": "平方公里",
+        "styles": {
+          "color": "#7b8f88",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_5_c1_10_body_13",
+        "component": "Column",
+        "children": [
+          "root_c1_5_c1_10_c0_11",
+          "root_c1_5_c1_10_c1_12"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "2px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_5_c1_10",
+        "component": "Card",
+        "child": "root_c1_5_c1_10_body_13",
+        "styles": {
+          "background-color": "#ffffff",
+          "border": "1px solid #dde9e3",
+          "border-radius": "14px",
+          "padding": "10px 6px",
+          "gap": "2px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_5_c2_14_c0_15",
+        "component": "Text",
+        "text": {
+          "path": "/overview/bestSeason"
+        },
+        "styles": {
+          "color": "#1f6f5c",
+          "font-size": "40px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_5_c2_14_c1_16",
+        "component": "Text",
+        "text": "最佳季节",
+        "styles": {
+          "color": "#7b8f88",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_5_c2_14_body_17",
+        "component": "Column",
+        "children": [
+          "root_c1_5_c2_14_c0_15",
+          "root_c1_5_c2_14_c1_16"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "2px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_5_c2_14",
+        "component": "Card",
+        "child": "root_c1_5_c2_14_body_17",
+        "styles": {
+          "background-color": "#ffffff",
+          "border": "1px solid #dde9e3",
+          "border-radius": "14px",
+          "padding": "10px 6px",
+          "gap": "2px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_5",
+        "component": "Row",
+        "children": [
+          "root_c1_5_c0_6",
+          "root_c1_5_c1_10",
+          "root_c1_5_c2_14"
+        ],
+        "styles": {
+          "padding": "14px 16px 4px 16px",
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_18_c0_19",
+        "component": "Text",
+        "text": "西湖十景 · 四时之美",
+        "styles": {
+          "color": "#264d42",
+          "font-size": "32px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_18_c1_20_c0_21_c0_22",
+        "component": "Text",
+        "text": "苏堤春晓",
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "26px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_18_c1_20_c0_21",
+        "component": "Column",
+        "children": [
+          "root_c2_18_c1_20_c0_21_c0_22"
+        ],
+        "justify": "flex-end",
+        "styles": {
+          "border-radius": "12px",
+          "padding": "8px",
+          "height": "96px",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "background-image": "url(http://store.is.autonavi.com/showpic/866654ed2f61e2bd67457c0f179baf04)",
+          "background-color": "linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.7))"
+        }
+      },
+      {
+        "id": "root_c2_18_c1_20_c1_23_c0_24",
+        "component": "Text",
+        "text": "断桥残雪",
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "26px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_18_c1_20_c1_23",
+        "component": "Column",
+        "children": [
+          "root_c2_18_c1_20_c1_23_c0_24"
+        ],
+        "justify": "flex-end",
+        "styles": {
+          "border-radius": "12px",
+          "padding": "8px",
+          "height": "96px",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "background-image": "url(http://store.is.autonavi.com/showpic/478ddbbf592df9e88466a3e10c5d6b70)",
+          "background-color": "linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.7))"
+        }
+      },
+      {
+        "id": "root_c2_18_c1_20_c2_25_c0_26",
+        "component": "Text",
+        "text": "雷峰夕照",
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "26px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_18_c1_20_c2_25",
+        "component": "Column",
+        "children": [
+          "root_c2_18_c1_20_c2_25_c0_26"
+        ],
+        "justify": "flex-end",
+        "styles": {
+          "border-radius": "12px",
+          "padding": "8px",
+          "height": "96px",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "background-image": "url(http://store.is.autonavi.com/showpic/58fbc3bf5460862ef2056ae1aa053754)",
+          "background-color": "linear-gradient(to bottom, rgba(0,0,0,0) 55%, rgba(0,0,0,0.7))"
+        }
+      },
+      {
+        "id": "root_c2_18_c1_20",
+        "component": "Row",
+        "children": [
+          "root_c2_18_c1_20_c0_21",
+          "root_c2_18_c1_20_c1_23",
+          "root_c2_18_c1_20_c2_25"
+        ],
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_18_c2_27",
+        "component": "Text",
+        "text": "春有花、夏有荷、秋有月、冬有雪，湖光山色四时各异。",
+        "styles": {
+          "color": "#5a706a",
+          "font-size": "26px",
+          "line-height": "1.5",
+          "line-clamp": 0
+        }
+      },
+      {
+        "id": "root_c2_18",
+        "component": "Column",
+        "children": [
+          "root_c2_18_c0_19",
+          "root_c2_18_c1_20",
+          "root_c2_18_c2_27"
+        ],
+        "styles": {
+          "padding": "12px 16px 4px 16px",
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c3_28_c0_29_c0_30",
+        "component": "Text",
+        "text": "人文底蕴",
+        "styles": {
+          "color": "#264d42",
+          "font-size": "28px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c3_28_c0_29_c1_31",
+        "component": "Text",
+        "text": "白蛇传、苏东坡等故事与西湖相连，湖畔古刹园林荟萃，是文人墨客的灵感源泉。",
+        "styles": {
+          "color": "#5a706a",
+          "font-size": "24px",
+          "line-height": "1.5",
+          "line-clamp": 0
+        }
+      },
+      {
+        "id": "root_c3_28_c0_29_body_32",
+        "component": "Column",
+        "children": [
+          "root_c3_28_c0_29_c0_30",
+          "root_c3_28_c0_29_c1_31"
+        ],
+        "styles": {
+          "gap": "5px",
+          "flex-grow": 2,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c3_28_c0_29",
+        "component": "Card",
+        "child": "root_c3_28_c0_29_body_32",
+        "styles": {
+          "background-color": "#eef4f1",
+          "border": "1px solid #d8e6e0",
+          "border-radius": "14px",
+          "padding": "12px",
+          "gap": "5px",
+          "flex-grow": 2,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c3_28_c1_33_c0_34",
+        "component": "Text",
+        "text": {
+          "path": "/visit/duration"
+        },
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "34px",
+          "font-weight": "800",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c3_28_c1_33_c1_35",
+        "component": "Text",
+        "text": "建议游览",
+        "styles": {
+          "color": "#bfe0d5",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c3_28_c1_33_body_36",
+        "component": "Column",
+        "children": [
+          "root_c3_28_c1_33_c0_34",
+          "root_c3_28_c1_33_c1_35"
+        ],
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c3_28_c1_33",
+        "component": "Card",
+        "child": "root_c3_28_c1_33_body_36",
+        "styles": {
+          "background-color": "#1f6f5c",
+          "border-radius": "14px",
+          "padding": "12px",
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c3_28",
+        "component": "Row",
+        "children": [
+          "root_c3_28_c0_29",
+          "root_c3_28_c1_33"
+        ],
+        "styles": {
+          "padding": "8px 16px 4px 16px",
+          "gap": "10px"
+        }
+      },
+      {
+        "id": "root_c4_37_c0_38",
+        "component": "Text",
+        "text": "游览方式",
+        "styles": {
+          "color": "#264d42",
+          "font-size": "30px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c4_37_c1_39_c0_40",
+        "component": "Text",
+        "text": "环湖步行",
+        "styles": {
+          "background-color": "#ffffff",
+          "color": "#1f6f5c",
+          "border": "1px solid #cfe1da",
+          "border-radius": "20px",
+          "padding": "6px 4px",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "24px",
+          "font-weight": "600",
+          "text-align": "center",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c4_37_c1_39_c1_41",
+        "component": "Text",
+        "text": "骑行",
+        "styles": {
+          "background-color": "#ffffff",
+          "color": "#1f6f5c",
+          "border": "1px solid #cfe1da",
+          "border-radius": "20px",
+          "padding": "6px 4px",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "24px",
+          "font-weight": "600",
+          "text-align": "center",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c4_37_c1_39_c2_42",
+        "component": "Text",
+        "text": "游船",
+        "styles": {
+          "background-color": "#ffffff",
+          "color": "#1f6f5c",
+          "border": "1px solid #cfe1da",
+          "border-radius": "20px",
+          "padding": "6px 4px",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "24px",
+          "font-weight": "600",
+          "text-align": "center",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c4_37_c1_39",
+        "component": "Row",
+        "children": [
+          "root_c4_37_c1_39_c0_40",
+          "root_c4_37_c1_39_c1_41",
+          "root_c4_37_c1_39_c2_42"
+        ],
+        "styles": {
+          "gap": "7px"
+        }
+      },
+      {
+        "id": "root_c4_37_c2_43",
+        "component": "Text",
+        "text": "推荐苏堤、白堤、孤山经典路线；免费进入湖滨区域，部分景点需购票。",
+        "styles": {
+          "color": "#5a706a",
+          "font-size": "24px",
+          "line-height": "1.5",
+          "line-clamp": 0
+        }
+      },
+      {
+        "id": "root_c4_37",
+        "component": "Column",
+        "children": [
+          "root_c4_37_c0_38",
+          "root_c4_37_c1_39",
+          "root_c4_37_c2_43"
+        ],
+        "styles": {
+          "padding": "8px 16px 18px 16px",
+          "gap": "7px"
+        }
+      },
+      {
+        "id": "root_body_44",
+        "component": "Column",
+        "children": [
+          "root_c0_0",
+          "root_c1_5",
+          "root_c2_18",
+          "root_c3_28",
+          "root_c4_37"
+        ],
+        "styles": {
+          "gap": "0px"
+        }
+      },
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "root_body_44",
+        "styles": {
+          "background-color": "#f2f6f4",
+          "border": "1px solid #d5e3dc",
+          "border-radius": "20px",
+          "padding": "0px",
+          "gap": "0px",
+          "filter": "drop-shadow(0 6px 20px rgba(60,90,80,0.15))"
+        }
+      }
+    ]
+  }
+}

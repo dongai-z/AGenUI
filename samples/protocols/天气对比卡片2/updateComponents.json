@@ -1,0 +1,510 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "assistant-mrvh2o52-aqlg",
+    "components": [
+      {
+        "id": "root_c0_0_c0_1",
+        "component": "Text",
+        "text": "此刻天气 · 两城对照",
+        "styles": {
+          "color": "#1b2733",
+          "font-size": "38px",
+          "font-weight": "700",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_2",
+        "component": "Text",
+        "text": "07-22 上午 · 北京 阴凉，海口 晴热，温差达 8°",
+        "styles": {
+          "color": "#6b7a8d",
+          "font-size": "24px",
+          "font-weight": "500",
+          "line-height": "1.4",
+          "line-clamp": 0
+        }
+      },
+      {
+        "id": "root_c0_0",
+        "component": "Column",
+        "children": [
+          "root_c0_0_c0_1",
+          "root_c0_0_c1_2"
+        ],
+        "styles": {
+          "padding": "18px 20px 14px 20px",
+          "gap": "3px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c0_5",
+        "component": "Text",
+        "text": "北京",
+        "styles": {
+          "color": "#dbe7f2",
+          "font-size": "30px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c1_6",
+        "component": "Text",
+        "text": "⛅",
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "80px",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c2_7",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/temp"
+        },
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "104px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c3_8",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/cond"
+        },
+        "styles": {
+          "color": "#c6d5e6",
+          "font-size": "30px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c4_9",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/feelsLike"
+        },
+        "styles": {
+          "color": "#9db2c9",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4",
+        "component": "Column",
+        "children": [
+          "root_c1_3_c0_4_c0_5",
+          "root_c1_3_c0_4_c1_6",
+          "root_c1_3_c0_4_c2_7",
+          "root_c1_3_c0_4_c3_8",
+          "root_c1_3_c0_4_c4_9"
+        ],
+        "align": "center",
+        "styles": {
+          "background-color": "linear-gradient(160deg,#4a6b8a,#334a63)",
+          "padding": "20px 12px 22px 12px",
+          "gap": "10px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_10_c0_11",
+        "component": "Text",
+        "text": "海口",
+        "styles": {
+          "color": "#fff2e3",
+          "font-size": "30px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_10_c1_12",
+        "component": "Text",
+        "text": "☀️",
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "80px",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_10_c2_13",
+        "component": "Text",
+        "text": {
+          "path": "/haikou/temp"
+        },
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "104px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_10_c3_14",
+        "component": "Text",
+        "text": {
+          "path": "/haikou/cond"
+        },
+        "styles": {
+          "color": "#fff0df",
+          "font-size": "30px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_10_c4_15",
+        "component": "Text",
+        "text": {
+          "path": "/haikou/feelsLike"
+        },
+        "styles": {
+          "color": "#ffe0c4",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_10",
+        "component": "Column",
+        "children": [
+          "root_c1_3_c1_10_c0_11",
+          "root_c1_3_c1_10_c1_12",
+          "root_c1_3_c1_10_c2_13",
+          "root_c1_3_c1_10_c3_14",
+          "root_c1_3_c1_10_c4_15"
+        ],
+        "align": "center",
+        "styles": {
+          "background-color": "linear-gradient(160deg,#f2a154,#e8743b)",
+          "padding": "20px 12px 22px 12px",
+          "gap": "10px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_3",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c0_4",
+          "root_c1_3_c1_10"
+        ],
+        "styles": {
+          "gap": "0px"
+        }
+      },
+      {
+        "id": "root_c2_16_c0_17_c0_18",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/humidity"
+        },
+        "styles": {
+          "color": "#4a6b8a",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "32px",
+          "font-weight": "700",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c0_17_c1_19",
+        "component": "Text",
+        "text": "湿度",
+        "styles": {
+          "color": "#6b7a8d",
+          "min-width": "48px",
+          "font-size": "24px",
+          "font-weight": "600",
+          "text-align": "center",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c0_17_c2_20",
+        "component": "Text",
+        "text": {
+          "path": "/haikou/humidity"
+        },
+        "styles": {
+          "color": "#e8743b",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "32px",
+          "font-weight": "700",
+          "text-align": "left",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c0_17",
+        "component": "Row",
+        "children": [
+          "root_c2_16_c0_17_c0_18",
+          "root_c2_16_c0_17_c1_19",
+          "root_c2_16_c0_17_c2_20"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_16_c1_21",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "#dde4ec",
+          "height": "1px"
+        }
+      },
+      {
+        "id": "root_c2_16_c2_22_c0_23",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/wind"
+        },
+        "styles": {
+          "color": "#4a6b8a",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "32px",
+          "font-weight": "700",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c2_22_c1_24",
+        "component": "Text",
+        "text": "风力",
+        "styles": {
+          "color": "#6b7a8d",
+          "min-width": "48px",
+          "font-size": "24px",
+          "font-weight": "600",
+          "text-align": "center",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c2_22_c2_25",
+        "component": "Text",
+        "text": {
+          "path": "/haikou/wind"
+        },
+        "styles": {
+          "color": "#e8743b",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "32px",
+          "font-weight": "700",
+          "text-align": "left",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c2_22",
+        "component": "Row",
+        "children": [
+          "root_c2_16_c2_22_c0_23",
+          "root_c2_16_c2_22_c1_24",
+          "root_c2_16_c2_22_c2_25"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_16_c3_26",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "#dde4ec",
+          "height": "1px"
+        }
+      },
+      {
+        "id": "root_c2_16_c4_27_c0_28",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/vis"
+        },
+        "styles": {
+          "color": "#4a6b8a",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "32px",
+          "font-weight": "700",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c4_27_c1_29",
+        "component": "Text",
+        "text": "能见度",
+        "styles": {
+          "color": "#6b7a8d",
+          "min-width": "48px",
+          "font-size": "24px",
+          "font-weight": "600",
+          "text-align": "center",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c4_27_c2_30",
+        "component": "Text",
+        "text": {
+          "path": "/haikou/vis"
+        },
+        "styles": {
+          "color": "#e8743b",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "32px",
+          "font-weight": "700",
+          "text-align": "left",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c4_27",
+        "component": "Row",
+        "children": [
+          "root_c2_16_c4_27_c0_28",
+          "root_c2_16_c4_27_c1_29",
+          "root_c2_16_c4_27_c2_30"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_16_c5_31",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "#dde4ec",
+          "height": "1px"
+        }
+      },
+      {
+        "id": "root_c2_16_c6_32_c0_33",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/range"
+        },
+        "styles": {
+          "color": "#4a6b8a",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "32px",
+          "font-weight": "700",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c6_32_c1_34",
+        "component": "Text",
+        "text": "今日区间",
+        "styles": {
+          "color": "#6b7a8d",
+          "min-width": "56px",
+          "font-size": "24px",
+          "font-weight": "600",
+          "text-align": "center",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c6_32_c2_35",
+        "component": "Text",
+        "text": {
+          "path": "/haikou/range"
+        },
+        "styles": {
+          "color": "#e8743b",
+          "flex-grow": 1,
+          "flex-basis": "0",
+          "font-size": "32px",
+          "font-weight": "700",
+          "text-align": "left",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_16_c6_32",
+        "component": "Row",
+        "children": [
+          "root_c2_16_c6_32_c0_33",
+          "root_c2_16_c6_32_c1_34",
+          "root_c2_16_c6_32_c2_35"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_16",
+        "component": "Column",
+        "children": [
+          "root_c2_16_c0_17",
+          "root_c2_16_c1_21",
+          "root_c2_16_c2_22",
+          "root_c2_16_c3_26",
+          "root_c2_16_c4_27",
+          "root_c2_16_c5_31",
+          "root_c2_16_c6_32"
+        ],
+        "styles": {
+          "padding": "16px 20px 20px 20px",
+          "gap": "12px"
+        }
+      },
+      {
+        "id": "root_body_36",
+        "component": "Column",
+        "children": [
+          "root_c0_0",
+          "root_c1_3",
+          "root_c2_16"
+        ],
+        "styles": {
+          "gap": "0px"
+        }
+      },
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "root_body_36",
+        "styles": {
+          "background-color": "#eef2f7",
+          "border": "1px solid #d5dde8",
+          "border-radius": "22px",
+          "padding": "0px",
+          "gap": "0px"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "product_detail_page",
+    "path": "/page",
+    "value": {
+      "heroImage": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
+      "productName": "经典机械腕表 · 自动上链",
+      "ratingScore": "4.8",
+      "ratingCount": "2,368 条评价",
+      "currentPrice": "<font color='#E06C5E'><b>¥2,580</b></font>",
+      "originalPrice": "¥3,980",
+      "salesInfo": "已售 12,680 件 · 现货速发",
+      "highlightsTitle": "核心卖点",
+      "highlights": [
+        "瑞士进口自动机械机芯，3年质保",
+        "蓝宝石水晶镜面，防刮耐磨",
+        "50米生活防水，日常无忧"
+      ],
+      "specsTitle": "规格参数",
+      "specsColumns": ["参数", "规格"],
+      "specsRows": [
+        ["品牌", "Chronos Classic"],
+        ["机芯", "瑞士自动机械"],
+        ["表壳材质", "316L不锈钢"],
+        ["表镜", "蓝宝石水晶"],
+        ["防水深度", "50米"],
+        ["表带", "意大利进口牛皮"],
+        ["表盘直径", "40mm"],
+        ["保修", "3年全国联保"]
+      ],
+      "reviewsTitle": "用户评价",
+      "reviewsMoreText": "查看全部 →",
+      "reviewOverallScore": "4.8",
+      "reviewScoreLabel": "非常满意",
+      "reviewChartTitle": "评分分布",
+      "reviewChartData": {
+        "xAxis": ["5星", "4星", "3星", "2星", "1星"],
+        "yAxis": ["0", "500", "1000", "1500"],
+        "series": [{
+          "name": "评价数",
+          "data": [
+            {"value": 1580, "label": "1580"},
+            {"value": 520, "label": "520"},
+            {"value": 180, "label": "180"},
+            {"value": 58, "label": "58"},
+            {"value": 30, "label": "30"}
+          ]
+        }]
+      },
+      "reviews": [
+        {
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=60",
+          "userName": "张先生",
+          "date": "2026-05-20",
+          "starsHtml": "<font color='#D4A04A'><b>★★★★★</b></font>",
+          "content": "做工非常精致，表盘大小刚好，戴在手上很有质感。机芯走时准确，每天误差在5秒以内，非常满意！"
+        },
+        {
+          "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&q=60",
+          "userName": "李女士",
+          "date": "2026-05-15",
+          "starsHtml": "<font color='#D4A04A'><b>★★★★</b></font><font color='#CCCCCC'>★</font>",
+          "content": "送给老公的生日礼物，他很喜欢。表带柔软舒适，包装也很精美，送礼很有面子。唯一小建议是表扣可以再优化一下。"
+        },
+        {
+          "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&q=60",
+          "userName": "王先生",
+          "date": "2026-05-10",
+          "starsHtml": "<font color='#D4A04A'><b>★★★★★</b></font>",
+          "content": "第二次购买了，品质一如既往地好。蓝宝石镜面确实防刮，之前不小心碰到门框，一点痕迹都没有。强烈推荐！"
+        }
+      ],
+      "ctaText": "立即购买"
+    }
+  }
+}

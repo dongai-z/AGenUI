@@ -1,0 +1,706 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "assistant-mrvikzmq-5qoh",
+    "components": [
+      {
+        "id": "root_c0_0_c0_1_c0_2",
+        "component": "Text",
+        "text": "南",
+        "styles": {
+          "color": "#f6ead2",
+          "font-size": "52px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c0_1_c1_3",
+        "component": "Text",
+        "text": "京",
+        "styles": {
+          "color": "#f6ead2",
+          "font-size": "52px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c0_1",
+        "component": "Column",
+        "children": [
+          "root_c0_0_c0_1_c0_2",
+          "root_c0_0_c0_1_c1_3"
+        ],
+        "align": "center",
+        "justify": "center",
+        "styles": {
+          "background-color": "#8f3a2f",
+          "border": "2px solid #e8cfa0",
+          "border-radius": "10px",
+          "padding": "10px 8px",
+          "min-width": "64px",
+          "gap": "2px"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_4_c0_5",
+        "component": "Text",
+        "text": "金陵 · 六朝古都",
+        "styles": {
+          "color": "#e8cfa0",
+          "font-size": "26px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_4_c1_6",
+        "component": "Text",
+        "text": "Nanjing",
+        "styles": {
+          "color": "#f6ead2",
+          "font-size": "44px",
+          "font-weight": "700",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_4_c2_7",
+        "component": "Text",
+        "text": "十朝都会，长江下游的国家历史文化名城",
+        "styles": {
+          "color": "#d8b892",
+          "font-size": "24px",
+          "line-height": "1.4",
+          "line-clamp": 2
+        }
+      },
+      {
+        "id": "root_c0_0_c1_4",
+        "component": "Column",
+        "children": [
+          "root_c0_0_c1_4_c0_5",
+          "root_c0_0_c1_4_c1_6",
+          "root_c0_0_c1_4_c2_7"
+        ],
+        "justify": "center",
+        "styles": {
+          "gap": "6px",
+          "flex-grow": 1
+        }
+      },
+      {
+        "id": "root_c0_0",
+        "component": "Row",
+        "children": [
+          "root_c0_0_c0_1",
+          "root_c0_0_c1_4"
+        ],
+        "align": "stretch",
+        "styles": {
+          "background-color": "#8f3a2f",
+          "border-radius": "20px 20px 0 0",
+          "padding": "20px",
+          "gap": "14px"
+        }
+      },
+      {
+        "id": "root_c1_8_c0_9_c0_10",
+        "component": "Text",
+        "text": {
+          "path": "/identity/dynasty"
+        },
+        "styles": {
+          "color": "#8f3a2f",
+          "font-size": "36px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_8_c0_9_c1_11",
+        "component": "Text",
+        "text": "古都",
+        "styles": {
+          "color": "#7a6a52",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_8_c0_9_body_12",
+        "component": "Column",
+        "children": [
+          "root_c1_8_c0_9_c0_10",
+          "root_c1_8_c0_9_c1_11"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_8_c0_9",
+        "component": "Card",
+        "child": "root_c1_8_c0_9_body_12",
+        "styles": {
+          "background-color": "#f9f3e8",
+          "border": "1px solid #d8c199",
+          "border-radius": "12px",
+          "padding": "10px 6px",
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_8_c1_13_c0_14",
+        "component": "Text",
+        "text": {
+          "path": "/identity/areaValue"
+        },
+        "styles": {
+          "color": "#8f3a2f",
+          "font-size": "36px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_8_c1_13_c1_15",
+        "component": "Text",
+        "text": "平方公里",
+        "styles": {
+          "color": "#7a6a52",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_8_c1_13_body_16",
+        "component": "Column",
+        "children": [
+          "root_c1_8_c1_13_c0_14",
+          "root_c1_8_c1_13_c1_15"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_8_c1_13",
+        "component": "Card",
+        "child": "root_c1_8_c1_13_body_16",
+        "styles": {
+          "background-color": "#f9f3e8",
+          "border": "1px solid #d8c199",
+          "border-radius": "12px",
+          "padding": "10px 6px",
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_8_c2_17_c0_18",
+        "component": "Text",
+        "text": {
+          "path": "/identity/province"
+        },
+        "styles": {
+          "color": "#8f3a2f",
+          "font-size": "36px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_8_c2_17_c1_19",
+        "component": "Text",
+        "text": "长江下游",
+        "styles": {
+          "color": "#7a6a52",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_8_c2_17_body_20",
+        "component": "Column",
+        "children": [
+          "root_c1_8_c2_17_c0_18",
+          "root_c1_8_c2_17_c1_19"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_8_c2_17",
+        "component": "Card",
+        "child": "root_c1_8_c2_17_body_20",
+        "styles": {
+          "background-color": "#f9f3e8",
+          "border": "1px solid #d8c199",
+          "border-radius": "12px",
+          "padding": "10px 6px",
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_8",
+        "component": "Row",
+        "children": [
+          "root_c1_8_c0_9",
+          "root_c1_8_c1_13",
+          "root_c1_8_c2_17"
+        ],
+        "styles": {
+          "background-color": "#efe4d2",
+          "padding": "14px 16px",
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c2_21_c0_22_c0_23",
+        "component": "Icon",
+        "name": "map-pin",
+        "styles": {
+          "color": "#8f3a2f",
+          "width": "15px",
+          "height": "15px"
+        }
+      },
+      {
+        "id": "root_c2_21_c0_22_c1_24",
+        "component": "Text",
+        "text": "金陵名胜",
+        "styles": {
+          "color": "#3a1f22",
+          "font-size": "28px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c0_22",
+        "component": "Row",
+        "children": [
+          "root_c2_21_c0_22_c0_23",
+          "root_c2_21_c0_22_c1_24"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c0_26_c0_27",
+        "component": "Text",
+        "text": "中山陵",
+        "styles": {
+          "color": "#5c2b2f",
+          "min-width": "56px",
+          "font-size": "28px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c0_26_c1_28",
+        "component": "Text",
+        "text": "孙中山先生陵墓，重要革命纪念地",
+        "styles": {
+          "color": "#6b5940",
+          "flex-grow": 1,
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c0_26",
+        "component": "Row",
+        "children": [
+          "root_c2_21_c1_25_c0_26_c0_27",
+          "root_c2_21_c1_25_c0_26_c1_28"
+        ],
+        "align": "center",
+        "styles": {
+          "padding": "8px 0",
+          "gap": "10px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c1_29",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "#e4d5bb",
+          "height": "1px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c2_30_c0_31",
+        "component": "Text",
+        "text": "秦淮河",
+        "styles": {
+          "color": "#5c2b2f",
+          "min-width": "56px",
+          "font-size": "28px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c2_30_c1_32",
+        "component": "Text",
+        "text": "沿河风光带，古韵悠长",
+        "styles": {
+          "color": "#6b5940",
+          "flex-grow": 1,
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c2_30",
+        "component": "Row",
+        "children": [
+          "root_c2_21_c1_25_c2_30_c0_31",
+          "root_c2_21_c1_25_c2_30_c1_32"
+        ],
+        "align": "center",
+        "styles": {
+          "padding": "8px 0",
+          "gap": "10px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c3_33",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "#e4d5bb",
+          "height": "1px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c4_34_c0_35",
+        "component": "Text",
+        "text": "夫子庙",
+        "styles": {
+          "color": "#5c2b2f",
+          "min-width": "56px",
+          "font-size": "28px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c4_34_c1_36",
+        "component": "Text",
+        "text": "儒家文化重要象征",
+        "styles": {
+          "color": "#6b5940",
+          "flex-grow": 1,
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c4_34",
+        "component": "Row",
+        "children": [
+          "root_c2_21_c1_25_c4_34_c0_35",
+          "root_c2_21_c1_25_c4_34_c1_36"
+        ],
+        "align": "center",
+        "styles": {
+          "padding": "8px 0",
+          "gap": "10px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c5_37",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "#e4d5bb",
+          "height": "1px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c6_38_c0_39",
+        "component": "Text",
+        "text": "明城墙",
+        "styles": {
+          "color": "#5c2b2f",
+          "min-width": "56px",
+          "font-size": "28px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c6_38_c1_40",
+        "component": "Text",
+        "text": "现存最完整的古城墙",
+        "styles": {
+          "color": "#6b5940",
+          "flex-grow": 1,
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_c6_38",
+        "component": "Row",
+        "children": [
+          "root_c2_21_c1_25_c6_38_c0_39",
+          "root_c2_21_c1_25_c6_38_c1_40"
+        ],
+        "align": "center",
+        "styles": {
+          "padding": "8px 0",
+          "gap": "10px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25_body_41",
+        "component": "Column",
+        "children": [
+          "root_c2_21_c1_25_c0_26",
+          "root_c2_21_c1_25_c1_29",
+          "root_c2_21_c1_25_c2_30",
+          "root_c2_21_c1_25_c3_33",
+          "root_c2_21_c1_25_c4_34",
+          "root_c2_21_c1_25_c5_37",
+          "root_c2_21_c1_25_c6_38"
+        ],
+        "styles": {
+          "gap": "0px"
+        }
+      },
+      {
+        "id": "root_c2_21_c1_25",
+        "component": "Card",
+        "child": "root_c2_21_c1_25_body_41",
+        "styles": {
+          "background-color": "#f9f3e8",
+          "border": "1px solid #d8c199",
+          "border-radius": "12px",
+          "padding": "4px 12px",
+          "gap": "0px"
+        }
+      },
+      {
+        "id": "root_c2_21",
+        "component": "Column",
+        "children": [
+          "root_c2_21_c0_22",
+          "root_c2_21_c1_25"
+        ],
+        "styles": {
+          "padding": "6px 16px 0 16px",
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c3_42_c0_43_c0_44",
+        "component": "Text",
+        "text": "文化特色",
+        "styles": {
+          "color": "#e8cfa0",
+          "font-size": "24px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c3_42_c0_43_c1_45",
+        "component": "Text",
+        "text": "金陵文化发源地：秦淮灯会、南京云锦、剪纸；秦淮八绝小吃享誉全国。",
+        "styles": {
+          "color": "#e5d3b8",
+          "font-size": "24px",
+          "line-height": "1.5",
+          "line-clamp": 0
+        }
+      },
+      {
+        "id": "root_c3_42_c0_43_body_46",
+        "component": "Column",
+        "children": [
+          "root_c3_42_c0_43_c0_44",
+          "root_c3_42_c0_43_c1_45"
+        ],
+        "styles": {
+          "gap": "5px",
+          "flex-grow": 2,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c3_42_c0_43",
+        "component": "Card",
+        "child": "root_c3_42_c0_43_body_46",
+        "styles": {
+          "background-color": "#3a1f22",
+          "border-radius": "12px",
+          "padding": "12px",
+          "gap": "5px",
+          "flex-grow": 2,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c3_42_c1_47_c0_48",
+        "component": "Text",
+        "text": "最佳季节",
+        "styles": {
+          "color": "#f0d9b5",
+          "font-size": "22px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c3_42_c1_47_c1_49",
+        "component": "Text",
+        "text": {
+          "path": "/visit/bestSeason"
+        },
+        "styles": {
+          "color": "#f6ead2",
+          "font-size": "34px",
+          "font-weight": "800",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c3_42_c1_47_c2_50",
+        "component": "Text",
+        "text": {
+          "path": "/visit/bestMonths"
+        },
+        "styles": {
+          "color": "#e5c69f",
+          "font-size": "20px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c3_42_c1_47_body_51",
+        "component": "Column",
+        "children": [
+          "root_c3_42_c1_47_c0_48",
+          "root_c3_42_c1_47_c1_49",
+          "root_c3_42_c1_47_c2_50"
+        ],
+        "align": "center",
+        "justify": "center",
+        "styles": {
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c3_42_c1_47",
+        "component": "Card",
+        "child": "root_c3_42_c1_47_body_51",
+        "styles": {
+          "background-color": "#8f3a2f",
+          "border-radius": "12px",
+          "padding": "12px",
+          "gap": "3px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c3_42",
+        "component": "Row",
+        "children": [
+          "root_c3_42_c0_43",
+          "root_c3_42_c1_47"
+        ],
+        "styles": {
+          "padding": "12px 16px 4px 16px",
+          "gap": "10px"
+        }
+      },
+      {
+        "id": "root_c4_52_c0_53",
+        "component": "Icon",
+        "name": "info",
+        "styles": {
+          "color": "#8f3a2f",
+          "width": "14px",
+          "height": "14px"
+        }
+      },
+      {
+        "id": "root_c4_52_c1_54",
+        "component": "Text",
+        "text": "建议预留 2-3 天，沿秦淮河游览古城，地铁便捷通达各景点。",
+        "styles": {
+          "color": "#6b5940",
+          "flex-grow": 1,
+          "font-size": "24px",
+          "line-height": "1.45",
+          "line-clamp": 0
+        }
+      },
+      {
+        "id": "root_c4_52",
+        "component": "Row",
+        "children": [
+          "root_c4_52_c0_53",
+          "root_c4_52_c1_54"
+        ],
+        "align": "center",
+        "styles": {
+          "padding": "6px 16px 16px 16px",
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_body_55",
+        "component": "Column",
+        "children": [
+          "root_c0_0",
+          "root_c1_8",
+          "root_c2_21",
+          "root_c3_42",
+          "root_c4_52"
+        ],
+        "styles": {
+          "gap": "0px"
+        }
+      },
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "root_body_55",
+        "styles": {
+          "background-color": "linear-gradient(160deg,#f4ece0 0%,#efe4d2 100%)",
+          "border": "1px solid #c9a86a",
+          "border-radius": "20px",
+          "padding": "0px",
+          "gap": "0px"
+        }
+      }
+    ]
+  }
+}

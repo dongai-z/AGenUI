@@ -1,0 +1,548 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "product_detail_page",
+    "components": [
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "page_body",
+        "styles": {
+          "filter": "drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.08))",
+          "margin": "16px 16px 16px 16px"
+        }
+      },
+      {
+        "id": "page_body",
+        "component": "Column",
+        "children": ["hero_section", "divider1", "info_section", "divider2", "highlights_section", "divider3", "specs_section", "divider4", "reviews_section", "divider5", "cta_section"]
+      },
+
+      {
+        "id": "hero_section",
+        "component": "Column",
+        "children": ["hero_image"],
+        "styles": {
+          "padding": "0px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "hero_image",
+        "component": "Image",
+        "url": {"path": "/page/heroImage"},
+        "variant": "header",
+        "fit": "cover",
+        "styles": {
+          "width": "100%",
+          "aspect-ratio": "16 / 9"
+        }
+      },
+
+      {
+        "id": "divider1",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 0px 0px"
+        }
+      },
+
+      {
+        "id": "info_section",
+        "component": "Column",
+        "children": ["product_name", "rating_row", "price_row", "sales_info"],
+        "styles": {
+          "padding": "16px 20px 16px 20px"
+        }
+      },
+      {
+        "id": "product_name",
+        "component": "Text",
+        "text": {"path": "/page/productName"},
+        "variant": "h2",
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1E3A5F",
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "rating_row",
+        "component": "Row",
+        "children": ["rating_stars", "rating_score", "rating_count"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "rating_stars",
+        "component": "Icon",
+        "name": "star",
+        "styles": {
+          "width": "28px",
+          "height": "28px",
+          "margin": "0px 4px 0px 0px"
+        }
+      },
+      {
+        "id": "rating_score",
+        "component": "Text",
+        "text": {"path": "/page/ratingScore"},
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "font-weight": "bold",
+          "color": "#D4A04A",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "rating_count",
+        "component": "Text",
+        "text": {"path": "/page/ratingCount"},
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "price_row",
+        "component": "Row",
+        "children": ["price_current", "price_original"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "price_current",
+        "component": "RichText",
+        "text": {"path": "/page/currentPrice"},
+        "variant": "h2",
+        "styles": {
+          "color": "#E06C5E",
+          "font-size": "36px",
+          "font-weight": "bold",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "price_original",
+        "component": "Text",
+        "text": {"path": "/page/originalPrice"},
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#999999",
+          "text-decoration-line": "line-through"
+        }
+      },
+      {
+        "id": "sales_info",
+        "component": "Text",
+        "text": {"path": "/page/salesInfo"},
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+
+      {
+        "id": "divider2",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 0px 0px"
+        }
+      },
+
+      {
+        "id": "highlights_section",
+        "component": "Column",
+        "children": ["highlights_title", "highlights_block"],
+        "styles": {
+          "padding": "16px 20px 16px 20px"
+        }
+      },
+      {
+        "id": "highlights_title",
+        "component": "Text",
+        "text": {"path": "/page/highlightsTitle"},
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1E3A5F",
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "highlights_block",
+        "component": "Column",
+        "children": ["highlight_1", "highlight_2", "highlight_3"],
+        "styles": {
+          "background-color": "rgba(30, 58, 95, 0.06)",
+          "border-radius": "16px",
+          "padding": "16px 20px 16px 20px"
+        }
+      },
+      {
+        "id": "highlight_1",
+        "component": "Row",
+        "children": ["highlight_icon_1", "highlight_text_1"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "highlight_icon_1",
+        "component": "Icon",
+        "name": "check",
+        "styles": {
+          "width": "24px",
+          "height": "24px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "highlight_text_1",
+        "component": "Text",
+        "text": {"path": "/page/highlights/0"},
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#333333"
+        }
+      },
+      {
+        "id": "highlight_2",
+        "component": "Row",
+        "children": ["highlight_icon_2", "highlight_text_2"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "highlight_icon_2",
+        "component": "Icon",
+        "name": "check",
+        "styles": {
+          "width": "24px",
+          "height": "24px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "highlight_text_2",
+        "component": "Text",
+        "text": {"path": "/page/highlights/1"},
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#333333"
+        }
+      },
+      {
+        "id": "highlight_3",
+        "component": "Row",
+        "children": ["highlight_icon_3", "highlight_text_3"],
+        "align": "center"
+      },
+      {
+        "id": "highlight_icon_3",
+        "component": "Icon",
+        "name": "check",
+        "styles": {
+          "width": "24px",
+          "height": "24px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "highlight_text_3",
+        "component": "Text",
+        "text": {"path": "/page/highlights/2"},
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#333333"
+        }
+      },
+
+      {
+        "id": "divider3",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 0px 0px"
+        }
+      },
+
+      {
+        "id": "specs_section",
+        "component": "Column",
+        "children": ["specs_title", "specs_table"],
+        "styles": {
+          "padding": "16px 20px 16px 20px"
+        }
+      },
+      {
+        "id": "specs_title",
+        "component": "Text",
+        "text": {"path": "/page/specsTitle"},
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1E3A5F",
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "specs_table",
+        "component": "Table",
+        "columns": {"path": "/page/specsColumns"},
+        "rows": {"path": "/page/specsRows"}
+      },
+
+      {
+        "id": "divider4",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 0px 0px"
+        }
+      },
+
+      {
+        "id": "reviews_section",
+        "component": "Column",
+        "children": ["reviews_header", "reviews_summary", "reviews_list"],
+        "styles": {
+          "padding": "16px 20px 16px 20px"
+        }
+      },
+      {
+        "id": "reviews_header",
+        "component": "Row",
+        "children": ["reviews_title", "reviews_more_btn"],
+        "justify": "spaceBetween",
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "reviews_title",
+        "component": "Text",
+        "text": {"path": "/page/reviewsTitle"},
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1E3A5F"
+        }
+      },
+      {
+        "id": "reviews_more_btn",
+        "component": "Button",
+        "child": "reviews_more_text",
+        "variant": "borderless",
+        "action": {"functionCall": {"call": "openUrl", "args": {"url": "https://example.com/reviews"}}},
+        "styles": {
+          "padding": "8px 16px 8px 16px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "reviews_more_text",
+        "component": "Text",
+        "text": {"path": "/page/reviewsMoreText"},
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#1E3A5F"
+        }
+      },
+      {
+        "id": "reviews_summary",
+        "component": "Row",
+        "children": ["review_overall_score", "review_bar"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "review_overall_score",
+        "component": "Column",
+        "children": ["review_big_score", "review_score_label"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 16px 0px 0px"
+        }
+      },
+      {
+        "id": "review_big_score",
+        "component": "Text",
+        "text": {"path": "/page/reviewOverallScore"},
+        "variant": "h1",
+        "styles": {
+          "font-size": "40px",
+          "font-weight": "bold",
+          "color": "#D4A04A"
+        }
+      },
+      {
+        "id": "review_score_label",
+        "component": "Text",
+        "text": {"path": "/page/reviewScoreLabel"},
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "review_bar",
+        "component": "Chart",
+        "chartType": "bar",
+        "title": {"path": "/page/reviewChartTitle"},
+        "data": {"path": "/page/reviewChartData"},
+        "styles": {
+          "height": "200px",
+          "flex-grow": 1
+        }
+      },
+      {
+        "id": "reviews_list",
+        "component": "List",
+        "children": {"path": "/page/reviews", "componentId": "review_item_template"},
+        "direction": "vertical"
+      },
+      {
+        "id": "review_item_template",
+        "component": "Column",
+        "children": ["review_item_header", "review_item_stars", "review_item_text"],
+        "styles": {
+          "padding": "12px 16px 12px 16px",
+          "margin": "0px 0px 12px 0px",
+          "background-color": "rgba(30, 58, 95, 0.04)",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "review_item_header",
+        "component": "Row",
+        "children": ["review_item_avatar", "review_item_name", "review_item_date"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "review_item_avatar",
+        "component": "Image",
+        "url": {"path": "avatar"},
+        "variant": "avatar",
+        "styles": {
+          "width": "40px",
+          "height": "40px",
+          "border-radius": "20px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "review_item_name",
+        "component": "Text",
+        "text": {"path": "userName"},
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "font-weight": "bold",
+          "color": "#333333",
+          "flex-grow": 1
+        }
+      },
+      {
+        "id": "review_item_date",
+        "component": "Text",
+        "text": {"path": "date"},
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#999999"
+        }
+      },
+      {
+        "id": "review_item_stars",
+        "component": "RichText",
+        "text": {"path": "starsHtml"},
+        "variant": "body",
+        "styles": {
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "review_item_text",
+        "component": "Text",
+        "text": {"path": "content"},
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#444444",
+          "line-height": 1.5
+        }
+      },
+
+      {
+        "id": "divider5",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 0px 0px"
+        }
+      },
+
+      {
+        "id": "cta_section",
+        "component": "Column",
+        "children": ["cta_button"],
+        "align": "center",
+        "styles": {
+          "padding": "20px 20px 24px 20px"
+        }
+      },
+      {
+        "id": "cta_button",
+        "component": "Button",
+        "child": "cta_text",
+        "variant": "primary",
+        "action": {"functionCall": {"call": "openUrl", "args": {"url": "https://example.com/buy"}}},
+        "styles": {
+          "background-color": "#E06C5E",
+          "border-radius": "24px",
+          "padding": "16px 48px 16px 48px",
+          "filter": "drop-shadow(0px 4px 16px rgba(224, 108, 94, 0.30))"
+        }
+      },
+      {
+        "id": "cta_text",
+        "component": "Text",
+        "text": {"path": "/page/ctaText"},
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#FFFFFF"
+        }
+      }
+    ]
+  }
+}

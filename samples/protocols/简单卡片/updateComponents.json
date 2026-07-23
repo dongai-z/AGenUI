@@ -1,0 +1,305 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "a2ui_protocol_card",
+    "components": [
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "card_body",
+        "styles": {
+          "filter": "drop-shadow(0px 4px 12px rgba(108, 92, 231, 0.12))",
+          "margin": "16px 16px 16px 16px"
+        }
+      },
+      {
+        "id": "card_body",
+        "component": "Column",
+        "children": ["header_section", "metrics_row", "summary_section", "tag_section"],
+        "styles": {
+          "padding": "24px 20px 24px 20px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "header_section",
+        "component": "Column",
+        "children": ["title_row", "subtitle"],
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "title_row",
+        "component": "Row",
+        "children": ["protocol_icon", "title_text", "version_badge"],
+        "align": "center",
+        "justify": "start",
+        "styles": {
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "protocol_icon",
+        "component": "Icon",
+        "name": "share",
+        "styles": {
+          "width": "32px",
+          "height": "32px",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "title_text",
+        "component": "Text",
+        "text": {"path": "/card/title"},
+        "variant": "h2",
+        "styles": {
+          "color": "#6C5CE7",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "version_badge",
+        "component": "Text",
+        "text": {"path": "/card/version"},
+        "variant": "caption",
+        "styles": {
+          "background-color": "rgba(108, 92, 231, 0.12)",
+          "color": "#6C5CE7",
+          "border-radius": "10px",
+          "padding": "4px 12px 4px 12px",
+          "margin": "0px 0px 0px 12px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "subtitle",
+        "component": "Text",
+        "text": {"path": "/card/subtitle"},
+        "variant": "body",
+        "styles": {
+          "color": "#636E72",
+          "font-size": "28px"
+        }
+      },
+      {
+        "id": "metrics_row",
+        "component": "Row",
+        "children": ["metric_platform", "metric_architecture", "metric_agent"],
+        "justify": "spaceBetween",
+        "align": "stretch",
+        "styles": {
+          "background-color": "rgba(108, 92, 231, 0.06)",
+          "border-radius": "16px",
+          "padding": "16px 16px 16px 16px",
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "metric_platform",
+        "component": "Column",
+        "children": ["platform_icon_row", "platform_value", "platform_label"],
+        "align": "center",
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "platform_icon_row",
+        "component": "Icon",
+        "name": "phone",
+        "styles": {
+          "width": "28px",
+          "height": "28px",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "platform_value",
+        "component": "Text",
+        "text": {"path": "/card/metrics/platform/value"},
+        "variant": "h3",
+        "styles": {
+          "color": "#6C5CE7",
+          "font-weight": "bold",
+          "font-size": "36px"
+        }
+      },
+      {
+        "id": "platform_label",
+        "component": "Text",
+        "text": {"path": "/card/metrics/platform/label"},
+        "variant": "caption",
+        "styles": {
+          "color": "#636E72",
+          "font-size": "24px"
+        }
+      },
+      {
+        "id": "metric_architecture",
+        "component": "Column",
+        "children": ["arch_icon_row", "arch_value", "arch_label"],
+        "align": "center",
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "arch_icon_row",
+        "component": "Icon",
+        "name": "info",
+        "styles": {
+          "width": "28px",
+          "height": "28px",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "arch_value",
+        "component": "Text",
+        "text": {"path": "/card/metrics/architecture/value"},
+        "variant": "h3",
+        "styles": {
+          "color": "#00CEC9",
+          "font-weight": "bold",
+          "font-size": "36px"
+        }
+      },
+      {
+        "id": "arch_label",
+        "component": "Text",
+        "text": {"path": "/card/metrics/architecture/label"},
+        "variant": "caption",
+        "styles": {
+          "color": "#636E72",
+          "font-size": "24px"
+        }
+      },
+      {
+        "id": "metric_agent",
+        "component": "Column",
+        "children": ["agent_icon_row", "agent_value", "agent_label"],
+        "align": "center",
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "agent_icon_row",
+        "component": "Icon",
+        "name": "settings",
+        "styles": {
+          "width": "28px",
+          "height": "28px",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "agent_value",
+        "component": "Text",
+        "text": {"path": "/card/metrics/agent/value"},
+        "variant": "h3",
+        "styles": {
+          "color": "#6C5CE7",
+          "font-weight": "bold",
+          "font-size": "36px"
+        }
+      },
+      {
+        "id": "agent_label",
+        "component": "Text",
+        "text": {"path": "/card/metrics/agent/label"},
+        "variant": "caption",
+        "styles": {
+          "color": "#636E72",
+          "font-size": "24px"
+        }
+      },
+      {
+        "id": "summary_section",
+        "component": "Column",
+        "children": ["summary_text"],
+        "styles": {
+          "margin": "0px 0px 20px 0px"
+        }
+      },
+      {
+        "id": "summary_text",
+        "component": "RichText",
+        "text": {"path": "/card/summary"},
+        "variant": "body",
+        "styles": {
+          "color": "#2D3436",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "tag_section",
+        "component": "Column",
+        "children": ["tag_row"],
+        "styles": {
+          "margin": "0px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "tag_row",
+        "component": "Row",
+        "children": ["tag_protocol", "tag_crossplatform", "tag_agent"],
+        "justify": "start",
+        "styles": {
+          "flex-wrap": "wrap"
+        }
+      },
+      {
+        "id": "tag_protocol",
+        "component": "Text",
+        "text": {"path": "/card/tags/0"},
+        "variant": "caption",
+        "styles": {
+          "background-color": "rgba(108, 92, 231, 0.10)",
+          "color": "#6C5CE7",
+          "border-radius": "10px",
+          "padding": "6px 14px 6px 14px",
+          "margin": "0px 8px 0px 0px",
+          "font-size": "24px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "tag_crossplatform",
+        "component": "Text",
+        "text": {"path": "/card/tags/1"},
+        "variant": "caption",
+        "styles": {
+          "background-color": "rgba(0, 206, 201, 0.10)",
+          "color": "#00B894",
+          "border-radius": "10px",
+          "padding": "6px 14px 6px 14px",
+          "margin": "0px 8px 0px 0px",
+          "font-size": "24px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "tag_agent",
+        "component": "Text",
+        "text": {"path": "/card/tags/2"},
+        "variant": "caption",
+        "styles": {
+          "background-color": "rgba(162, 155, 254, 0.15)",
+          "color": "#6C5CE7",
+          "border-radius": "10px",
+          "padding": "6px 14px 6px 14px",
+          "margin": "0px 0px 0px 0px",
+          "font-size": "24px",
+          "font-weight": "bold"
+        }
+      }
+    ]
+  }
+}

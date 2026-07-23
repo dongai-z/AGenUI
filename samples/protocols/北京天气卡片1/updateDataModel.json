@@ -1,0 +1,38 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "assistant-mrvgsopi-7ois",
+    "path": "/",
+    "value": {
+      "today": {
+        "obsLabel": "今天 10:06 实况",
+        "temp": "24",
+        "feelsLabel": "体感 23°",
+        "cond": "阴",
+        "range": "最高 26° / 最低 22°",
+        "humidity": "88%",
+        "windDir": "东风",
+        "windScale": "4级",
+        "precip": "2.5mm",
+        "vis": "17km"
+      },
+      "forecast": [
+        {
+          "day": "今天",
+          "cond": "雷阵雨",
+          "range": "22° / 26°"
+        },
+        {
+          "day": "周四",
+          "cond": "雷阵雨",
+          "range": "23° / 29°"
+        },
+        {
+          "day": "周五",
+          "cond": "雷阵雨转多云",
+          "range": "23° / 30°"
+        }
+      ]
+    }
+  }
+}

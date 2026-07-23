@@ -1,0 +1,27 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "assistant-mrvh63md-dpwf",
+    "path": "/",
+    "value": {
+      "beijing": {
+        "temp": "24°",
+        "cond": "阴",
+        "feels": "体感 23°",
+        "humidity": "88%",
+        "wind": "东风 4级",
+        "vis": "17km",
+        "range": "22°/26°"
+      },
+      "wuhan": {
+        "temp": "26°",
+        "cond": "小雨",
+        "feels": "体感 30°",
+        "humidity": "100%",
+        "wind": "北风 2级",
+        "vis": "15km",
+        "range": "26°/30°"
+      }
+    }
+  }
+}

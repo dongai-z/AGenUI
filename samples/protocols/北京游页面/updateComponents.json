@@ -1,0 +1,887 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "beijing_travel_page",
+    "components": [
+      {
+        "id": "root",
+        "component": "Column",
+        "children": ["hero_section", "divider1", "schedule_section", "divider2", "attractions_section", "divider3", "food_section", "divider4", "tips_section", "divider5", "cta_section"]
+      },
+      {
+        "id": "hero_section",
+        "component": "Column",
+        "children": ["hero_image", "hero_title", "hero_divider", "hero_subtitle", "hero_tags_row", "hero_summary"],
+        "styles": {
+          "padding": "0px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "hero_image",
+        "component": "Carousel",
+        "content": [
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Forbidden_City_12.2012.jpg/1280px-Forbidden_City_12.2012.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/The_Great_Wall_of_China_at_Jinshanling_edit.jpg/1280px-The_Great_Wall_of_China_at_Jinshanling_edit.jpg",
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Temple_of_Heaven_3.jpg/1280px-Temple_of_Heaven_3.jpg"
+        ],
+        "styles": {
+          "margin": "0px 0px 24px 0px",
+          "border-radius": "20px",
+          "overflow": "hidden"
+        }
+      },
+      {
+        "id": "hero_title",
+        "component": "RichText",
+        "text": {"path": "/page/hero/title"},
+        "variant": "h1",
+        "styles": {
+          "text-align": "center",
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "hero_divider",
+        "component": "Column",
+        "styles": {
+          "height": "2px",
+          "background-color": "rgba(139, 111, 78, 0.30)",
+          "margin": "0px 0px 16px 0px",
+          "width": "120px",
+          "align-self": "center"
+        }
+      },
+      {
+        "id": "hero_subtitle",
+        "component": "Text",
+        "text": {"path": "/page/hero/subtitle"},
+        "variant": "body",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "text-align": "center",
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "hero_tags_row",
+        "component": "Row",
+        "children": ["hero_tag_duration", "hero_tag_season", "hero_tag_budget"],
+        "justify": "center",
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "hero_tag_duration",
+        "component": "Text",
+        "text": {"path": "/page/hero/tags/0/text"},
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "24px",
+          "background-color": "rgba(139, 111, 78, 0.10)",
+          "border-radius": "12px",
+          "padding": "8px 16px 8px 16px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "hero_tag_season",
+        "component": "Text",
+        "text": {"path": "/page/hero/tags/1/text"},
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "24px",
+          "background-color": "rgba(139, 111, 78, 0.10)",
+          "border-radius": "12px",
+          "padding": "8px 16px 8px 16px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "hero_tag_budget",
+        "component": "Text",
+        "text": {"path": "/page/hero/tags/2/text"},
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "24px",
+          "background-color": "rgba(139, 111, 78, 0.10)",
+          "border-radius": "12px",
+          "padding": "8px 16px 8px 16px"
+        }
+      },
+      {
+        "id": "hero_summary",
+        "component": "Text",
+        "text": {"path": "/page/hero/summary"},
+        "variant": "body",
+        "styles": {
+          "color": "#5A4A3A",
+          "font-size": "28px",
+          "text-align": "center",
+          "line-height": 1.5,
+          "margin": "0px 24px 0px 24px"
+        }
+      },
+      {
+        "id": "divider1",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "schedule_section",
+        "component": "Column",
+        "children": ["schedule_title", "schedule_day1", "schedule_day2", "schedule_day3"],
+        "styles": {
+          "padding": "0px 24px 0px 24px"
+        }
+      },
+      {
+        "id": "schedule_title",
+        "component": "Text",
+        "text": "三日精华行程",
+        "variant": "h2",
+        "styles": {
+          "color": "#2D2418",
+          "font-size": "36px",
+          "font-weight": "bold",
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "schedule_day1",
+        "component": "Column",
+        "children": ["day1_header", "day1_morning", "day1_afternoon", "day1_evening"],
+        "styles": {
+          "background-color": "rgba(139, 111, 78, 0.06)",
+          "border-radius": "16px",
+          "padding": "20px 20px 20px 20px",
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "day1_header",
+        "component": "Row",
+        "children": ["day1_icon", "day1_title_col"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day1_icon",
+        "component": "Icon",
+        "name": "locationOn",
+        "styles": {
+          "width": "32px",
+          "height": "32px",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "day1_title_col",
+        "component": "Column",
+        "children": ["day1_title", "day1_theme"]
+      },
+      {
+        "id": "day1_title",
+        "component": "Text",
+        "text": "Day 1",
+        "variant": "h3",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "32px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "day1_theme",
+        "component": "Text",
+        "text": "皇城文化 · 中轴线",
+        "variant": "body",
+        "styles": {
+          "color": "#5A4A3A",
+          "font-size": "28px",
+          "margin": "4px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "day1_morning",
+        "component": "Column",
+        "children": ["day1_morning_time", "day1_morning_content"],
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day1_morning_time",
+        "component": "Text",
+        "text": "上午",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day1_morning_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day1/morning"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "day1_afternoon",
+        "component": "Column",
+        "children": ["day1_afternoon_time", "day1_afternoon_content"],
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day1_afternoon_time",
+        "component": "Text",
+        "text": "下午",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day1_afternoon_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day1/afternoon"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "day1_evening",
+        "component": "Column",
+        "children": ["day1_evening_time", "day1_evening_content"]
+      },
+      {
+        "id": "day1_evening_time",
+        "component": "Text",
+        "text": "晚上",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day1_evening_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day1/evening"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "schedule_day2",
+        "component": "Column",
+        "children": ["day2_header", "day2_morning", "day2_afternoon", "day2_evening"],
+        "styles": {
+          "background-color": "rgba(139, 111, 78, 0.06)",
+          "border-radius": "16px",
+          "padding": "20px 20px 20px 20px",
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "day2_header",
+        "component": "Row",
+        "children": ["day2_icon", "day2_title_col"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day2_icon",
+        "component": "Icon",
+        "name": "locationOn",
+        "styles": {
+          "width": "32px",
+          "height": "32px",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "day2_title_col",
+        "component": "Column",
+        "children": ["day2_title", "day2_theme"]
+      },
+      {
+        "id": "day2_title",
+        "component": "Text",
+        "text": "Day 2",
+        "variant": "h3",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "32px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "day2_theme",
+        "component": "Text",
+        "text": "长城雄风 · 奥运风光",
+        "variant": "body",
+        "styles": {
+          "color": "#5A4A3A",
+          "font-size": "28px",
+          "margin": "4px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "day2_morning",
+        "component": "Column",
+        "children": ["day2_morning_time", "day2_morning_content"],
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day2_morning_time",
+        "component": "Text",
+        "text": "上午",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day2_morning_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day2/morning"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "day2_afternoon",
+        "component": "Column",
+        "children": ["day2_afternoon_time", "day2_afternoon_content"],
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day2_afternoon_time",
+        "component": "Text",
+        "text": "下午",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day2_afternoon_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day2/afternoon"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "day2_evening",
+        "component": "Column",
+        "children": ["day2_evening_time", "day2_evening_content"]
+      },
+      {
+        "id": "day2_evening_time",
+        "component": "Text",
+        "text": "晚上",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day2_evening_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day2/evening"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "schedule_day3",
+        "component": "Column",
+        "children": ["day3_header", "day3_morning", "day3_afternoon", "day3_evening"],
+        "styles": {
+          "background-color": "rgba(139, 111, 78, 0.06)",
+          "border-radius": "16px",
+          "padding": "20px 20px 20px 20px",
+          "margin": "0px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "day3_header",
+        "component": "Row",
+        "children": ["day3_icon", "day3_title_col"],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day3_icon",
+        "component": "Icon",
+        "name": "locationOn",
+        "styles": {
+          "width": "32px",
+          "height": "32px",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "day3_title_col",
+        "component": "Column",
+        "children": ["day3_title", "day3_theme"]
+      },
+      {
+        "id": "day3_title",
+        "component": "Text",
+        "text": "Day 3",
+        "variant": "h3",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "32px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "day3_theme",
+        "component": "Text",
+        "text": "皇家园林 · 文艺胡同",
+        "variant": "body",
+        "styles": {
+          "color": "#5A4A3A",
+          "font-size": "28px",
+          "margin": "4px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "day3_morning",
+        "component": "Column",
+        "children": ["day3_morning_time", "day3_morning_content"],
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day3_morning_time",
+        "component": "Text",
+        "text": "上午",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day3_morning_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day3/morning"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "day3_afternoon",
+        "component": "Column",
+        "children": ["day3_afternoon_time", "day3_afternoon_content"],
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day3_afternoon_time",
+        "component": "Text",
+        "text": "下午",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day3_afternoon_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day3/afternoon"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "day3_evening",
+        "component": "Column",
+        "children": ["day3_evening_time", "day3_evening_content"]
+      },
+      {
+        "id": "day3_evening_time",
+        "component": "Text",
+        "text": "晚上",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "day3_evening_content",
+        "component": "Text",
+        "text": {"path": "/page/schedule/day3/evening"},
+        "variant": "body",
+        "styles": {
+          "color": "#3D3020",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "divider2",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "32px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "attractions_section",
+        "component": "Column",
+        "children": ["attractions_title", "attractions_list"],
+        "styles": {
+          "padding": "0px 24px 0px 24px"
+        }
+      },
+      {
+        "id": "attractions_title",
+        "component": "Text",
+        "text": "必游景点",
+        "variant": "h2",
+        "styles": {
+          "color": "#2D2418",
+          "font-size": "36px",
+          "font-weight": "bold",
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "attractions_list",
+        "component": "List",
+        "children": {"path": "/page/attractions", "componentId": "attraction_card_template"},
+        "direction": "horizontal"
+      },
+      {
+        "id": "attraction_card_template",
+        "component": "Card",
+        "child": "attraction_card_inner",
+        "styles": {
+          "width": "280px",
+          "margin": "0px 16px 0px 0px",
+          "filter": "drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.08))",
+          "border-radius": "16px"
+        }
+      },
+      {
+        "id": "attraction_card_inner",
+        "component": "Column",
+        "children": ["attraction_image", "attraction_name", "attraction_desc", "attraction_tags"],
+        "styles": {
+          "padding": "16px 16px 16px 16px"
+        }
+      },
+      {
+        "id": "attraction_image",
+        "component": "Image",
+        "url": {"path": "imageUrl"},
+        "variant": "mediumFeature",
+        "fit": "cover",
+        "styles": {
+          "border-radius": "12px",
+          "margin": "0px 0px 12px 0px",
+          "aspect-ratio": "16 / 9"
+        }
+      },
+      {
+        "id": "attraction_name",
+        "component": "Text",
+        "text": {"path": "name"},
+        "variant": "h3",
+        "styles": {
+          "color": "#2D2418",
+          "font-size": "32px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "attraction_desc",
+        "component": "Text",
+        "text": {"path": "description"},
+        "variant": "body",
+        "styles": {
+          "color": "#5A4A3A",
+          "font-size": "28px",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "attraction_tags",
+        "component": "List",
+        "children": {"path": "tags", "componentId": "attraction_tag_template"},
+        "direction": "horizontal"
+      },
+      {
+        "id": "attraction_tag_template",
+        "component": "Text",
+        "text": {"path": "text"},
+        "variant": "caption",
+        "styles": {
+          "color": "#8B6F4E",
+          "font-size": "24px",
+          "background-color": "rgba(139, 111, 78, 0.10)",
+          "border-radius": "8px",
+          "padding": "4px 12px 4px 12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "divider3",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "32px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "food_section",
+        "component": "Column",
+        "children": ["food_title", "food_list"],
+        "styles": {
+          "padding": "0px 24px 0px 24px"
+        }
+      },
+      {
+        "id": "food_title",
+        "component": "Text",
+        "text": "京味美食",
+        "variant": "h2",
+        "styles": {
+          "color": "#2D2418",
+          "font-size": "36px",
+          "font-weight": "bold",
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "food_list",
+        "component": "List",
+        "children": {"path": "/page/foods", "componentId": "food_card_template"},
+        "direction": "horizontal"
+      },
+      {
+        "id": "food_card_template",
+        "component": "Card",
+        "child": "food_card_inner",
+        "styles": {
+          "width": "260px",
+          "margin": "0px 16px 0px 0px",
+          "filter": "drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.08))",
+          "border-radius": "16px"
+        }
+      },
+      {
+        "id": "food_card_inner",
+        "component": "Column",
+        "children": ["food_name", "food_desc", "food_price"],
+        "styles": {
+          "padding": "20px 16px 20px 16px"
+        }
+      },
+      {
+        "id": "food_name",
+        "component": "Text",
+        "text": {"path": "name"},
+        "variant": "h3",
+        "styles": {
+          "color": "#2D2418",
+          "font-size": "32px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "food_desc",
+        "component": "Text",
+        "text": {"path": "description"},
+        "variant": "body",
+        "styles": {
+          "color": "#5A4A3A",
+          "font-size": "28px",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "food_price",
+        "component": "RichText",
+        "text": {"path": "priceText"},
+        "variant": "body",
+        "styles": {
+          "font-size": "28px"
+        }
+      },
+      {
+        "id": "divider4",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "32px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "tips_section",
+        "component": "Column",
+        "children": ["tips_title", "tips_table"],
+        "styles": {
+          "padding": "0px 24px 0px 24px"
+        }
+      },
+      {
+        "id": "tips_title",
+        "component": "Text",
+        "text": "实用信息",
+        "variant": "h2",
+        "styles": {
+          "color": "#2D2418",
+          "font-size": "36px",
+          "font-weight": "bold",
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "tips_table",
+        "component": "Table",
+        "columns": {"path": "/page/tips/columns"},
+        "rows": {"path": "/page/tips/rows"}
+      },
+      {
+        "id": "divider5",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "32px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "cta_section",
+        "component": "Column",
+        "children": ["cta_button_col"],
+        "align": "center",
+        "styles": {
+          "padding": "0px 24px 32px 24px"
+        }
+      },
+      {
+        "id": "cta_button_col",
+        "component": "Column",
+        "children": ["cta_button", "cta_note"],
+        "align": "center"
+      },
+      {
+        "id": "cta_button",
+        "component": "Button",
+        "child": "cta_text",
+        "action": {"functionCall": {"call": "openUrl", "args": {"url": "https://example.com/beijing-guide"}}},
+        "styles": {
+          "background-color": "#8B6F4E",
+          "border-radius": "24px",
+          "padding": "16px 40px 16px 40px",
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "cta_text",
+        "component": "Text",
+        "text": "查看完整攻略",
+        "variant": "body",
+        "styles": {
+          "color": "#FFFFFF",
+          "font-size": "32px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "cta_note",
+        "component": "Text",
+        "text": "数据仅供参考，出行前请确认最新信息",
+        "variant": "caption",
+        "styles": {
+          "color": "#8B7B6B",
+          "font-size": "24px",
+          "opacity": 0.7
+        }
+      }
+    ]
+  }
+}

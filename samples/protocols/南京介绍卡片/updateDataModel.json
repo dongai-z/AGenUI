@@ -1,0 +1,18 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "assistant-mrvikzmq-5qoh",
+    "path": "/",
+    "value": {
+      "identity": {
+        "dynasty": "六朝",
+        "areaValue": "6587",
+        "province": "江苏"
+      },
+      "visit": {
+        "bestSeason": "春 · 秋",
+        "bestMonths": "3-5 / 9-11月"
+      }
+    }
+  }
+}

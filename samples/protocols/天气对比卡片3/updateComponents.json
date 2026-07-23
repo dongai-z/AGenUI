@@ -1,0 +1,658 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "assistant-mrvh63md-dpwf",
+    "components": [
+      {
+        "id": "root_c0_0_c0_1",
+        "component": "Text",
+        "text": "实时天气对比",
+        "styles": {
+          "color": "#f4f8ff",
+          "font-size": "36px",
+          "font-weight": "700",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c0_0_c1_2",
+        "component": "Text",
+        "text": "今日 07-22",
+        "styles": {
+          "color": "#9fb4d4",
+          "font-size": "24px",
+          "font-weight": "500",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c0_0",
+        "component": "Row",
+        "children": [
+          "root_c0_0_c0_1",
+          "root_c0_0_c1_2"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "gap": "8px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c0_5_c0_6",
+        "component": "Icon",
+        "name": "map-pin",
+        "styles": {
+          "color": "#8fd0ff",
+          "width": "14px",
+          "height": "14px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c0_5_c1_7",
+        "component": "Text",
+        "text": "北京",
+        "styles": {
+          "color": "#f4f8ff",
+          "font-size": "32px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c0_5",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c0_4_c0_5_c0_6",
+          "root_c1_3_c0_4_c0_5_c1_7"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c1_8_c0_9",
+        "component": "Text",
+        "text": "⛅",
+        "styles": {
+          "font-size": "60px",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c1_8_c1_10",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/temp"
+        },
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "80px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c1_8",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c0_4_c1_8_c0_9",
+          "root_c1_3_c0_4_c1_8_c1_10"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c2_11",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/cond"
+        },
+        "styles": {
+          "color": "#bcd4f2",
+          "font-size": "28px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c3_12",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/feels"
+        },
+        "styles": {
+          "color": "#8ea6c8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c4_13",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "#3d5f88",
+          "margin": "2px 0",
+          "height": "1px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c5_14_c0_15",
+        "component": "Text",
+        "text": "湿度",
+        "styles": {
+          "color": "#8ea6c8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c5_14_c1_16",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/humidity"
+        },
+        "styles": {
+          "color": "#e6f0ff",
+          "font-size": "26px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c5_14",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c0_4_c5_14_c0_15",
+          "root_c1_3_c0_4_c5_14_c1_16"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c6_17_c0_18",
+        "component": "Text",
+        "text": "风力",
+        "styles": {
+          "color": "#8ea6c8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c6_17_c1_19",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/wind"
+        },
+        "styles": {
+          "color": "#e6f0ff",
+          "font-size": "26px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c6_17",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c0_4_c6_17_c0_18",
+          "root_c1_3_c0_4_c6_17_c1_19"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c7_20_c0_21",
+        "component": "Text",
+        "text": "能见度",
+        "styles": {
+          "color": "#8ea6c8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c7_20_c1_22",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/vis"
+        },
+        "styles": {
+          "color": "#e6f0ff",
+          "font-size": "26px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c7_20",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c0_4_c7_20_c0_21",
+          "root_c1_3_c0_4_c7_20_c1_22"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c8_23_c0_24",
+        "component": "Text",
+        "text": "今日",
+        "styles": {
+          "color": "#8ea6c8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c8_23_c1_25",
+        "component": "Text",
+        "text": {
+          "path": "/beijing/range"
+        },
+        "styles": {
+          "color": "#8fd0ff",
+          "min-width": "58px",
+          "font-size": "26px",
+          "font-weight": "700",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_c8_23",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c0_4_c8_23_c0_24",
+          "root_c1_3_c0_4_c8_23_c1_25"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "background-color": "#1b2d47",
+          "border-radius": "10px",
+          "padding": "7px 9px",
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4_body_26",
+        "component": "Column",
+        "children": [
+          "root_c1_3_c0_4_c0_5",
+          "root_c1_3_c0_4_c1_8",
+          "root_c1_3_c0_4_c2_11",
+          "root_c1_3_c0_4_c3_12",
+          "root_c1_3_c0_4_c4_13",
+          "root_c1_3_c0_4_c5_14",
+          "root_c1_3_c0_4_c6_17",
+          "root_c1_3_c0_4_c7_20",
+          "root_c1_3_c0_4_c8_23"
+        ],
+        "styles": {
+          "gap": "10px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_3_c0_4",
+        "component": "Card",
+        "child": "root_c1_3_c0_4_body_26",
+        "styles": {
+          "background-color": "linear-gradient(150deg,#2c4a6b 0%,#1b2d47 100%)",
+          "border": "1px solid #3d5f88",
+          "border-radius": "16px",
+          "padding": "14px",
+          "gap": "10px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c0_28_c0_29",
+        "component": "Icon",
+        "name": "map-pin",
+        "styles": {
+          "color": "#b0a8ff",
+          "width": "14px",
+          "height": "14px"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c0_28_c1_30",
+        "component": "Text",
+        "text": "武汉",
+        "styles": {
+          "color": "#f4f8ff",
+          "font-size": "32px",
+          "font-weight": "700",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c0_28",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c1_27_c0_28_c0_29",
+          "root_c1_3_c1_27_c0_28_c1_30"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c1_31_c0_32",
+        "component": "Text",
+        "text": "🌧️",
+        "styles": {
+          "font-size": "60px",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c1_31_c1_33",
+        "component": "Text",
+        "text": {
+          "path": "/wuhan/temp"
+        },
+        "styles": {
+          "color": "#ffffff",
+          "font-size": "80px",
+          "font-weight": "800",
+          "line-height": "1.3"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c1_31",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c1_27_c1_31_c0_32",
+          "root_c1_3_c1_27_c1_31_c1_33"
+        ],
+        "align": "center",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c2_34",
+        "component": "Text",
+        "text": {
+          "path": "/wuhan/cond"
+        },
+        "styles": {
+          "color": "#d4cdf2",
+          "font-size": "28px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c3_35",
+        "component": "Text",
+        "text": {
+          "path": "/wuhan/feels"
+        },
+        "styles": {
+          "color": "#a89ec8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c4_36",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "background-color": "#5a5f88",
+          "margin": "2px 0",
+          "height": "1px"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c5_37_c0_38",
+        "component": "Text",
+        "text": "湿度",
+        "styles": {
+          "color": "#a89ec8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c5_37_c1_39",
+        "component": "Text",
+        "text": {
+          "path": "/wuhan/humidity"
+        },
+        "styles": {
+          "color": "#f0ecff",
+          "font-size": "26px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c5_37",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c1_27_c5_37_c0_38",
+          "root_c1_3_c1_27_c5_37_c1_39"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c6_40_c0_41",
+        "component": "Text",
+        "text": "风力",
+        "styles": {
+          "color": "#a89ec8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c6_40_c1_42",
+        "component": "Text",
+        "text": {
+          "path": "/wuhan/wind"
+        },
+        "styles": {
+          "color": "#f0ecff",
+          "font-size": "26px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c6_40",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c1_27_c6_40_c0_41",
+          "root_c1_3_c1_27_c6_40_c1_42"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c7_43_c0_44",
+        "component": "Text",
+        "text": "能见度",
+        "styles": {
+          "color": "#a89ec8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c7_43_c1_45",
+        "component": "Text",
+        "text": {
+          "path": "/wuhan/vis"
+        },
+        "styles": {
+          "color": "#f0ecff",
+          "font-size": "26px",
+          "font-weight": "600",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c7_43",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c1_27_c7_43_c0_44",
+          "root_c1_3_c1_27_c7_43_c1_45"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c8_46_c0_47",
+        "component": "Text",
+        "text": "今日",
+        "styles": {
+          "color": "#a89ec8",
+          "font-size": "24px",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c8_46_c1_48",
+        "component": "Text",
+        "text": {
+          "path": "/wuhan/range"
+        },
+        "styles": {
+          "color": "#b0a8ff",
+          "min-width": "58px",
+          "font-size": "26px",
+          "font-weight": "700",
+          "text-align": "right",
+          "line-height": "1.4"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_c8_46",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c1_27_c8_46_c0_47",
+          "root_c1_3_c1_27_c8_46_c1_48"
+        ],
+        "align": "center",
+        "justify": "space-between",
+        "styles": {
+          "background-color": "#22243f",
+          "border-radius": "10px",
+          "padding": "7px 9px",
+          "gap": "6px"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27_body_49",
+        "component": "Column",
+        "children": [
+          "root_c1_3_c1_27_c0_28",
+          "root_c1_3_c1_27_c1_31",
+          "root_c1_3_c1_27_c2_34",
+          "root_c1_3_c1_27_c3_35",
+          "root_c1_3_c1_27_c4_36",
+          "root_c1_3_c1_27_c5_37",
+          "root_c1_3_c1_27_c6_40",
+          "root_c1_3_c1_27_c7_43",
+          "root_c1_3_c1_27_c8_46"
+        ],
+        "styles": {
+          "gap": "10px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_3_c1_27",
+        "component": "Card",
+        "child": "root_c1_3_c1_27_body_49",
+        "styles": {
+          "background-color": "linear-gradient(150deg,#3a4a6b 0%,#22243f 100%)",
+          "border": "1px solid #5a5f88",
+          "border-radius": "16px",
+          "padding": "14px",
+          "gap": "10px",
+          "flex-grow": 1,
+          "flex-basis": "0"
+        }
+      },
+      {
+        "id": "root_c1_3",
+        "component": "Row",
+        "children": [
+          "root_c1_3_c0_4",
+          "root_c1_3_c1_27"
+        ],
+        "styles": {
+          "gap": "12px"
+        }
+      },
+      {
+        "id": "root_c2_50",
+        "component": "Text",
+        "text": "武汉湿度更高、有降水，出行注意雨具；北京相对温和偏阴。",
+        "styles": {
+          "color": "#9fb4d4",
+          "font-size": "24px",
+          "line-height": "1.5",
+          "line-clamp": 0
+        }
+      },
+      {
+        "id": "root_body_51",
+        "component": "Column",
+        "children": [
+          "root_c0_0",
+          "root_c1_3",
+          "root_c2_50"
+        ],
+        "styles": {
+          "gap": "14px"
+        }
+      },
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "root_body_51",
+        "styles": {
+          "background-color": "linear-gradient(160deg,#243b55 0%,#141e30 100%)",
+          "border-radius": "20px",
+          "padding": "18px",
+          "gap": "14px"
+        }
+      }
+    ]
+  }
+}
