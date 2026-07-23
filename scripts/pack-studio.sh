@@ -46,6 +46,7 @@ rsync -a "${REPO_ROOT}/samples/" "${STAGE_DIR}/samples/"
 
 # --- copy required skill directory (prompt builder + validator) ---
 echo "[pack-studio] Copying skills/a2ui-generation/ ..."
+mkdir -p "${STAGE_DIR}/skills/a2ui-generation"
 rsync -a \
   --exclude='__pycache__' \
   --exclude='*.pyc' \
