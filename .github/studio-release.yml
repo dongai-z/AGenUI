@@ -3,7 +3,7 @@ name: Studio Release
 on:
   push:
     tags:
-      - "v*"
+      - "AGenUI-*"
 
 permissions:
   contents: write
