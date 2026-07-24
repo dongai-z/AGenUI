@@ -156,6 +156,25 @@ def list_providers() -> dict[str, Any]:
     }
 
 
+@app.get("/api/config/all")
+def get_all_config() -> dict[str, Any]:
+    """Return ALL providers (including those without api_key) with full key values.
+
+    Used by the configuration modal so users can edit any provider.
+    """
+    cfg = load_config()
+    providers: list[dict[str, Any]] = []
+    for name, pc in cfg.providers.items():
+        providers.append({
+            "name": name,
+            "base_url": pc.base_url,
+            "api_key": pc.api_key,
+            "model": pc.model,
+            "max_tokens": pc.max_tokens,
+        })
+    return {"active": cfg.active, "providers": providers}
+
+
 @app.post("/api/config")
 def update_config(req: ConfigUpdateRequest) -> dict[str, Any]:
     cfg = load_config()
@@ -309,7 +328,7 @@ def update_protocol(protocol_id: str, req: ProtocolUpdateRequest):
 
 
 # --------------------------------------------------------------------------- #
-# Presets (samples under ~/.agenui/protocols/samples/)
+# Presets (samples under ~/.agenui/protocols/presets/)
 # --------------------------------------------------------------------------- #
 @app.get("/api/presets")
 def list_presets() -> dict[str, Any]:

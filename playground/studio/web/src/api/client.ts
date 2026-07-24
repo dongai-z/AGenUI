@@ -2,6 +2,7 @@
 
 import type {
   A2uiPayload,
+  ConfigProvider,
   PresetRecord,
   PresetSummary,
   ProtocolRecord,
@@ -24,6 +25,30 @@ export async function fetchServerInfo(): Promise<ServerInfo> {
 
 export async function fetchProviders(): Promise<ProvidersResponse> {
   return getJson<ProvidersResponse>("/api/providers");
+}
+
+export async function fetchAllConfig(): Promise<{ active: string | null; providers: ConfigProvider[] }> {
+  return getJson("/api/config/all");
+}
+
+export async function saveConfig(providers: ConfigProvider[]): Promise<void> {
+  const set_providers: Record<string, { base_url: string; api_key: string; model: string; max_tokens: number }> = {};
+  for (const p of providers) {
+    set_providers[p.name] = {
+      base_url: p.base_url,
+      api_key: p.api_key,
+      model: p.model,
+      max_tokens: p.max_tokens,
+    };
+  }
+  const res = await fetch("/api/config", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ set_providers }),
+  });
+  if (!res.ok) {
+    throw new Error(`POST /api/config failed: ${res.status}`);
+  }
 }
 
 export async function fetchPresets(): Promise<PresetSummary[]> {

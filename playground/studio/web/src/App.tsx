@@ -38,7 +38,7 @@ const EMPTY_PANEL: PanelState = {
 
 export default function App() {
   const gen = useGeneration();
-  const { providers, active, serverInfo } = useProviders();
+  const { providers, active, serverInfo, refresh } = useProviders();
   const library = useLibrary();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -228,6 +228,7 @@ export default function App() {
             isGenerating={gen.isGenerating}
             onSend={handleGenerate}
             onStop={gen.stop}
+            onConfigSaved={refresh}
           />
         </div>
 

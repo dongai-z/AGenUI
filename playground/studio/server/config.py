@@ -18,9 +18,9 @@ from typing import Any
 CONFIG_DIR = Path.home() / ".agenui"
 CONFIG_FILE = CONFIG_DIR / "config.json"
 PROTOCOLS_DIR = CONFIG_DIR / "protocols"
-# Model-generated (custom) protocols and preset samples live in sub-directories.
+# Model-generated (custom) protocols and presets live in sub-directories.
 CUSTOM_DIR = PROTOCOLS_DIR / "custom"
-SAMPLES_DIR = PROTOCOLS_DIR / "samples"
+SAMPLES_DIR = PROTOCOLS_DIR / "presets"
 
 # Preset template for first-run config generation.
 # api_key left empty for user to fill.

@@ -14,6 +14,15 @@ export interface ProvidersResponse {
   providers: Provider[];
 }
 
+/** Full provider config (with raw api_key) used by the configuration modal. */
+export interface ConfigProvider {
+  name: string;
+  base_url: string;
+  api_key: string;
+  model: string;
+  max_tokens: number;
+}
+
 export interface ServerInfo {
   lan_ip: string;
   port: number;

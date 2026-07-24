@@ -1,9 +1,10 @@
 /** Bottom input bar: model selector (left), auto-growing textarea, send/stop (right). */
 
 import { useRef, useState } from "react";
+import { ConfigModal } from "./ConfigModal";
 import { ModelSelector } from "./ModelSelector";
-import { ReasoningToggle } from "./ReasoningToggle";
 import { SendButton } from "./SendButton";
+import { SettingsIcon } from "@/components/icons";
 import type { Provider } from "@/types";
 
 interface InputBarProps {
@@ -12,6 +13,7 @@ interface InputBarProps {
   isGenerating: boolean;
   onSend: (prompt: string, provider: string | null, reasoning: boolean) => void;
   onStop: () => void;
+  onConfigSaved: () => void;
 }
 
 export function InputBar({
@@ -20,10 +22,11 @@ export function InputBar({
   isGenerating,
   onSend,
   onStop,
+  onConfigSaved,
 }: InputBarProps) {
   const [text, setText] = useState("");
   const [provider, setProvider] = useState<string | null>(null);
-  const [reasoning, setReasoning] = useState(false);
+  const [configOpen, setConfigOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const canSend = text.trim().length > 0 && !isGenerating;
@@ -38,7 +41,7 @@ export function InputBar({
   const handleSend = () => {
     const prompt = text.trim();
     if (!prompt || isGenerating) return;
-    onSend(prompt, provider, reasoning);
+    onSend(prompt, provider, false);
     setText("");
     requestAnimationFrame(autoResize);
   };
@@ -82,11 +85,14 @@ export function InputBar({
               disabled={isGenerating}
               onChange={setProvider}
             />
-            <ReasoningToggle
-              enabled={reasoning}
-              disabled={isGenerating}
-              onChange={setReasoning}
-            />
+            <button
+              type="button"
+              onClick={() => setConfigOpen(true)}
+              title="Configure model API keys"
+              className="flex h-[30px] w-[30px] items-center justify-center rounded-lg border border-slate-200 text-slate-400 transition hover:border-slate-300 hover:text-slate-600"
+            >
+              <SettingsIcon size={14} />
+            </button>
           </div>
           <div className="flex items-center gap-2 pt-1">
             <span className="hidden text-[11px] text-slate-400 md:block">
@@ -101,6 +107,13 @@ export function InputBar({
           </div>
         </div>
       </div>
+
+      {/* Config modal */}
+      <ConfigModal
+        open={configOpen}
+        onClose={() => setConfigOpen(false)}
+        onSaved={onConfigSaved}
+      />
     </div>
   );
 }

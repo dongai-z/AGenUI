@@ -216,6 +216,14 @@ async function ensureApp() {
   // Write version marker
   fs.writeFileSync(VERSION_FILE, tag + "\n");
   fs.unlinkSync(zipPath);
+
+  // Remove cached presets so they get re-seeded from the fresh app bundle
+  const presetsDir = path.join(BASE_DIR, "protocols", "presets");
+  if (fs.existsSync(presetsDir)) {
+    fs.rmSync(presetsDir, { recursive: true, force: true });
+    log("Cleared cached presets (will re-seed on next start)");
+  }
+
   log(`Installed version ${tag}`);
 }
 

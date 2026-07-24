@@ -1,13 +1,13 @@
 """Preset sample protocols for AGenUI Studio.
 
-Samples live under ``~/.agenui/protocols/samples/`` using the same directory
+Samples live under ``~/.agenui/protocols/presets/`` using the same directory
 layout as the Playground stories: ``<Name>/updateComponents.json`` plus an
 optional ``updateDataModel.json``.
 
-On first run the samples directory is seeded from the repo's
+On first run the presets directory is seeded from the app bundle's
 ``samples/protocols/`` so users get a ready-made gallery.
-Seeding only happens when the samples directory is empty, so anything the user
-adds later is preserved.
+Seeding only happens when the presets directory is empty (e.g. after
+``--update`` clears it), so anything the user adds later is preserved.
 """
 
 from __future__ import annotations
@@ -32,9 +32,9 @@ def _read_json(path: Path) -> Any | None:
 
 
 def ensure_samples() -> None:
-    """Seed ``~/.agenui/protocols/samples/`` from the repo stories when empty.
+    """Seed ``~/.agenui/protocols/presets/`` from the app bundle when empty.
 
-    Idempotent: only copies when the samples directory has no preset dirs yet.
+    Idempotent: only copies when the presets directory has no preset dirs yet.
     """
     SAMPLES_DIR.mkdir(parents=True, exist_ok=True)
     if any(p.is_dir() for p in SAMPLES_DIR.iterdir()):
