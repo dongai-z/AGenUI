@@ -24,6 +24,7 @@ interface PresetSidebarProps {
   onSelectPreset: (id: string) => void;
   onSelectProtocol: (id: string) => void;
   onRefresh: () => void;
+  onNewChat?: () => void;
 }
 
 function GroupHeader({
@@ -66,6 +67,7 @@ export function PresetSidebar({
   onSelectPreset,
   onSelectProtocol,
   onRefresh,
+  onNewChat,
 }: PresetSidebarProps) {
   const [query, setQuery] = useState("");
   const [presetsOpen, setPresetsOpen] = useState(true);
@@ -86,6 +88,22 @@ export function PresetSidebar({
 
   return (
     <div className="flex h-full w-60 shrink-0 flex-col border-r border-slate-200 bg-white">
+      {/* New Chat button */}
+      {onNewChat && (
+        <div className="shrink-0 border-b border-slate-200 p-2">
+          <button
+            type="button"
+            onClick={onNewChat}
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-3 py-2 text-xs font-medium text-white shadow-sm transition hover:bg-brand-600 active:scale-[0.98]"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            New Chat
+          </button>
+        </div>
+      )}
+
       {/* Search + refresh */}
       <div className="flex shrink-0 items-center gap-1.5 border-b border-slate-200 p-2">
         <div className="flex flex-1 items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2 py-1.5 focus-within:border-brand-500 focus-within:bg-white">

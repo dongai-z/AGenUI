@@ -3,7 +3,21 @@
 from __future__ import annotations
 
 import argparse
+import socket
+import threading
+import time
 import webbrowser
+
+
+def _open_when_ready(url: str, port: int) -> None:
+    """Poll the port until the server accepts connections, then open browser."""
+    for _ in range(50):  # max ~5 s
+        try:
+            with socket.create_connection(("127.0.0.1", port), timeout=0.2):
+                webbrowser.open(url)
+                return
+        except (ConnectionRefusedError, OSError):
+            time.sleep(0.1)
 
 
 def main() -> None:
@@ -28,7 +42,11 @@ def main() -> None:
     print()
 
     if not args.no_browser:
-        webbrowser.open(f"http://127.0.0.1:{port}")
+        threading.Thread(
+            target=_open_when_ready,
+            args=(f"http://127.0.0.1:{port}", port),
+            daemon=True,
+        ).start()
 
     import uvicorn
 

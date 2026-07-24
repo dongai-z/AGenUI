@@ -94,6 +94,7 @@ def generate_a2ui_stream(
     user_prompt: str,
     mode: str = "component",
     enable_reasoning: bool | None = None,
+    history: list[dict] | None = None,
 ) -> Generator[GenerationEvent, None, None]:
     """Generate an A2UI protocol, yielding progress events as they happen.
 
@@ -105,6 +106,9 @@ def generate_a2ui_stream(
 
     ``enable_reasoning`` is forwarded to the provider to force the model's
     thinking switch on/off (``None`` keeps the model default).
+
+    ``history`` is an optional list of prior chat messages (user/assistant
+    dicts) enabling multi-turn refinement of a protocol.
     """
     try:
         yield _stage("building_prompt")
@@ -119,7 +123,8 @@ def generate_a2ui_stream(
         yield _stage("calling_model", model=provider.model)
         full_text = ""
         for tok in provider.chat_stream(
-            system_prompt, user_message, enable_reasoning=enable_reasoning
+            system_prompt, user_message, enable_reasoning=enable_reasoning,
+            history=history,
         ):
             if tok.kind == "reasoning":
                 # Chain-of-thought: display-only, does not enter the payload.
@@ -198,6 +203,7 @@ def generate_a2ui_sync(
     user_prompt: str,
     mode: str = "component",
     enable_reasoning: bool | None = None,
+    history: list[dict] | None = None,
 ) -> dict[str, Any]:
     """Non-streaming wrapper (for curl / testing). Returns the final event data."""
     final: dict[str, Any] = {
@@ -205,7 +211,7 @@ def generate_a2ui_sync(
         "message": "Generation produced no result",
         "code": "internal",
     }
-    for event in generate_a2ui_stream(provider, user_prompt, mode, enable_reasoning):
+    for event in generate_a2ui_stream(provider, user_prompt, mode, enable_reasoning, history):
         if event.type in ("done", "error"):
             final = event.data
     return final

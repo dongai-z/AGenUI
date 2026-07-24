@@ -15,6 +15,7 @@ import {
   updateProtocol,
 } from "@/api/client";
 import type { A2uiPayload, RoundSnapshot } from "@/types";
+import type { ChatMessage } from "@/api/sse";
 
 interface PanelState {
   title: string;
@@ -82,7 +83,23 @@ export default function App() {
   // --- Archive the just-finished round into history when a new one starts ---
   const handleGenerate = useCallback(
     (prompt: string, provider: string | null, reasoning: boolean) => {
-      // `gen` still holds the previous round's state here (generate() resets it).
+      // Build multi-turn history from the last completed round (single-turn context).
+      const chatHistory: ChatMessage[] = [];
+      if (gen.prompt && gen.done?.components) {
+        chatHistory.push(
+          { role: "user", content: gen.prompt },
+          {
+            role: "assistant",
+            content: JSON.stringify(
+              { updateComponents: gen.done.components, updateDataModel: gen.done.datamodel },
+              null,
+              2,
+            ),
+          },
+        );
+      }
+
+      // Archive current round into display history.
       if (gen.prompt) {
         setHistory((h) => [
           ...h,
@@ -97,10 +114,15 @@ export default function App() {
           },
         ]);
       }
-      gen.generate(prompt, "component", provider, reasoning);
+      gen.generate(prompt, "component", provider, reasoning, chatHistory);
     },
     [gen],
   );
+
+  // --- New chat: clear conversation history ---
+  const handleNewChat = useCallback(() => {
+    setHistory([]);
+  }, []);
 
   // --- Load a preset sample into the panel ---
   const handleSelectPreset = useCallback(async (id: string) => {
@@ -180,6 +202,7 @@ export default function App() {
             onSelectPreset={handleSelectPreset}
             onSelectProtocol={handleSelectProtocol}
             onRefresh={library.refresh}
+            onNewChat={handleNewChat}
           />
         )}
 

@@ -21,6 +21,11 @@ export interface GenerateCallbacks {
   onError: (error: ErrorEvent) => void;
 }
 
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
 export async function startGeneration(
   prompt: string,
   mode: string,
@@ -28,11 +33,12 @@ export async function startGeneration(
   reasoning: boolean,
   callbacks: GenerateCallbacks,
   signal: AbortSignal,
+  history: ChatMessage[] = [],
 ): Promise<void> {
   await fetchEventSource("/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, mode, stream: true, provider, reasoning }),
+    body: JSON.stringify({ prompt, mode, stream: true, provider, reasoning, history }),
     signal,
     // Keep the stream alive even when the tab is backgrounded.
     openWhenHidden: true,

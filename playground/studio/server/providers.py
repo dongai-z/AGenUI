@@ -255,11 +255,17 @@ class OpenAICompatProvider:
         self.max_tokens = max_tokens
         self._client = OpenAI(base_url=base_url, api_key=api_key or "empty")
 
-    def _messages(self, system_prompt: str, user_prompt: str) -> list[dict]:
-        return [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ]
+    def _messages(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        history: list[dict] | None = None,
+    ) -> list[dict]:
+        msgs: list[dict] = [{"role": "system", "content": system_prompt}]
+        if history:
+            msgs.extend(history)
+        msgs.append({"role": "user", "content": user_prompt})
+        return msgs
 
     def chat(self, system_prompt: str, user_prompt: str, timeout: float = 120) -> str:
         """Non-streaming completion. Returns the full assistant text.
@@ -285,6 +291,7 @@ class OpenAICompatProvider:
         user_prompt: str,
         timeout: float = 120,
         enable_reasoning: bool | None = None,
+        history: list[dict] | None = None,
     ) -> Generator[StreamToken, None, None]:
         """Streaming completion. Yields incremental :class:`StreamToken` items.
 
@@ -314,7 +321,7 @@ class OpenAICompatProvider:
         try:
             stream = self._client.chat.completions.create(
                 model=self.model,
-                messages=self._messages(system_prompt, user_prompt),
+                messages=self._messages(system_prompt, user_prompt, history),
                 max_tokens=self.max_tokens,
                 stream=True,
                 timeout=timeout,

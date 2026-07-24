@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ProtocolEditor } from "./ProtocolEditor";
-import { QrCodeCard } from "./QrCodeCard";
-import { RenderingPreview } from "./RenderingPreview";
+import { PreviewScanStrip } from "./PreviewScanStrip";
 import { SaveBar, type SaveState } from "./SaveBar";
 import { BoxIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
@@ -90,8 +89,8 @@ export function ProtocolPanel({
         )}
       </div>
 
-      {/* Reference rendering (presets only; renders nothing otherwise). */}
-      <RenderingPreview presetId={presetId} renderingUrl={renderingUrl} />
+      {/* Preview & Scan strip: rendering (presets) + QR code. */}
+      <PreviewScanStrip presetId={presetId} renderingUrl={renderingUrl} qrUrl={qrUrl} />
 
       {hasContent ? (
         <>
@@ -132,9 +131,8 @@ export function ProtocolPanel({
             </div>
           </div>
 
-          {/* Footer: QR + save */}
-          <div className="shrink-0 space-y-2 border-t border-slate-200 bg-white p-2.5">
-            {qrUrl && <QrCodeCard url={qrUrl} />}
+          {/* Footer: save */}
+          <div className="shrink-0 border-t border-slate-200 bg-white p-2.5">
             <SaveBar
               canSave={protocolId != null}
               saveState={saveState}

@@ -1,4 +1,4 @@
-/** QR code card: encodes the raw protocol URL for Playground QR-scan loading. */
+/** QR code card: vertical layout, 128px code for easy scanning. */
 
 import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
@@ -20,35 +20,30 @@ export function QrCodeCard({ url }: QrCodeCardProps) {
   };
 
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-2.5">
-      <div className="shrink-0 rounded-md border border-slate-100 bg-white p-1">
-        <QRCodeSVG value={url} size={84} level="M" />
+    <div className="flex w-[172px] shrink-0 flex-col items-center gap-1.5 rounded-lg border border-slate-200 bg-white p-2.5">
+      <div className="rounded-md border border-slate-100 bg-white p-1.5 shadow-sm">
+        <QRCodeSVG value={url} size={152} level="M" />
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-medium text-slate-600">
-          Scan with AGenUI Playground
-        </p>
-        <p className="mt-0.5 break-all font-mono text-[10px] leading-4 text-slate-400">
-          {url}
-        </p>
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="mt-1.5 inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-1 text-[11px] font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-50"
-        >
-          {copied ? (
-            <>
-              <CheckIcon size={11} className="text-emerald-500" />
-              Copied
-            </>
-          ) : (
-            <>
-              <CopyIcon size={11} />
-              Copy URL
-            </>
-          )}
-        </button>
-      </div>
+      <p className="text-center text-[10px] font-medium leading-tight text-slate-500">
+        Scan with AGenUI Playground
+      </p>
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="inline-flex items-center gap-1 rounded-md border border-slate-200 px-2 py-0.5 text-[10px] font-medium text-slate-500 transition hover:border-slate-300 hover:bg-slate-50"
+      >
+        {copied ? (
+          <>
+            <CheckIcon size={10} className="text-emerald-500" />
+            Copied
+          </>
+        ) : (
+          <>
+            <CopyIcon size={10} />
+            Copy URL
+          </>
+        )}
+      </button>
     </div>
   );
 }

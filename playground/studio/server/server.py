@@ -56,6 +56,11 @@ def _startup() -> None:
 # --------------------------------------------------------------------------- #
 # Request models
 # --------------------------------------------------------------------------- #
+class ChatMessage(BaseModel):
+    role: str  # "user" | "assistant"
+    content: str
+
+
 class GenerateRequest(BaseModel):
     prompt: str
     mode: str = "component"  # "component" | "page"
@@ -66,6 +71,8 @@ class GenerateRequest(BaseModel):
     # generation; the UI exposes a toggle to turn it back on. Providers without
     # a safe switch ignore this flag (see providers._reasoning_family).
     reasoning: bool = False
+    # Multi-turn history: prior user/assistant messages for protocol refinement.
+    history: list[ChatMessage] = []
 
 
 class ProviderUpdate(BaseModel):
@@ -216,6 +223,7 @@ def generate(req: GenerateRequest):
         )
 
     mode = req.mode if req.mode in ("component", "page") else "component"
+    history_msgs = [{"role": m.role, "content": m.content} for m in req.history] if req.history else None
     provider = _resolve_provider(req.provider)
     if provider is None:
         return JSONResponse(
@@ -231,10 +239,10 @@ def generate(req: GenerateRequest):
         )
 
     if not req.stream:
-        return generate_a2ui_sync(provider, prompt, mode, req.reasoning)
+        return generate_a2ui_sync(provider, prompt, mode, req.reasoning, history_msgs)
 
     def event_stream():
-        for event in generate_a2ui_stream(provider, prompt, mode, req.reasoning):
+        for event in generate_a2ui_stream(provider, prompt, mode, req.reasoning, history_msgs):
             yield _sse(event)
 
     return StreamingResponse(
