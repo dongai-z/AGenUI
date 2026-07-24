@@ -1,0 +1,214 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "flight_status_card",
+    "components": [
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "body",
+        "styles": {
+          "border-radius": "20px",
+          "filter": "drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.08))"
+        }
+      },
+      {
+        "id": "body",
+        "component": "Column",
+        "children": [
+          "header_row",
+          "route_text",
+          "time_text",
+          "delay_reason",
+          "divider",
+          "counter_row",
+          "refresh_btn",
+          "full_trip_btn"
+        ],
+        "align": "stretch",
+        "styles": {
+          "padding": "24px 24px 24px 24px"
+        }
+      },
+      {
+        "id": "header_row",
+        "component": "Row",
+        "children": [
+          "flight_number",
+          "status_text"
+        ],
+        "justify": "spaceBetween",
+        "align": "center"
+      },
+      {
+        "id": "flight_number",
+        "component": "Text",
+        "text": {
+          "path": "/flight/flightNumber"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-weight": "bold",
+          "color": "#0F172A"
+        }
+      },
+      {
+        "id": "status_text",
+        "component": "Text",
+        "text": {
+          "path": "/flight/status"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#F28C28",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "route_text",
+        "component": "Text",
+        "text": {
+          "path": "/flight/route"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#64748B",
+          "margin": "12px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "time_text",
+        "component": "Text",
+        "text": {
+          "path": "/flight/time"
+        },
+        "variant": "h1",
+        "styles": {
+          "font-weight": "bold",
+          "color": "#0F172A",
+          "margin": "16px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "delay_reason",
+        "component": "Text",
+        "text": {
+          "path": "/flight/delayReason"
+        },
+        "variant": "caption",
+        "styles": {
+          "color": "#F28C28",
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "divider",
+        "component": "Divider",
+        "axis": "horizontal"
+      },
+      {
+        "id": "counter_row",
+        "component": "Row",
+        "children": [
+          "counter_label",
+          "counter_value"
+        ],
+        "justify": "spaceBetween",
+        "align": "center",
+        "styles": {
+          "margin": "16px 0px 20px 0px"
+        }
+      },
+      {
+        "id": "counter_label",
+        "component": "Text",
+        "text": {
+          "path": "/flight/counterLabel"
+        },
+        "variant": "caption",
+        "styles": {
+          "color": "#94A3B8"
+        }
+      },
+      {
+        "id": "counter_value",
+        "component": "Text",
+        "text": {
+          "path": "/flight/counterValue"
+        },
+        "variant": "body",
+        "styles": {
+          "font-weight": "bold",
+          "color": "#0F172A"
+        }
+      },
+      {
+        "id": "refresh_btn",
+        "component": "Button",
+        "child": "refresh_btn_text",
+        "variant": "primary",
+        "action": {
+          "event": {
+            "name": "refresh",
+            "context": {
+              "cardType": "flightStatus"
+            }
+          }
+        },
+        "styles": {
+          "background-color": "#2563EB",
+          "border-radius": "12px",
+          "padding": "14px 24px 14px 24px"
+        }
+      },
+      {
+        "id": "refresh_btn_text",
+        "component": "Text",
+        "text": {
+          "path": "/flight/refreshLabel"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#FFFFFF",
+          "font-weight": "bold",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "full_trip_btn",
+        "component": "Button",
+        "child": "full_trip_btn_text",
+        "variant": "borderless",
+        "action": {
+          "event": {
+            "name": "viewFullTrip",
+            "context": {
+              "cardType": "flightStatus"
+            }
+          }
+        },
+        "styles": {
+          "border-color": "#2563EB",
+          "border-style": "solid",
+          "border-width": "1px",
+          "border-radius": "12px",
+          "padding": "14px 24px 14px 24px",
+          "margin": "12px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "full_trip_btn_text",
+        "component": "Text",
+        "text": {
+          "path": "/flight/fullTripLabel"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#2563EB",
+          "font-weight": "bold",
+          "text-align": "center"
+        }
+      }
+    ]
+  }
+}

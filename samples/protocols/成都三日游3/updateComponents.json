@@ -1,0 +1,703 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "chengdu_trip",
+    "components": [
+      {
+        "id": "root",
+        "component": "Column",
+        "children": [
+          "hero",
+          "overview_card",
+          "section_days_title",
+          "day1_card",
+          "day2_card",
+          "day3_card",
+          "section_tips_title",
+          "tips_card",
+          "cta_section"
+        ],
+        "styles": {
+          "background-color": "#FAF8F5"
+        }
+      },
+      {
+        "id": "hero",
+        "component": "Column",
+        "children": [
+          "hero_badge",
+          "hero_title",
+          "hero_dates",
+          "hero_desc"
+        ],
+        "styles": {
+          "background-color": "#B8432E",
+          "padding": "56px 32px 72px 32px",
+          "border-radius": "0px 0px 32px 32px"
+        }
+      },
+      {
+        "id": "hero_badge",
+        "component": "Text",
+        "text": {
+          "path": "/trip/badge"
+        },
+        "styles": {
+          "color": "#FFFFFF",
+          "font-size": "24px",
+          "font-weight": "bold",
+          "background-color": "#FFFFFF33",
+          "padding": "8px 20px 8px 20px",
+          "border-radius": "20px",
+          "align-self": "flex-start",
+          "margin": "0px 0px 20px 0px"
+        }
+      },
+      {
+        "id": "hero_title",
+        "component": "Text",
+        "text": {
+          "path": "/trip/title"
+        },
+        "styles": {
+          "color": "#FFFFFF",
+          "font-size": "40px",
+          "font-weight": "bold",
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "hero_dates",
+        "component": "Text",
+        "text": {
+          "path": "/trip/dates"
+        },
+        "styles": {
+          "color": "#FFFFFFCC",
+          "font-size": "28px",
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "hero_desc",
+        "component": "Text",
+        "text": {
+          "path": "/trip/intro"
+        },
+        "styles": {
+          "color": "#FFFFFFB3",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "overview_card",
+        "component": "Card",
+        "child": "overview_body",
+        "styles": {
+          "margin": "-40px 32px 0px 32px",
+          "border-radius": "24px",
+          "background-color": "#FFFFFF",
+          "filter": "drop-shadow(0px 8px 24px rgba(0, 0, 0, 0.08))"
+        }
+      },
+      {
+        "id": "overview_body",
+        "component": "Column",
+        "children": [
+          "overview_row"
+        ],
+        "styles": {
+          "padding": "32px 16px 32px 16px"
+        }
+      },
+      {
+        "id": "overview_row",
+        "component": "Row",
+        "children": [
+          "metric_1",
+          "metric_2",
+          "metric_3"
+        ],
+        "justify": "spaceAround",
+        "align": "center"
+      },
+      {
+        "id": "metric_1",
+        "component": "Column",
+        "children": [
+          "metric_1_num",
+          "metric_1_label"
+        ],
+        "align": "center",
+        "styles": {
+          "flex-grow": 1
+        }
+      },
+      {
+        "id": "metric_1_num",
+        "component": "Text",
+        "text": {
+          "path": "/trip/metrics/days"
+        },
+        "styles": {
+          "color": "#C84B31",
+          "font-size": "40px",
+          "font-weight": "bold",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "metric_1_label",
+        "component": "Text",
+        "text": {
+          "path": "/trip/metrics/daysLabel"
+        },
+        "styles": {
+          "color": "#6B6B7B",
+          "font-size": "24px",
+          "text-align": "center",
+          "margin": "4px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "metric_2",
+        "component": "Column",
+        "children": [
+          "metric_2_num",
+          "metric_2_label"
+        ],
+        "align": "center",
+        "styles": {
+          "flex-grow": 1
+        }
+      },
+      {
+        "id": "metric_2_num",
+        "component": "Text",
+        "text": {
+          "path": "/trip/metrics/spots"
+        },
+        "styles": {
+          "color": "#C84B31",
+          "font-size": "40px",
+          "font-weight": "bold",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "metric_2_label",
+        "component": "Text",
+        "text": {
+          "path": "/trip/metrics/spotsLabel"
+        },
+        "styles": {
+          "color": "#6B6B7B",
+          "font-size": "24px",
+          "text-align": "center",
+          "margin": "4px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "metric_3",
+        "component": "Column",
+        "children": [
+          "metric_3_num",
+          "metric_3_label"
+        ],
+        "align": "center",
+        "styles": {
+          "flex-grow": 1
+        }
+      },
+      {
+        "id": "metric_3_num",
+        "component": "Text",
+        "text": {
+          "path": "/trip/metrics/foods"
+        },
+        "styles": {
+          "color": "#C84B31",
+          "font-size": "40px",
+          "font-weight": "bold",
+          "text-align": "center"
+        }
+      },
+      {
+        "id": "metric_3_label",
+        "component": "Text",
+        "text": {
+          "path": "/trip/metrics/foodsLabel"
+        },
+        "styles": {
+          "color": "#6B6B7B",
+          "font-size": "24px",
+          "text-align": "center",
+          "margin": "4px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "section_days_title",
+        "component": "Text",
+        "text": {
+          "path": "/trip/sectionDays"
+        },
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1A1A2E",
+          "margin": "48px 32px 24px 32px"
+        }
+      },
+      {
+        "id": "day1_card",
+        "component": "Card",
+        "child": "day1_body",
+        "styles": {
+          "margin": "0px 32px 24px 32px",
+          "border-radius": "24px",
+          "background-color": "#FFFFFF",
+          "filter": "drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.06))"
+        }
+      },
+      {
+        "id": "day1_body",
+        "component": "Column",
+        "children": [
+          "day1_header",
+          "day1_list"
+        ]
+      },
+      {
+        "id": "day1_header",
+        "component": "Column",
+        "children": [
+          "day1_label",
+          "day1_title"
+        ],
+        "styles": {
+          "padding": "32px 32px 24px 32px",
+          "border-color": "#F0EDE8",
+          "border-style": "solid",
+          "border-width": "0px 0px 1px 0px"
+        }
+      },
+      {
+        "id": "day1_label",
+        "component": "Text",
+        "text": {
+          "path": "/trip/day1/label"
+        },
+        "styles": {
+          "background-color": "#FFF0ED",
+          "color": "#C84B31",
+          "font-size": "24px",
+          "font-weight": "bold",
+          "padding": "8px 20px 8px 20px",
+          "border-radius": "16px",
+          "align-self": "flex-start",
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day1_title",
+        "component": "Text",
+        "text": {
+          "path": "/trip/day1/title"
+        },
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1A1A2E"
+        }
+      },
+      {
+        "id": "day1_list",
+        "component": "List",
+        "children": {
+          "path": "/trip/day1/activities",
+          "componentId": "activity_tpl"
+        },
+        "direction": "vertical",
+        "align": "stretch"
+      },
+      {
+        "id": "day2_card",
+        "component": "Card",
+        "child": "day2_body",
+        "styles": {
+          "margin": "0px 32px 24px 32px",
+          "border-radius": "24px",
+          "background-color": "#FFFFFF",
+          "filter": "drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.06))"
+        }
+      },
+      {
+        "id": "day2_body",
+        "component": "Column",
+        "children": [
+          "day2_header",
+          "day2_list"
+        ]
+      },
+      {
+        "id": "day2_header",
+        "component": "Column",
+        "children": [
+          "day2_label",
+          "day2_title"
+        ],
+        "styles": {
+          "padding": "32px 32px 24px 32px",
+          "border-color": "#F0EDE8",
+          "border-style": "solid",
+          "border-width": "0px 0px 1px 0px"
+        }
+      },
+      {
+        "id": "day2_label",
+        "component": "Text",
+        "text": {
+          "path": "/trip/day2/label"
+        },
+        "styles": {
+          "background-color": "#FFF0ED",
+          "color": "#C84B31",
+          "font-size": "24px",
+          "font-weight": "bold",
+          "padding": "8px 20px 8px 20px",
+          "border-radius": "16px",
+          "align-self": "flex-start",
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day2_title",
+        "component": "Text",
+        "text": {
+          "path": "/trip/day2/title"
+        },
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1A1A2E"
+        }
+      },
+      {
+        "id": "day2_list",
+        "component": "List",
+        "children": {
+          "path": "/trip/day2/activities",
+          "componentId": "activity_tpl"
+        },
+        "direction": "vertical",
+        "align": "stretch"
+      },
+      {
+        "id": "day3_card",
+        "component": "Card",
+        "child": "day3_body",
+        "styles": {
+          "margin": "0px 32px 24px 32px",
+          "border-radius": "24px",
+          "background-color": "#FFFFFF",
+          "filter": "drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.06))"
+        }
+      },
+      {
+        "id": "day3_body",
+        "component": "Column",
+        "children": [
+          "day3_header",
+          "day3_list"
+        ]
+      },
+      {
+        "id": "day3_header",
+        "component": "Column",
+        "children": [
+          "day3_label",
+          "day3_title"
+        ],
+        "styles": {
+          "padding": "32px 32px 24px 32px",
+          "border-color": "#F0EDE8",
+          "border-style": "solid",
+          "border-width": "0px 0px 1px 0px"
+        }
+      },
+      {
+        "id": "day3_label",
+        "component": "Text",
+        "text": {
+          "path": "/trip/day3/label"
+        },
+        "styles": {
+          "background-color": "#FFF0ED",
+          "color": "#C84B31",
+          "font-size": "24px",
+          "font-weight": "bold",
+          "padding": "8px 20px 8px 20px",
+          "border-radius": "16px",
+          "align-self": "flex-start",
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "day3_title",
+        "component": "Text",
+        "text": {
+          "path": "/trip/day3/title"
+        },
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1A1A2E"
+        }
+      },
+      {
+        "id": "day3_list",
+        "component": "List",
+        "children": {
+          "path": "/trip/day3/activities",
+          "componentId": "activity_tpl"
+        },
+        "direction": "vertical",
+        "align": "stretch"
+      },
+      {
+        "id": "activity_tpl",
+        "component": "Column",
+        "children": [
+          "act_time",
+          "act_name",
+          "act_desc",
+          "act_tip_row"
+        ],
+        "styles": {
+          "padding": "24px 32px 24px 32px",
+          "border-color": "#F5F2ED",
+          "border-style": "solid",
+          "border-width": "0px 0px 1px 0px"
+        }
+      },
+      {
+        "id": "act_time",
+        "component": "Text",
+        "text": {
+          "path": "time"
+        },
+        "styles": {
+          "color": "#C84B31",
+          "font-size": "24px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "act_name",
+        "component": "Text",
+        "text": {
+          "path": "name"
+        },
+        "styles": {
+          "color": "#1A1A2E",
+          "font-size": "32px",
+          "font-weight": "bold",
+          "margin": "8px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "act_desc",
+        "component": "Text",
+        "text": {
+          "path": "desc"
+        },
+        "styles": {
+          "color": "#5A5A6E",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "act_tip_row",
+        "component": "Row",
+        "children": [
+          "act_tip_icon",
+          "act_tip_text"
+        ],
+        "align": "center",
+        "styles": {
+          "background-color": "#F8F4EF",
+          "border-radius": "12px",
+          "padding": "12px 16px 12px 16px",
+          "margin": "12px 0px 0px 0px"
+        }
+      },
+      {
+        "id": "act_tip_icon",
+        "component": "Icon",
+        "name": "info",
+        "styles": {
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "act_tip_text",
+        "component": "Text",
+        "text": {
+          "path": "tip"
+        },
+        "styles": {
+          "color": "#8B7355",
+          "font-size": "24px"
+        }
+      },
+      {
+        "id": "section_tips_title",
+        "component": "Text",
+        "text": {
+          "path": "/trip/sectionTips"
+        },
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1A1A2E",
+          "margin": "48px 32px 24px 32px"
+        }
+      },
+      {
+        "id": "tips_card",
+        "component": "Card",
+        "child": "tips_body",
+        "styles": {
+          "margin": "0px 32px 24px 32px",
+          "border-radius": "24px",
+          "background-color": "#FFFFFF",
+          "filter": "drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.06))"
+        }
+      },
+      {
+        "id": "tips_body",
+        "component": "Column",
+        "children": [
+          "tips_list"
+        ],
+        "styles": {
+          "padding": "8px 32px 8px 32px"
+        }
+      },
+      {
+        "id": "tips_list",
+        "component": "List",
+        "children": {
+          "path": "/trip/tips",
+          "componentId": "tip_tpl"
+        },
+        "direction": "vertical",
+        "align": "stretch"
+      },
+      {
+        "id": "tip_tpl",
+        "component": "Row",
+        "children": [
+          "tip_icon",
+          "tip_content"
+        ],
+        "align": "start",
+        "styles": {
+          "padding": "20px 0px 20px 0px",
+          "border-color": "#F5F2ED",
+          "border-style": "solid",
+          "border-width": "0px 0px 1px 0px"
+        }
+      },
+      {
+        "id": "tip_icon",
+        "component": "Icon",
+        "name": {
+          "path": "icon"
+        },
+        "styles": {
+          "margin": "6px 16px 0px 0px"
+        }
+      },
+      {
+        "id": "tip_content",
+        "component": "Column",
+        "children": [
+          "tip_title",
+          "tip_desc"
+        ],
+        "styles": {
+          "flex-grow": 1
+        }
+      },
+      {
+        "id": "tip_title",
+        "component": "Text",
+        "text": {
+          "path": "title"
+        },
+        "styles": {
+          "color": "#1A1A2E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "tip_desc",
+        "component": "Text",
+        "text": {
+          "path": "desc"
+        },
+        "styles": {
+          "color": "#5A5A6E",
+          "font-size": "28px",
+          "line-height": 1.5
+        }
+      },
+      {
+        "id": "cta_section",
+        "component": "Column",
+        "children": [
+          "cta_btn"
+        ],
+        "align": "center",
+        "styles": {
+          "padding": "32px 32px 64px 32px"
+        }
+      },
+      {
+        "id": "cta_btn",
+        "component": "Button",
+        "child": "cta_btn_text",
+        "variant": "primary",
+        "action": {
+          "functionCall": {
+            "call": "saveItinerary",
+            "args": {}
+          }
+        },
+        "styles": {
+          "background-color": "#C84B31",
+          "border-radius": "24px",
+          "padding": "24px 64px 24px 64px"
+        }
+      },
+      {
+        "id": "cta_btn_text",
+        "component": "Text",
+        "text": {
+          "path": "/trip/ctaText"
+        },
+        "styles": {
+          "color": "#FFFFFF",
+          "font-size": "32px",
+          "font-weight": "bold",
+          "text-align": "center"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "flight_status_card",
+    "path": "/flight",
+    "value": {
+      "flightNumber": "CA4113",
+      "status": "延误",
+      "route": "北京首都 T3 → 成都天府 T2",
+      "time": "09:10 - 12:15",
+      "delayReason": "受天气影响",
+      "counterLabel": "值机柜台",
+      "counterValue": "E12-E18",
+      "refreshLabel": "刷新状态",
+      "fullTripLabel": "查看完整行程"
+    }
+  }
+}

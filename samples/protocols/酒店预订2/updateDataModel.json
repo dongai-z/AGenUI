@@ -1,0 +1,27 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "hotel_card",
+    "path": "/card",
+    "value": {
+      "name": "杭州西子湖四季酒店",
+      "location": "西湖风景区",
+      "rating": "4.8",
+      "tags": [
+        "湖景",
+        "亲子友好"
+      ],
+      "checkInLabel": "入住",
+      "checkInDate": "7月20日",
+      "checkOutLabel": "离店",
+      "checkOutDate": "7月22日",
+      "nights": "2晚",
+      "roomType": "豪华湖景大床房",
+      "guests": "2位成人",
+      "pricePerNight": "¥1,680 / 晚",
+      "priceTotal": "合计 ¥3,360",
+      "cancellation": "入住前一天 18:00 前可免费取消",
+      "ctaLabel": "确认预订"
+    }
+  }
+}

@@ -1,0 +1,442 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "movie_recommendations_surface",
+    "components": [
+      {
+        "id": "root",
+        "component": "Column",
+        "children": [
+          "header_subtitle",
+          "header_title",
+          "movies_list",
+          "summary",
+          "tags_row",
+          "cta_btn"
+        ],
+        "styles": {
+          "padding": "40px 32px 40px 32px",
+          "background-color": "#FFFFFF"
+        }
+      },
+      {
+        "id": "header_subtitle",
+        "component": "Text",
+        "text": {
+          "path": "/header/subtitle"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#D86B27",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "header_title",
+        "component": "Text",
+        "text": {
+          "path": "/header/title"
+        },
+        "variant": "h1",
+        "styles": {
+          "color": "#1A1A1A",
+          "font-size": "40px",
+          "font-weight": "bold",
+          "margin": "0px 0px 36px 0px"
+        }
+      },
+      {
+        "id": "movies_list",
+        "component": "Column",
+        "children": [
+          "movie_1",
+          "movie_2",
+          "movie_3"
+        ],
+        "styles": {
+          "margin": "0px 0px 36px 0px"
+        }
+      },
+      {
+        "id": "movie_1",
+        "component": "Row",
+        "align": "center",
+        "children": [
+          "badge_1",
+          "content_1",
+          "genre_1"
+        ],
+        "styles": {
+          "background-color": "#FFF5EE",
+          "border-radius": "24px",
+          "padding": "24px 24px 24px 24px",
+          "margin": "0px 0px 20px 0px"
+        }
+      },
+      {
+        "id": "badge_1",
+        "component": "Text",
+        "text": {
+          "path": "/movie1/badge"
+        },
+        "variant": "body",
+        "styles": {
+          "background-color": "#C14A1E",
+          "color": "#FFFFFF",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "border-radius": "20px",
+          "width": "64px",
+          "height": "64px",
+          "text-align": "center center",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "content_1",
+        "component": "Column",
+        "children": [
+          "m_title_1",
+          "m_desc_1"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "m_title_1",
+        "component": "Text",
+        "text": {
+          "path": "/movie1/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "color": "#1A1A1A",
+          "font-size": "32px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "m_desc_1",
+        "component": "Text",
+        "text": {
+          "path": "/movie1/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#7A7A7A",
+          "font-size": "28px",
+          "line-clamp": 2,
+          "text-overflow": "ellipsis"
+        }
+      },
+      {
+        "id": "genre_1",
+        "component": "Text",
+        "text": {
+          "path": "/movie1/genre"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#C14A1E",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 0px 16px"
+        }
+      },
+      {
+        "id": "movie_2",
+        "component": "Row",
+        "align": "center",
+        "children": [
+          "badge_2",
+          "content_2",
+          "genre_2"
+        ],
+        "styles": {
+          "background-color": "#F4F4F4",
+          "border-radius": "24px",
+          "padding": "24px 24px 24px 24px",
+          "margin": "0px 0px 20px 0px"
+        }
+      },
+      {
+        "id": "badge_2",
+        "component": "Text",
+        "text": {
+          "path": "/movie2/badge"
+        },
+        "variant": "body",
+        "styles": {
+          "background-color": "#4A4A4A",
+          "color": "#FFFFFF",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "border-radius": "20px",
+          "width": "64px",
+          "height": "64px",
+          "text-align": "center center",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "content_2",
+        "component": "Column",
+        "children": [
+          "m_title_2",
+          "m_desc_2"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "m_title_2",
+        "component": "Text",
+        "text": {
+          "path": "/movie2/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "color": "#1A1A1A",
+          "font-size": "32px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "m_desc_2",
+        "component": "Text",
+        "text": {
+          "path": "/movie2/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#7A7A7A",
+          "font-size": "28px",
+          "line-clamp": 2,
+          "text-overflow": "ellipsis"
+        }
+      },
+      {
+        "id": "genre_2",
+        "component": "Text",
+        "text": {
+          "path": "/movie2/genre"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#4A4A4A",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 0px 16px"
+        }
+      },
+      {
+        "id": "movie_3",
+        "component": "Row",
+        "align": "center",
+        "children": [
+          "badge_3",
+          "content_3",
+          "genre_3"
+        ],
+        "styles": {
+          "background-color": "#F0F5FF",
+          "border-radius": "24px",
+          "padding": "24px 24px 24px 24px"
+        }
+      },
+      {
+        "id": "badge_3",
+        "component": "Text",
+        "text": {
+          "path": "/movie3/badge"
+        },
+        "variant": "body",
+        "styles": {
+          "background-color": "#1B59F8",
+          "color": "#FFFFFF",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "border-radius": "20px",
+          "width": "64px",
+          "height": "64px",
+          "text-align": "center center",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "content_3",
+        "component": "Column",
+        "children": [
+          "m_title_3",
+          "m_desc_3"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "m_title_3",
+        "component": "Text",
+        "text": {
+          "path": "/movie3/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "color": "#1A1A1A",
+          "font-size": "32px",
+          "font-weight": "bold",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "m_desc_3",
+        "component": "Text",
+        "text": {
+          "path": "/movie3/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#7A7A7A",
+          "font-size": "28px",
+          "line-clamp": 2,
+          "text-overflow": "ellipsis"
+        }
+      },
+      {
+        "id": "genre_3",
+        "component": "Text",
+        "text": {
+          "path": "/movie3/genre"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#1B59F8",
+          "font-size": "28px",
+          "font-weight": "bold",
+          "margin": "0px 0px 0px 16px"
+        }
+      },
+      {
+        "id": "summary",
+        "component": "Text",
+        "text": {
+          "path": "/summary/text"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#4A4A4A",
+          "font-size": "32px",
+          "line-height": 1.4,
+          "margin": "0px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "tags_row",
+        "component": "Row",
+        "children": [
+          "tag_1",
+          "tag_2",
+          "tag_3"
+        ],
+        "styles": {
+          "margin": "0px 0px 48px 0px"
+        }
+      },
+      {
+        "id": "tag_1",
+        "component": "Text",
+        "text": {
+          "path": "/tags/t1"
+        },
+        "variant": "caption",
+        "styles": {
+          "background-color": "#FFEFE5",
+          "color": "#C16C24",
+          "font-size": "24px",
+          "font-weight": "bold",
+          "padding": "12px 24px 12px 24px",
+          "border-radius": "16px",
+          "margin": "0px 16px 0px 0px"
+        }
+      },
+      {
+        "id": "tag_2",
+        "component": "Text",
+        "text": {
+          "path": "/tags/t2"
+        },
+        "variant": "caption",
+        "styles": {
+          "background-color": "#F4F4F4",
+          "color": "#7A7A7A",
+          "font-size": "24px",
+          "font-weight": "bold",
+          "padding": "12px 24px 12px 24px",
+          "border-radius": "16px",
+          "margin": "0px 16px 0px 0px"
+        }
+      },
+      {
+        "id": "tag_3",
+        "component": "Text",
+        "text": {
+          "path": "/tags/t3"
+        },
+        "variant": "caption",
+        "styles": {
+          "background-color": "#E6F0FF",
+          "color": "#1B59F8",
+          "font-size": "24px",
+          "font-weight": "bold",
+          "padding": "12px 24px 12px 24px",
+          "border-radius": "16px"
+        }
+      },
+      {
+        "id": "cta_btn",
+        "component": "Button",
+        "child": "cta_text",
+        "variant": "primary",
+        "action": {
+          "functionCall": {
+            "call": "openUrl",
+            "args": {
+              "url": "https://example.com/more_recommendations"
+            }
+          }
+        },
+        "styles": {
+          "background-color": "#C14A1E",
+          "border-radius": "32px",
+          "padding": "24px 0px 24px 0px",
+          "width": "100%",
+          "justify-content": "center",
+          "align-items": "center"
+        }
+      },
+      {
+        "id": "cta_text",
+        "component": "Text",
+        "text": {
+          "path": "/cta/label"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#FFFFFF",
+          "font-size": "32px",
+          "font-weight": "bold",
+          "text-align": "center"
+        }
+      }
+    ]
+  }
+}

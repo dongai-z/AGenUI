@@ -1,0 +1,479 @@
+{
+  "updateComponents": {
+    "surfaceId": "route_plan_card_debug_simple",
+    "version": "v0.9",
+    "components": [
+      {
+        "component": "Tabs",
+        "id": "root",
+        "tabs": [
+          {
+            "title": {
+              "path": "/travel_tabs/0/data/tablist/0"
+            },
+            "child": "tab_content_0"
+          },
+          {
+            "title": {
+              "path": "/travel_tabs/0/data/tablist/1"
+            },
+            "child": "tab_content_1"
+          },
+          {
+            "title": {
+              "path": "/travel_tabs/0/data/tablist/2"
+            },
+            "child": "tab_content_2"
+          },
+          {
+            "title": {
+              "path": "/travel_tabs/0/data/tablist/3"
+            },
+            "child": "tab_content_3"
+          }
+        ],
+        "selectedIndex": "@placeholder(selectedIndex)",
+        "styles": {
+          "width": "100%"
+        }
+      },
+      {
+        "align": "center",
+        "children": [
+          "icon_container_0",
+          "info_col_0",
+          "nav_button_0"
+        ],
+        "component": "Row",
+        "id": "tab_content_0",
+        "justify": "spaceBetween",
+        "styles": {
+          "padding": "16px 16px 16px 16px"
+        }
+      },
+      {
+        "align": "center",
+        "children": [
+          "icon_0"
+        ],
+        "component": "Row",
+        "id": "icon_container_0",
+        "justify": "center",
+        "styles": {
+          "width": "84px",
+          "height": "84px",
+          "margin-right": "24px",
+          "flex-shrink": "0"
+        }
+      },
+      {
+        "component": "Image",
+        "id": "icon_0",
+        "styles": {
+          "width": "84px",
+          "height": "84px",
+          "border-width": "0",
+          "aspect-ratio": "1"
+        },
+        "url": {
+          "path": "/travel_tabs/1/data/0/data/icon"
+        }
+      },
+      {
+        "children": [
+          "title_0",
+          "details_0"
+        ],
+        "component": "Column",
+        "id": "info_col_0",
+        "styles": {
+          "flex-grow": 1
+        }
+      },
+      {
+        "component": "Text",
+        "id": "title_0",
+        "text": {
+          "path": "/travel_tabs/1/data/0/data/title"
+        },
+        "variant": "h3"
+      },
+      {
+        "component": "Text",
+        "id": "details_0",
+        "styles": {
+          "color": "#00000099"
+        },
+        "text": {
+          "path": "/travel_tabs/1/data/0/data/subTitle"
+        },
+        "variant": "body"
+      },
+      {
+        "accessibility": {
+          "label": "导航"
+        },
+        "action": {
+          "event": {
+            "name": "navigate"
+          }
+        },
+        "child": "button_text_0",
+        "component": "Button",
+        "id": "nav_button_0",
+        "styles": {
+          "background-color": "rgba(34, 115, 247, 0.14)",
+          "border-color": "rgba(34, 115, 247, 0.14)",
+          "border-radius": "8px",
+          "padding": "12px 24px"
+        }
+      },
+      {
+        "component": "Text",
+        "id": "button_text_0",
+        "styles": {
+          "color": "#2273F7"
+        },
+        "text": {
+          "path": "/travel_tabs/1/data/0/data/buttonText"
+        }
+      },
+      {
+        "align": "center",
+        "children": [
+          "icon_container_1",
+          "info_col_1",
+          "nav_button_1"
+        ],
+        "component": "Row",
+        "id": "tab_content_1",
+        "justify": "spaceBetween",
+        "styles": {
+          "padding": "16px 16px 16px 16px"
+        }
+      },
+      {
+        "align": "center",
+        "children": [
+          "icon_1"
+        ],
+        "component": "Row",
+        "id": "icon_container_1",
+        "justify": "center",
+        "styles": {
+          "width": "84px",
+          "height": "84px",
+          "margin-right": "24px",
+          "flex-shrink": "0"
+        }
+      },
+      {
+        "component": "Image",
+        "id": "icon_1",
+        "styles": {
+          "width": "84px",
+          "height": "84px",
+          "border-width": "0",
+          "aspect-ratio": "1"
+        },
+        "url": {
+          "path": "/travel_tabs/1/data/1/data/icon"
+        }
+      },
+      {
+        "children": [
+          "title_1",
+          "details_1",
+          "lines_1"
+        ],
+        "component": "Column",
+        "id": "info_col_1",
+        "styles": {
+          "flex-grow": 1
+        }
+      },
+      {
+        "id": "lines_1",
+        "component": "Row",
+        "items": "/travel_tabs/1/data/1/data/lines",
+        "children": {
+          "componentId": "line_name_1",
+          "path": "/travel_tabs/1/data/1/data/lines"
+        },
+        "styles": {
+          "margin-top": "10px"
+        }
+      },
+      {
+        "component": "Text",
+        "id": "line_name_1",
+        "text": {
+          "path": "name"
+        },
+        "styles": {
+          "background-color": {
+            "path": "backgroundColor"
+          },
+          "color": {
+            "path": "color"
+          },
+          "font-size": "22px",
+          "padding": "6px 14px",
+          "margin-left": "8px",
+          "border-radius": "8px",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "component": "Text",
+        "id": "title_1",
+        "text": {
+          "path": "/travel_tabs/1/data/1/data/title"
+        },
+        "variant": "h3"
+      },
+      {
+        "component": "Text",
+        "id": "details_1",
+        "styles": {
+          "color": "#00000099"
+        },
+        "text": {
+          "path": "/travel_tabs/1/data/1/data/subTitle"
+        },
+        "variant": "body"
+      },
+      {
+        "accessibility": {
+          "label": "导航"
+        },
+        "action": {
+          "event": {
+            "name": "navigate"
+          }
+        },
+        "child": "button_text_1",
+        "component": "Button",
+        "id": "nav_button_1",
+        "styles": {
+          "background-color": "rgba(34, 115, 247, 0.14)",
+          "border-color": "rgba(34, 115, 247, 0.14)",
+          "border-radius": "8px",
+          "padding": "12px 24px"
+        }
+      },
+      {
+        "component": "Text",
+        "id": "button_text_1",
+        "styles": {
+          "color": "#2273F7"
+        },
+        "text": {
+          "path": "/travel_tabs/1/data/1/data/buttonText"
+        }
+      },
+      {
+        "align": "center",
+        "children": [
+          "icon_container_2",
+          "info_col_2",
+          "nav_button_2"
+        ],
+        "component": "Row",
+        "id": "tab_content_2",
+        "justify": "spaceBetween",
+        "styles": {
+          "padding": "16px 16px 16px 16px"
+        }
+      },
+      {
+        "align": "center",
+        "children": [
+          "icon_2"
+        ],
+        "component": "Row",
+        "id": "icon_container_2",
+        "justify": "center",
+        "styles": {
+          "width": "84px",
+          "height": "84px",
+          "margin-right": "24px",
+          "flex-shrink": "0"
+        }
+      },
+      {
+        "component": "Image",
+        "id": "icon_2",
+        "styles": {
+          "width": "84px",
+          "height": "84px",
+          "border-width": "0",
+          "aspect-ratio": "1"
+        },
+        "url": {
+          "path": "/travel_tabs/1/data/2/data/icon"
+        }
+      },
+      {
+        "children": [
+          "title_2",
+          "details_2"
+        ],
+        "component": "Column",
+        "id": "info_col_2",
+        "styles": {
+          "flex-grow": 1
+        }
+      },
+      {
+        "component": "Text",
+        "id": "title_2",
+        "text": {
+          "path": "/travel_tabs/1/data/2/data/title"
+        },
+        "variant": "h3"
+      },
+      {
+        "component": "Text",
+        "id": "details_2",
+        "styles": {
+          "color": "#00000099"
+        },
+        "text": {
+          "path": "/travel_tabs/1/data/2/data/subTitle"
+        },
+        "variant": "body"
+      },
+      {
+        "accessibility": {
+          "label": "导航"
+        },
+        "action": {
+          "event": {
+            "name": "navigate"
+          }
+        },
+        "child": "button_text_2",
+        "component": "Button",
+        "id": "nav_button_2",
+        "styles": {
+          "background-color": "rgba(34, 115, 247, 0.14)",
+          "border-color": "rgba(34, 115, 247, 0.14)",
+          "border-radius": "8px",
+          "padding": "12px 24px"
+        }
+      },
+      {
+        "component": "Text",
+        "id": "button_text_2",
+        "styles": {
+          "color": "#2273F7"
+        },
+        "text": {
+          "path": "/travel_tabs/1/data/2/data/buttonText"
+        }
+      },
+      {
+        "align": "center",
+        "children": [
+          "icon_container_3",
+          "info_col_3",
+          "nav_button_3"
+        ],
+        "component": "Row",
+        "id": "tab_content_3",
+        "justify": "spaceBetween",
+        "styles": {
+          "padding": "16px 16px 16px 16px"
+        }
+      },
+      {
+        "align": "center",
+        "children": [
+          "icon_3"
+        ],
+        "component": "Row",
+        "id": "icon_container_3",
+        "justify": "center",
+        "styles": {
+          "width": "84px",
+          "height": "84px",
+          "margin-right": "24px",
+          "flex-shrink": "0"
+        }
+      },
+      {
+        "component": "Image",
+        "id": "icon_3",
+        "styles": {
+          "width": "84px",
+          "height": "84px",
+          "border-width": "0",
+          "aspect-ratio": "1"
+        },
+        "url": {
+          "path": "/travel_tabs/1/data/3/data/icon"
+        }
+      },
+      {
+        "children": [
+          "title_3",
+          "details_3"
+        ],
+        "component": "Column",
+        "id": "info_col_3",
+        "styles": {
+          "flex-grow": 1
+        }
+      },
+      {
+        "component": "Text",
+        "id": "title_3",
+        "text": {
+          "path": "/travel_tabs/1/data/3/data/title"
+        },
+        "variant": "h3"
+      },
+      {
+        "component": "Text",
+        "id": "details_3",
+        "styles": {
+          "color": "#00000099"
+        },
+        "text": {
+          "path": "/travel_tabs/1/data/3/data/subTitle"
+        },
+        "variant": "body"
+      },
+      {
+        "accessibility": {
+          "label": "导航"
+        },
+        "action": {
+          "event": {
+            "name": "navigate"
+          }
+        },
+        "child": "button_text_3",
+        "component": "Button",
+        "id": "nav_button_3",
+        "styles": {
+          "background-color": "rgba(34, 115, 247, 0.14)",
+          "border-color": "rgba(34, 115, 247, 0.14)",
+          "border-radius": "8px",
+          "padding": "12px 24px"
+        }
+      },
+      {
+        "component": "Text",
+        "id": "button_text_3",
+        "styles": {
+          "color": "#2273F7"
+        },
+        "text": {
+          "path": "/travel_tabs/1/data/3/data/buttonText"
+        }
+      }
+    ]
+  }
+}

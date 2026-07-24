@@ -1,0 +1,428 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "hotel_card",
+    "components": [
+      {
+        "id": "root",
+        "component": "Card",
+        "child": "body",
+        "styles": {
+          "margin": "16px 16px 16px 16px"
+        }
+      },
+      {
+        "id": "body",
+        "component": "Column",
+        "children": [
+          "title",
+          "location_row",
+          "rating_pill",
+          "divider1",
+          "tag_row",
+          "divider_booking",
+          "date_row",
+          "room_info",
+          "price_row",
+          "policy_row",
+          "cta_button"
+        ],
+        "align": "start",
+        "styles": {
+          "padding": "24px 24px 24px 24px"
+        }
+      },
+      {
+        "id": "title",
+        "component": "Text",
+        "text": {
+          "path": "/card/name"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#0E142B",
+          "margin": "0px 0px 10px 0px"
+        }
+      },
+      {
+        "id": "location_row",
+        "component": "Row",
+        "children": [
+          "icon_loc",
+          "location_text"
+        ],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 20px 0px"
+        }
+      },
+      {
+        "id": "icon_loc",
+        "component": "Icon",
+        "name": "locationOn",
+        "styles": {
+          "margin": "0px 6px 0px 0px"
+        }
+      },
+      {
+        "id": "location_text",
+        "component": "Text",
+        "text": {
+          "path": "/card/location"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#757575"
+        }
+      },
+      {
+        "id": "rating_pill",
+        "component": "Row",
+        "children": [
+          "icon_star",
+          "rating_text"
+        ],
+        "align": "center",
+        "styles": {
+          "background-color": "#FFF8E1",
+          "border-radius": "16px",
+          "padding": "8px 18px 8px 14px",
+          "margin": "0px 0px 20px 0px"
+        }
+      },
+      {
+        "id": "icon_star",
+        "component": "Icon",
+        "name": "star",
+        "styles": {
+          "margin": "0px 6px 0px 0px"
+        }
+      },
+      {
+        "id": "rating_text",
+        "component": "Text",
+        "text": {
+          "path": "/card/rating"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#E65100"
+        }
+      },
+      {
+        "id": "divider1",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "tag_row",
+        "component": "Row",
+        "children": [
+          "tag_1",
+          "tag_2"
+        ],
+        "align": "center",
+        "styles": {
+          "flex-wrap": "wrap"
+        }
+      },
+      {
+        "id": "tag_1",
+        "component": "Text",
+        "text": {
+          "path": "/card/tags/0"
+        },
+        "styles": {
+          "font-size": "24px",
+          "color": "#455A64",
+          "background-color": "#ECEFF1",
+          "border-radius": "12px",
+          "padding": "6px 16px 6px 16px",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "tag_2",
+        "component": "Text",
+        "text": {
+          "path": "/card/tags/1"
+        },
+        "styles": {
+          "font-size": "24px",
+          "color": "#455A64",
+          "background-color": "#ECEFF1",
+          "border-radius": "12px",
+          "padding": "6px 16px 6px 16px"
+        }
+      },
+      {
+        "id": "divider_booking",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "16px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "date_row",
+        "component": "Row",
+        "children": [
+          "checkin_col",
+          "stay_mid",
+          "checkout_col"
+        ],
+        "justify": "spaceBetween",
+        "align": "center",
+        "styles": {
+          "background-color": "#F5F7FA",
+          "border-radius": "16px",
+          "padding": "16px 16px 16px 16px",
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "checkin_col",
+        "component": "Column",
+        "children": [
+          "checkin_label",
+          "checkin_date"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "checkin_label",
+        "component": "Text",
+        "text": {
+          "path": "/card/checkInLabel"
+        },
+        "styles": {
+          "font-size": "24px",
+          "color": "#9E9E9E",
+          "margin": "0px 0px 4px 0px"
+        }
+      },
+      {
+        "id": "checkin_date",
+        "component": "Text",
+        "text": {
+          "path": "/card/checkInDate"
+        },
+        "styles": {
+          "font-size": "28px",
+          "font-weight": "bold",
+          "color": "#0E142B"
+        }
+      },
+      {
+        "id": "stay_mid",
+        "component": "Column",
+        "children": [
+          "mid_arrow",
+          "stay_nights_text"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "mid_arrow",
+        "component": "Icon",
+        "name": "arrowForward",
+        "styles": {
+          "margin": "0px 0px 4px 0px"
+        }
+      },
+      {
+        "id": "stay_nights_text",
+        "component": "Text",
+        "text": {
+          "path": "/card/nights"
+        },
+        "styles": {
+          "font-size": "24px",
+          "color": "#1976D2",
+          "background-color": "#E3F2FD",
+          "border-radius": "8px",
+          "padding": "4px 12px 4px 12px"
+        }
+      },
+      {
+        "id": "checkout_col",
+        "component": "Column",
+        "children": [
+          "checkout_label",
+          "checkout_date"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "checkout_label",
+        "component": "Text",
+        "text": {
+          "path": "/card/checkOutLabel"
+        },
+        "styles": {
+          "font-size": "24px",
+          "color": "#9E9E9E",
+          "margin": "0px 0px 4px 0px"
+        }
+      },
+      {
+        "id": "checkout_date",
+        "component": "Text",
+        "text": {
+          "path": "/card/checkOutDate"
+        },
+        "styles": {
+          "font-size": "28px",
+          "font-weight": "bold",
+          "color": "#0E142B"
+        }
+      },
+      {
+        "id": "room_info",
+        "component": "Column",
+        "children": [
+          "room_type",
+          "guest_text"
+        ],
+        "align": "start",
+        "styles": {
+          "margin": "0px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "room_type",
+        "component": "Text",
+        "text": {
+          "path": "/card/roomType"
+        },
+        "styles": {
+          "font-size": "28px",
+          "font-weight": "bold",
+          "color": "#0E142B",
+          "margin": "0px 0px 6px 0px"
+        }
+      },
+      {
+        "id": "guest_text",
+        "component": "Text",
+        "text": {
+          "path": "/card/guests"
+        },
+        "styles": {
+          "font-size": "24px",
+          "color": "#757575"
+        }
+      },
+      {
+        "id": "price_row",
+        "component": "Row",
+        "children": [
+          "price_night",
+          "price_total"
+        ],
+        "justify": "spaceBetween",
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "price_night",
+        "component": "Text",
+        "text": {
+          "path": "/card/pricePerNight"
+        },
+        "styles": {
+          "font-size": "28px",
+          "color": "#757575",
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "price_total",
+        "component": "Text",
+        "text": {
+          "path": "/card/priceTotal"
+        },
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#C62828",
+          "flex-shrink": 0
+        }
+      },
+      {
+        "id": "policy_row",
+        "component": "Row",
+        "children": [
+          "icon_check",
+          "policy_text"
+        ],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 20px 0px"
+        }
+      },
+      {
+        "id": "icon_check",
+        "component": "Icon",
+        "name": "check",
+        "styles": {
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "policy_text",
+        "component": "Text",
+        "text": {
+          "path": "/card/cancellation"
+        },
+        "styles": {
+          "font-size": "24px",
+          "color": "#2E7D32"
+        }
+      },
+      {
+        "id": "cta_button",
+        "component": "Button",
+        "child": "cta_text",
+        "variant": "primary",
+        "action": {
+          "functionCall": {
+            "call": "openUrl",
+            "args": {
+              "url": "https://example.com/booking/confirm"
+            }
+          }
+        },
+        "styles": {
+          "background-color": "#1976D2",
+          "border-radius": "24px",
+          "padding": "18px 24px 18px 24px",
+          "align-self": "stretch"
+        }
+      },
+      {
+        "id": "cta_text",
+        "component": "Text",
+        "text": {
+          "path": "/card/ctaLabel"
+        },
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#FFFFFF",
+          "text-align": "center"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,1524 @@
+{
+  "version": "v0.9",
+  "updateComponents": {
+    "surfaceId": "chengdu_holiday_itinerary",
+    "components": [
+      {
+        "id": "root",
+        "component": "Column",
+        "children": [
+          "header_card",
+          "tabs_days",
+          "footer_action"
+        ],
+        "styles": {
+          "padding": "32px 24px 32px 24px",
+          "background-color": "#F9F9FA"
+        }
+      },
+      {
+        "id": "header_card",
+        "component": "Card",
+        "child": "header_col",
+        "styles": {
+          "background-color": "#E8F5E9",
+          "border-radius": "24px",
+          "border-style": "solid",
+          "border-width": "0px",
+          "padding": "24px 24px 24px 24px"
+        }
+      },
+      {
+        "id": "header_col",
+        "component": "Column",
+        "children": [
+          "header_title",
+          "header_subtitle"
+        ]
+      },
+      {
+        "id": "header_title",
+        "component": "Text",
+        "text": {
+          "path": "/header/title"
+        },
+        "variant": "h1",
+        "styles": {
+          "font-size": "40px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "header_subtitle",
+        "component": "Text",
+        "text": {
+          "path": "/header/subtitle"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "28px",
+          "color": "#2D6A4F",
+          "font-weight": "bold"
+        }
+      },
+      {
+        "id": "tabs_days",
+        "component": "Tabs",
+        "tabs": [
+          {
+            "title": {
+              "path": "/tabs/day1/label"
+            },
+            "child": "day1_card"
+          },
+          {
+            "title": {
+              "path": "/tabs/day2/label"
+            },
+            "child": "day2_card"
+          },
+          {
+            "title": {
+              "path": "/tabs/day3/label"
+            },
+            "child": "day3_card"
+          }
+        ],
+        "styles": {
+          "margin": "24px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "day1_card",
+        "component": "Card",
+        "child": "day1_col",
+        "styles": {
+          "background-color": "#FFFFFF",
+          "border-radius": "24px",
+          "border-style": "solid",
+          "border-width": "0px",
+          "padding": "32px 24px 32px 24px",
+          "box-shadow": "0px 4px 16px rgba(0, 0, 0, 0.04)"
+        }
+      },
+      {
+        "id": "day1_col",
+        "component": "Column",
+        "children": [
+          "d1_title_row",
+          "d1_n1_row",
+          "d1_div1",
+          "d1_n2_row",
+          "d1_div2",
+          "d1_n3_row"
+        ]
+      },
+      {
+        "id": "d1_title_row",
+        "component": "Row",
+        "children": [
+          "d1_title_icon",
+          "d1_title_text"
+        ],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "d1_title_icon",
+        "component": "Icon",
+        "name": "event",
+        "styles": {
+          "color": "#2D6A4F",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "d1_title_text",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/title"
+        },
+        "variant": "h2",
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1C251F"
+        }
+      },
+      {
+        "id": "d1_n1_row",
+        "component": "Row",
+        "children": [
+          "d1_n1_time_col",
+          "d1_n1_detail_col"
+        ],
+        "align": "start",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d1_n1_time_col",
+        "component": "Column",
+        "children": [
+          "d1_n1_time",
+          "d1_n1_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d1_n1_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n1/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d1_n1_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n1/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d1_n1_detail_col",
+        "component": "Column",
+        "children": [
+          "d1_n1_title",
+          "d1_n1_desc",
+          "d1_n1_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d1_n1_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n1/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d1_n1_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n1/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d1_n1_tag_row",
+        "component": "Row",
+        "children": [
+          "d1_n1_tag1",
+          "d1_n1_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d1_n1_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n1/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d1_n1_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n1/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "d1_div1",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d1_n2_row",
+        "component": "Row",
+        "children": [
+          "d1_n2_time_col",
+          "d1_n2_detail_col"
+        ],
+        "align": "start",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d1_n2_time_col",
+        "component": "Column",
+        "children": [
+          "d1_n2_time",
+          "d1_n2_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d1_n2_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n2/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d1_n2_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n2/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d1_n2_detail_col",
+        "component": "Column",
+        "children": [
+          "d1_n2_title",
+          "d1_n2_desc",
+          "d1_n2_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d1_n2_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n2/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d1_n2_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n2/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d1_n2_tag_row",
+        "component": "Row",
+        "children": [
+          "d1_n2_tag1",
+          "d1_n2_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d1_n2_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n2/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d1_n2_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n2/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "d1_div2",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d1_n3_row",
+        "component": "Row",
+        "children": [
+          "d1_n3_time_col",
+          "d1_n3_detail_col"
+        ],
+        "align": "start"
+      },
+      {
+        "id": "d1_n3_time_col",
+        "component": "Column",
+        "children": [
+          "d1_n3_time",
+          "d1_n3_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d1_n3_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n3/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d1_n3_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n3/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d1_n3_detail_col",
+        "component": "Column",
+        "children": [
+          "d1_n3_title",
+          "d1_n3_desc",
+          "d1_n3_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d1_n3_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n3/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d1_n3_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n3/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d1_n3_tag_row",
+        "component": "Row",
+        "children": [
+          "d1_n3_tag1",
+          "d1_n3_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d1_n3_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n3/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d1_n3_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day1/n3/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "day2_card",
+        "component": "Card",
+        "child": "day2_col",
+        "styles": {
+          "background-color": "#FFFFFF",
+          "border-radius": "24px",
+          "border-style": "solid",
+          "border-width": "0px",
+          "padding": "32px 24px 32px 24px",
+          "box-shadow": "0px 4px 16px rgba(0, 0, 0, 0.04)"
+        }
+      },
+      {
+        "id": "day2_col",
+        "component": "Column",
+        "children": [
+          "d2_title_row",
+          "d2_n1_row",
+          "d2_div1",
+          "d2_n2_row",
+          "d2_div2",
+          "d2_n3_row"
+        ]
+      },
+      {
+        "id": "d2_title_row",
+        "component": "Row",
+        "children": [
+          "d2_title_icon",
+          "d2_title_text"
+        ],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "d2_title_icon",
+        "component": "Icon",
+        "name": "event",
+        "styles": {
+          "color": "#2D6A4F",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "d2_title_text",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/title"
+        },
+        "variant": "h2",
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1C251F"
+        }
+      },
+      {
+        "id": "d2_n1_row",
+        "component": "Row",
+        "children": [
+          "d2_n1_time_col",
+          "d2_n1_detail_col"
+        ],
+        "align": "start",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d2_n1_time_col",
+        "component": "Column",
+        "children": [
+          "d2_n1_time",
+          "d2_n1_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d2_n1_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n1/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d2_n1_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n1/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d2_n1_detail_col",
+        "component": "Column",
+        "children": [
+          "d2_n1_title",
+          "d2_n1_desc",
+          "d2_n1_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d2_n1_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n1/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d2_n1_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n1/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d2_n1_tag_row",
+        "component": "Row",
+        "children": [
+          "d2_n1_tag1",
+          "d2_n1_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d2_n1_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n1/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d2_n1_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n1/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "d2_div1",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d2_n2_row",
+        "component": "Row",
+        "children": [
+          "d2_n2_time_col",
+          "d2_n2_detail_col"
+        ],
+        "align": "start",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d2_n2_time_col",
+        "component": "Column",
+        "children": [
+          "d2_n2_time",
+          "d2_n2_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d2_n2_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n2/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d2_n2_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n2/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d2_n2_detail_col",
+        "component": "Column",
+        "children": [
+          "d2_n2_title",
+          "d2_n2_desc",
+          "d2_n2_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d2_n2_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n2/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d2_n2_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n2/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d2_n2_tag_row",
+        "component": "Row",
+        "children": [
+          "d2_n2_tag1",
+          "d2_n2_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d2_n2_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n2/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d2_n2_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n2/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "d2_div2",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d2_n3_row",
+        "component": "Row",
+        "children": [
+          "d2_n3_time_col",
+          "d2_n3_detail_col"
+        ],
+        "align": "start"
+      },
+      {
+        "id": "d2_n3_time_col",
+        "component": "Column",
+        "children": [
+          "d2_n3_time",
+          "d2_n3_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d2_n3_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n3/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d2_n3_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n3/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d2_n3_detail_col",
+        "component": "Column",
+        "children": [
+          "d2_n3_title",
+          "d2_n3_desc",
+          "d2_n3_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d2_n3_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n3/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d2_n3_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n3/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d2_n3_tag_row",
+        "component": "Row",
+        "children": [
+          "d2_n3_tag1",
+          "d2_n3_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d2_n3_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n3/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d2_n3_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day2/n3/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "day3_card",
+        "component": "Card",
+        "child": "day3_col",
+        "styles": {
+          "background-color": "#FFFFFF",
+          "border-radius": "24px",
+          "border-style": "solid",
+          "border-width": "0px",
+          "padding": "32px 24px 32px 24px",
+          "box-shadow": "0px 4px 16px rgba(0, 0, 0, 0.04)"
+        }
+      },
+      {
+        "id": "day3_col",
+        "component": "Column",
+        "children": [
+          "d3_title_row",
+          "d3_n1_row",
+          "d3_div1",
+          "d3_n2_row",
+          "d3_div2",
+          "d3_n3_row"
+        ]
+      },
+      {
+        "id": "d3_title_row",
+        "component": "Row",
+        "children": [
+          "d3_title_icon",
+          "d3_title_text"
+        ],
+        "align": "center",
+        "styles": {
+          "margin": "0px 0px 32px 0px"
+        }
+      },
+      {
+        "id": "d3_title_icon",
+        "component": "Icon",
+        "name": "event",
+        "styles": {
+          "color": "#2D6A4F",
+          "margin": "0px 12px 0px 0px"
+        }
+      },
+      {
+        "id": "d3_title_text",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/title"
+        },
+        "variant": "h2",
+        "styles": {
+          "font-size": "36px",
+          "font-weight": "bold",
+          "color": "#1C251F"
+        }
+      },
+      {
+        "id": "d3_n1_row",
+        "component": "Row",
+        "children": [
+          "d3_n1_time_col",
+          "d3_n1_detail_col"
+        ],
+        "align": "start",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d3_n1_time_col",
+        "component": "Column",
+        "children": [
+          "d3_n1_time",
+          "d3_n1_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d3_n1_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n1/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d3_n1_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n1/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d3_n1_detail_col",
+        "component": "Column",
+        "children": [
+          "d3_n1_title",
+          "d3_n1_desc",
+          "d3_n1_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d3_n1_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n1/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d3_n1_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n1/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d3_n1_tag_row",
+        "component": "Row",
+        "children": [
+          "d3_n1_tag1",
+          "d3_n1_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d3_n1_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n1/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d3_n1_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n1/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "d3_div1",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d3_n2_row",
+        "component": "Row",
+        "children": [
+          "d3_n2_time_col",
+          "d3_n2_detail_col"
+        ],
+        "align": "start",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d3_n2_time_col",
+        "component": "Column",
+        "children": [
+          "d3_n2_time",
+          "d3_n2_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d3_n2_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n2/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d3_n2_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n2/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d3_n2_detail_col",
+        "component": "Column",
+        "children": [
+          "d3_n2_title",
+          "d3_n2_desc",
+          "d3_n2_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d3_n2_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n2/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d3_n2_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n2/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d3_n2_tag_row",
+        "component": "Row",
+        "children": [
+          "d3_n2_tag1",
+          "d3_n2_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d3_n2_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n2/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d3_n2_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n2/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "d3_div2",
+        "component": "Divider",
+        "axis": "horizontal",
+        "styles": {
+          "margin": "0px 0px 24px 0px"
+        }
+      },
+      {
+        "id": "d3_n3_row",
+        "component": "Row",
+        "children": [
+          "d3_n3_time_col",
+          "d3_n3_detail_col"
+        ],
+        "align": "start"
+      },
+      {
+        "id": "d3_n3_time_col",
+        "component": "Column",
+        "children": [
+          "d3_n3_time",
+          "d3_n3_period"
+        ],
+        "styles": {
+          "width": "110px",
+          "margin": "0px 24px 0px 0px"
+        }
+      },
+      {
+        "id": "d3_n3_time",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n3/time"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#2D6A4F"
+        }
+      },
+      {
+        "id": "d3_n3_period",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n3/period"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#888888"
+        }
+      },
+      {
+        "id": "d3_n3_detail_col",
+        "component": "Column",
+        "children": [
+          "d3_n3_title",
+          "d3_n3_desc",
+          "d3_n3_tag_row"
+        ],
+        "styles": {
+          "flex-grow": 1,
+          "flex-shrink": 1
+        }
+      },
+      {
+        "id": "d3_n3_title",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n3/title"
+        },
+        "variant": "h3",
+        "styles": {
+          "font-size": "32px",
+          "font-weight": "bold",
+          "color": "#1C251F",
+          "margin": "0px 0px 8px 0px"
+        }
+      },
+      {
+        "id": "d3_n3_desc",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n3/desc"
+        },
+        "variant": "body",
+        "styles": {
+          "font-size": "28px",
+          "color": "#555555",
+          "line-height": 1.4,
+          "margin": "0px 0px 12px 0px"
+        }
+      },
+      {
+        "id": "d3_n3_tag_row",
+        "component": "Row",
+        "children": [
+          "d3_n3_tag1",
+          "d3_n3_tag2"
+        ],
+        "align": "center"
+      },
+      {
+        "id": "d3_n3_tag1",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n3/tags/0"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#2D6A4F",
+          "background-color": "#E8F5E9",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px",
+          "margin": "0px 8px 0px 0px"
+        }
+      },
+      {
+        "id": "d3_n3_tag2",
+        "component": "Text",
+        "text": {
+          "path": "/tabs/day3/n3/tags/1"
+        },
+        "variant": "caption",
+        "styles": {
+          "font-size": "24px",
+          "color": "#555555",
+          "background-color": "#F3F4F6",
+          "padding": "4px 12px 4px 12px",
+          "border-radius": "12px"
+        }
+      },
+      {
+        "id": "footer_action",
+        "component": "Row",
+        "children": [
+          "btn_save"
+        ],
+        "justify": "center",
+        "styles": {
+          "margin": "32px 0px 16px 0px"
+        }
+      },
+      {
+        "id": "btn_save",
+        "component": "Button",
+        "child": "btn_save_text",
+        "variant": "primary",
+        "action": {
+          "event": {
+            "name": "save_itinerary",
+            "context": {
+              "page": "chengdu_3day"
+            }
+          }
+        },
+        "styles": {
+          "background-color": "#2D6A4F",
+          "padding": "16px 48px 16px 48px",
+          "border-radius": "32px"
+        }
+      },
+      {
+        "id": "btn_save_text",
+        "component": "Text",
+        "text": {
+          "path": "/footer/btn_label"
+        },
+        "variant": "body",
+        "styles": {
+          "color": "#FFFFFF",
+          "font-size": "32px",
+          "font-weight": "bold"
+        }
+      }
+    ]
+  }
+}

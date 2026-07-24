@@ -1,0 +1,42 @@
+{
+  "version": "v0.9",
+  "updateDataModel": {
+    "surfaceId": "movie_recommendations_surface",
+    "path": "/",
+    "value": {
+      "header": {
+        "subtitle": "近年口碑佳作",
+        "title": "今晚可以看这 3 部"
+      },
+      "movie1": {
+        "badge": "01",
+        "title": "罪人",
+        "desc": "音乐、惊悚与时代氛围融合得很出色",
+        "genre": "惊悚"
+      },
+      "movie2": {
+        "badge": "02",
+        "title": "F1：狂飙飞车",
+        "desc": "赛车场面沉浸，适合追求大银幕爽感",
+        "genre": "动作"
+      },
+      "movie3": {
+        "badge": "03",
+        "title": "哪吒之魔童闹海",
+        "desc": "视觉升级，热血之外也保留了情感力度",
+        "genre": "动画"
+      },
+      "summary": {
+        "text": "想看氛围感选《罪人》，想放松过瘾选《F1》，全家一起看则推荐《哪吒之魔童闹海》。"
+      },
+      "tags": {
+        "t1": "氛围佳",
+        "t2": "大银幕",
+        "t3": "合家欢"
+      },
+      "cta": {
+        "label": "按我的口味继续推荐"
+      }
+    }
+  }
+}

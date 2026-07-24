@@ -1,0 +1,92 @@
+{
+  "updateDataModel": {
+    "path": "/travel_tabs",
+    "surfaceId": "route_plan_card_debug_simple",
+    "value": [
+      {
+        "data": {
+          "defaultIndex": 0,
+          "equallyDivide": 4,
+          "tablist": [
+            "驾车",
+            "公交地铁",
+            "骑行",
+            "步行"
+          ],
+          "type": "routeTab"
+        },
+        "type": "routeTab"
+      },
+      {
+        "data": [
+          {
+            "data": {
+              "buttonText": "导航",
+              "defaultIndex": 0,
+              "icon": "https://faas-image.amap.com/shaolin/images/AIQStool/%E9%A9%BE%E8%BD%A60716.png?t=1752645828000",
+              "linkType": "2",
+              "naviType": "0",
+              "schema": "amapuri://route/plan",
+              "subTitle": "18公里·1小时4分钟",
+              "title": "天安门",
+              "type": "routeCard"
+            }
+          },
+          {
+            "data": {
+              "buttonText": "导航",
+              "defaultIndex": 0,
+              "icon": "https://faas-image.amap.com/shaolin/images/AIQStool/%E5%85%AC%E4%BA%A40716.png?t=1752645828000",
+              "linkType": "2",
+              "naviType": "1",
+              "schema": "amapuri://route/plan?t=1&sid=&dlat=39.909187&dlon=116.397463&dname=天安门&dev=0&m=1&did=B000A60DA1&sid=&slat=40.002359&slon=116.489832&sname=我的位置",
+              "subTitle": "16.2公里·1小时29分钟",
+              "title": "天安门",
+              "type": "routeCard",
+              "lines": [
+                {
+                  "name": "15 号线",
+                  "backgroundColor": "#7B3FA0",
+                  "color": "#FFFFFF"
+                },
+                {
+                  "name": "5 号线",
+                  "backgroundColor": "#9B3DB8",
+                  "color": "#FFFFFF"
+                }
+              ]
+            }
+          },
+          {
+            "data": {
+              "buttonText": "导航",
+              "defaultIndex": 0,
+              "icon": "https://faas-image.amap.com/shaolin/images/AIQStool/%E9%AA%91%E8%A1%8C0716.png?t=1752648368000",
+              "linkType": "2",
+              "naviType": "3",
+              "schema": "amapuri://route/plan?t=3&sid=&dlat=39.909187&dlon=116.397463&dname=天安门&dev=0&m=1&did=B000A60DA1&rideType=bike&sid=&slat=40.002359&slon=116.489832&sname=我的位置",
+              "subTitle": "16.2公里·1小时29分钟",
+              "title": "天安门",
+              "type": "routeCard"
+            }
+          },
+          {
+            "data": {
+              "buttonText": "导航",
+              "defaultIndex": 0,
+              "icon": "https://faas-image.amap.com/shaolin/images/AIQStool/%E6%AD%A5%E8%A1%8C0716.png?t=1752645828000",
+              "linkType": "2",
+              "naviType": "2",
+              "schema": "amapuri://route/plan?t=2&sid=&dlat=39.909187&dlon=116.397463&dname=天安门&dev=0&m=1&did=B000A60DA1&sid=&slat=40.002359&slon=116.489832&sname=我的位置",
+              "subTitle": "16.1公里·4小时",
+              "title": "天安门",
+              "type": "routeCard"
+            }
+          }
+        ],
+        "type": "routeCard"
+      }
+    ]
+  },
+  "version": "v0.9"
+}
