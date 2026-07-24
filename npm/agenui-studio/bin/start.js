@@ -22,7 +22,7 @@ const https = require("https");
 const os = require("os");
 const path = require("path");
 
-const GITHUB_OWNER = "dongai-z";
+const GITHUB_OWNER = "AGenUI";
 const GITHUB_REPO = "AGenUI";
 const ASSET_NAME = "agenui-studio.zip";
 const API_URL = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest`;
