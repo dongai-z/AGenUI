@@ -184,7 +184,9 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
             target: self,
             action: #selector(editButtonTapped)
         )
-        editButton.isEnabled = false  // Initially disabled
+        // Keep the Edit button enabled from the start so the user can open the
+        // editor (in "Custom Input" mode) even before any page is rendered,
+        // matching the Android/HarmonyOS playgrounds.
         editBarButtonItem = editButton  // Save reference
 
         // Create theme button (tapping opens the theme picker directly)
@@ -675,12 +677,44 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
     }
 
     private func processQRCodeJsonData(createSurfaceJson: String?, updateComponentsJson: String?, updateDataModelJson: String?) {
+        // Extract the scanned surfaceId up front so we can clear any surface
+        // that would collide with it before issuing createSurface.
+        let scannedSurfaceId = createSurfaceJson.flatMap { Self.extractSurfaceId(fromCreateSurface: $0) }
+
         surfaceManager.beginTextStream()
-        
+
+        // The engine (both the C++ SurfaceCoordinator and the Swift
+        // SurfaceManager) rejects a createSurface whose surfaceId already
+        // exists and does NOT dispatch the creation event, so the scanned
+        // page would silently fail to render. That happens whenever a surface
+        // carrying the same surfaceId is still alive — e.g. the same QR was
+        // scanned before and then another page (a menu pick or a different
+        // QR) was rendered on top without disposing it. Mirroring the
+        // Android/HarmonyOS playgrounds, tear down stale surfaces first so
+        // the scanned createSurface always starts from a clean state.
+
+        // 1) Dispose the currently displayed surface when it differs from the
+        //    scanned one (avoids leaking the previous page).
+        if let previousSurfaceId = previousSurfaceId, previousSurfaceId != scannedSurfaceId {
+            sendDeleteSurface(previousSurfaceId)
+        }
+
+        // 2) Always clear any leftover surface that already carries the
+        //    scanned surfaceId (covers re-scanning the same QR after another
+        //    page was rendered on top).
+        if let scannedSurfaceId = scannedSurfaceId {
+            sendDeleteSurface(scannedSurfaceId)
+        }
+
         // Process createSurface JSON
         if let createSurfaceJson = createSurfaceJson {
             surfaceManager.receiveTextChunk(createSurfaceJson)
             print("✅ [QR Code] Sent createSurface")
+
+            // Track the scanned surfaceId so the next render can dispose it.
+            if let scannedSurfaceId = scannedSurfaceId {
+                self.previousSurfaceId = scannedSurfaceId
+            }
         }
 
         // Process updateComponents JSON
@@ -704,6 +738,26 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
         }
 
         surfaceManager.endTextStream()
+
+        // Enable the Edit button so the scanned protocol can be edited,
+        // matching the menu-selection flow which enables it on data selection.
+        editBarButtonItem.isEnabled = true
+    }
+
+    /// Send a `deleteSurface` chunk for the given surfaceId. Deleting a
+    /// surfaceId that does not exist is a safe no-op at the engine layer.
+    private func sendDeleteSurface(_ surfaceId: String) {
+        let deleteSurfaceJSON: [String: Any] = [
+            "version": "v0.9",
+            "deleteSurface": [
+                "surfaceId": surfaceId
+            ]
+        ]
+        if let deleteSurfaceData = try? JSONSerialization.data(withJSONObject: deleteSurfaceJSON, options: []),
+           let deleteSurfaceString = String(data: deleteSurfaceData, encoding: .utf8) {
+            surfaceManager.receiveTextChunk(deleteSurfaceString)
+            print("✅ [QR Code] Sent deleteSurface: surfaceId = \(surfaceId)")
+        }
     }
     
     /// Extract surfaceId from a `createSurface` JSON payload.
