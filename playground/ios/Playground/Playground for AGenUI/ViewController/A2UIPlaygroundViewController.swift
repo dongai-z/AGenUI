@@ -187,10 +187,29 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
         editButton.isEnabled = false  // Initially disabled
         editBarButtonItem = editButton  // Save reference
 
-        // Create theme button with menu
-        let themeButton = createThemeButtonWithMenu()
+        // Create theme button (tapping opens the theme picker directly)
+        let themeButton = createThemeButton()
 
-        navigationItem.rightBarButtonItems = [themeButton, editButton]
+        // Create scan QR button (promoted to a top-level bar item for
+        // cross-platform consistency with Android/HarmonyOS).
+        let scanButton = UIBarButtonItem(
+            image: UIImage(systemName: "qrcode.viewfinder"),
+            style: .plain,
+            target: self,
+            action: #selector(scanQRCodeButtonTapped)
+        )
+        scanButton.accessibilityLabel = "Scan QR"
+
+        // Visual order (left -> right): Scan | Theme | Edit. Since
+        // rightBarButtonItems index 0 is the rightmost item, the array is
+        // declared in reverse of the visual order. Negative-width fixed
+        // spaces tighten the gaps so the centered performance display gets
+        // more horizontal room.
+        let compactSpace1 = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        compactSpace1.width = -8
+        let compactSpace2 = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        compactSpace2.width = -8
+        navigationItem.rightBarButtonItems = [editButton, compactSpace1, themeButton, compactSpace2, scanButton]
         
         // Configure navigation bar appearance
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -213,7 +232,7 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
             performanceDisplayView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
             performanceDisplayView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
             performanceDisplayView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            performanceDisplayView.heightAnchor.constraint(equalToConstant: 44)
+            performanceDisplayView.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         // Set as title view
@@ -329,62 +348,16 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
 
     // MARK: - Menu and Actions
 
-    private func createThemeButtonWithMenu() -> UIBarButtonItem {
-        if #available(iOS 14.0, *) {
-            let themeAction = UIAction(title: "Theme Selection", image: UIImage(systemName: "paintbrush.fill")) { [weak self] _ in
-                self?.themeButtonTapped()
-            }
-
-            let scanQRAction = UIAction(title: "Scan QR Code", image: UIImage(systemName: "qrcode.viewfinder")) { [weak self] _ in
-                self?.scanQRCodeButtonTapped()
-            }
-
-            let menu = UIMenu(title: "", children: [themeAction, scanQRAction])
-
-            let themeButton = UIBarButtonItem(
-                image: UIImage(systemName: "paintbrush.fill"),
-                primaryAction: nil,
-                menu: menu
-            )
-
-            return themeButton
-        } else {
-            // For iOS versions before 14.0, use a simple button with an alert for menu
-            let themeButton = UIBarButtonItem(
-                image: UIImage(systemName: "paintbrush.fill") ?? UIImage(),
-                style: .plain,
-                target: self,
-                action: #selector(showLegacyMenu)
-            )
-            return themeButton
-        }
-    }
-
-    @objc private func showLegacyMenu() {
-        let alertController = UIAlertController(title: "Options", message: nil, preferredStyle: .actionSheet)
-
-        let themeAction = UIAlertAction(title: "Theme Selection", style: .default) { [weak self] _ in
-            self?.themeButtonTapped()
-        }
-
-        let scanQRAction = UIAlertAction(title: "Scan QR Code", style: .default) { [weak self] _ in
-            self?.scanQRCodeButtonTapped()
-        }
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
-
-        alertController.addAction(themeAction)
-        alertController.addAction(scanQRAction)
-        alertController.addAction(cancelAction)
-
-        if let popover = alertController.popoverPresentationController {
-            // Set the source for iPad compatibility
-            if let rightBarButton = navigationItem.rightBarButtonItems?.first {
-                popover.barButtonItem = rightBarButton
-            }
-        }
-
-        present(alertController, animated: true)
+    private func createThemeButton() -> UIBarButtonItem {
+        // Tapping the button opens the theme picker directly (no intermediate menu).
+        let themeButton = UIBarButtonItem(
+            image: UIImage(systemName: "paintbrush.fill"),
+            style: .plain,
+            target: self,
+            action: #selector(themeButtonTapped)
+        )
+        themeButton.accessibilityLabel = "Theme"
+        return themeButton
     }
 
     @objc private func scanQRCodeButtonTapped() {
@@ -459,9 +432,26 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
         // Create frame view for QR code on window to ensure it's always on top
         windowQRCodeFrameView = UIView()
         if let windowQRCodeFrameView = windowQRCodeFrameView {
+            windowQRCodeFrameView.frame = view.bounds
             windowQRCodeFrameView.layer.insertSublayer(previewLayer!, at: 0)
             windowQRCodeFrameView.layer.borderColor = UIColor.green.cgColor
             windowQRCodeFrameView.layer.borderWidth = 2
+
+            // Close (X) button to exit the scanner without scanning,
+            // matching the system scanner behavior on HarmonyOS.
+            let closeButton = UIButton(type: .system)
+            closeButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+            closeButton.tintColor = .white
+            closeButton.translatesAutoresizingMaskIntoConstraints = false
+            closeButton.addTarget(self, action: #selector(closeQRCodeScannerTapped), for: .touchUpInside)
+            closeButton.accessibilityLabel = "Close scanner"
+            windowQRCodeFrameView.addSubview(closeButton)
+            NSLayoutConstraint.activate([
+                closeButton.topAnchor.constraint(equalTo: windowQRCodeFrameView.safeAreaLayoutGuide.topAnchor, constant: 16),
+                closeButton.leadingAnchor.constraint(equalTo: windowQRCodeFrameView.leadingAnchor, constant: 16),
+                closeButton.widthAnchor.constraint(equalToConstant: 36),
+                closeButton.heightAnchor.constraint(equalToConstant: 36)
+            ])
 
             // Add to window's key window to ensure it's always on top
             if #available(iOS 13.0, *) {
@@ -498,6 +488,11 @@ class A2UIPlaygroundViewController: UIViewController, SurfaceManagerListener, AV
         windowQRCodeFrameView = nil
 
         captureSession = nil
+    }
+
+    @objc private func closeQRCodeScannerTapped() {
+        // Exit the scanner without scanning (X button).
+        stopQRCodeScanner()
     }
 
     private func showPermissionDeniedAlert() {
