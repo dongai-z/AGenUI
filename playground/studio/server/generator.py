@@ -38,6 +38,29 @@ from .providers import OpenAICompatProvider, ProviderError
 SKILL_DIR = Path(__file__).resolve().parents[3] / "skills" / "a2ui-generation"
 
 
+# Instruction wrapped around the user message on refinement turns (i.e. when a
+# conversation history carrying a previous protocol is present). Without it the
+# model treats a follow-up as a brand-new request and regenerates from scratch,
+# producing a result that diverges heavily from the original protocol. New
+# conversations have no history, so their prompt is sent through untouched.
+REFINEMENT_INSTRUCTION = """\
+The conversation above contains a previously generated A2UI protocol: the
+assistant's most recent message holds it as two JSON code blocks (the first is
+updateComponents, the second is updateDataModel).
+
+The user now wants to refine that existing protocol. You MUST:
+1. Treat the previous protocol as the baseline. Keep its structure, components,
+   data bindings, content and styling UNCHANGED, except for the specific
+   modifications requested below.
+2. Apply ONLY the changes described in the user's request. Do not redesign,
+   re-layout, or rewrite unrelated parts.
+3. Output the COMPLETE updated protocol - both the full updateComponents block
+   and the full updateDataModel block - not just the changed fragments.
+
+User's refinement request:
+{user_request}"""
+
+
 @dataclass
 class GenerationEvent:
     """A single SSE event pushed from the server to the browser.
@@ -57,6 +80,28 @@ def _stage(name: str, **extra: Any) -> GenerationEvent:
     return GenerationEvent(type="stage", data={"stage": name, **extra})
 
 
+def _split_combined_payload(
+    comp_dict: dict | None, data_dict: dict | None
+) -> tuple[dict | None, dict | None]:
+    """Split a single combined payload back into the expected pair.
+
+    On refinement turns some models collapse the two required blocks into one
+    object shaped like {"updateComponents": ..., "updateDataModel": ...} (often
+    echoing the format they saw in the chat history). The two-block extractor
+    yields that object as ``comp_dict`` with ``data_dict`` still None; recover
+    by splitting it so the turn still succeeds.
+    """
+    if data_dict is not None or not isinstance(comp_dict, dict):
+        return comp_dict, data_dict
+    if "updateComponents" in comp_dict and "updateDataModel" in comp_dict:
+        version = comp_dict.get("version", "v0.9")
+        return (
+            {"version": version, "updateComponents": comp_dict["updateComponents"]},
+            {"version": version, "updateDataModel": comp_dict["updateDataModel"]},
+        )
+    return comp_dict, data_dict
+
+
 def _attempt(full_text: str) -> dict[str, Any]:
     """Run extract -> parse -> validate over a raw model response.
 
@@ -65,6 +110,11 @@ def _attempt(full_text: str) -> dict[str, Any]:
     """
     comp_json, data_json = extract_json_blocks(full_text)
     comp_dict, data_dict, parse_error = parse_json_pair(comp_json, data_json)
+
+    # Recover from a combined single-object response (see helper docstring).
+    comp_dict, data_dict = _split_combined_payload(comp_dict, data_dict)
+    if comp_dict is not None and data_dict is not None:
+        parse_error = None
 
     if comp_dict is None or data_dict is None:
         return {
@@ -119,6 +169,12 @@ def generate_a2ui_stream(
             allow_placeholder_images=True,
         )
         user_message = build_user_prompt(user_prompt)
+        # On refinement turns, explicitly frame the request as an incremental
+        # modification of the previous protocol so the model preserves the rest
+        # (a bare follow-up prompt would otherwise be treated as a fresh
+        # generation and diverge heavily from the original).
+        if history:
+            user_message = REFINEMENT_INSTRUCTION.format(user_request=user_message)
 
         yield _stage("calling_model", model=provider.model)
         full_text = ""
