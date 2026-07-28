@@ -2,8 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
-// Build output goes to ../static so the FastAPI server (test/a2ui_server/server.py)
-// can serve the SPA directly. During dev, /api requests are proxied to the local agent.
+// Build output goes to ../server/static so the FastAPI server
+// (playground/studio/server/server.py, STATIC_DIR = <server pkg>/static) serves
+// the SPA directly. During dev, /api requests are proxied to the local agent.
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -12,7 +13,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: path.resolve(__dirname, "../static"),
+    outDir: path.resolve(__dirname, "../server/static"),
     emptyOutDir: true,
   },
   server: {

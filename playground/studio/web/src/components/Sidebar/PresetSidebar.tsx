@@ -14,6 +14,7 @@ import type { PresetSummary, ProtocolSummary } from "@/types";
 export type Selection =
   | { kind: "preset"; id: string }
   | { kind: "protocol"; id: string }
+  | { kind: "generation" }
   | null;
 
 interface PresetSidebarProps {
@@ -21,8 +22,12 @@ interface PresetSidebarProps {
   protocols: ProtocolSummary[];
   loading: boolean;
   selection: Selection;
+  /** The in-flight generation (null when idle). Shown at the top of "My
+   * Generations" so the user can leave and come back to it at any time. */
+  liveGeneration: { prompt: string } | null;
   onSelectPreset: (id: string) => void;
   onSelectProtocol: (id: string) => void;
+  onSelectGeneration: () => void;
   onRefresh: () => void;
   onNewChat?: () => void;
 }
@@ -64,8 +69,10 @@ export function PresetSidebar({
   protocols,
   loading,
   selection,
+  liveGeneration,
   onSelectPreset,
   onSelectProtocol,
+  onSelectGeneration,
   onRefresh,
   onNewChat,
 }: PresetSidebarProps) {
@@ -165,16 +172,40 @@ export function PresetSidebar({
         <GroupHeader
           icon={<ClockIcon size={12} />}
           label="My Generations"
-          count={filteredProtocols.length}
+          count={filteredProtocols.length + (liveGeneration ? 1 : 0)}
           open={protocolsOpen}
           onToggle={() => setProtocolsOpen((o) => !o)}
         />
         {protocolsOpen && (
           <div className="space-y-0.5">
-            {filteredProtocols.length === 0 && (
+            {filteredProtocols.length === 0 && !liveGeneration && (
               <p className="px-2 py-1 text-[11px] text-slate-400">
                 Generated protocols will appear here
               </p>
+            )}
+            {liveGeneration && (
+              <button
+                type="button"
+                onClick={onSelectGeneration}
+                title={liveGeneration.prompt}
+                className={cn(
+                  "flex w-full flex-col gap-0.5 rounded-md px-2 py-1.5 text-left transition",
+                  selection?.kind === "generation" ? "bg-brand-50" : "hover:bg-slate-100",
+                )}
+              >
+                <span
+                  className={cn(
+                    "flex items-center gap-1.5 text-xs",
+                    selection?.kind === "generation"
+                      ? "font-medium text-brand-600"
+                      : "text-slate-600",
+                  )}
+                >
+                  <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-brand-500" />
+                  <span className="truncate">{liveGeneration.prompt || "(generating)"}</span>
+                </span>
+                <span className="pl-3 text-[10px] text-brand-500">Generating…</span>
+              </button>
             )}
             {filteredProtocols.map((p) => {
               const active = selection?.kind === "protocol" && selection.id === p.id;

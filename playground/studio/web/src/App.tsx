@@ -1,6 +1,6 @@
 /** AGenUI Studio root: three-column layout + generation orchestration. */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ConversationPanel } from "@/components/Conversation/ConversationPanel";
 import { Header } from "@/components/Header";
 import { InputBar } from "@/components/InputBar/InputBar";
@@ -46,10 +46,17 @@ export default function App() {
   const [panel, setPanel] = useState<PanelState>(EMPTY_PANEL);
   const [history, setHistory] = useState<RoundSnapshot[]>([]);
 
+  // Whether the right panel currently mirrors the live generation stream.
+  // It is re-attached whenever a new round starts and detached as soon as the
+  // user explicitly selects a preset/protocol, so incoming stream chunks no
+  // longer clobber the content the user chose to look at.
+  const panelAttachedRef = useRef(false);
+
   // --- Sync editor panel while streaming ---
+  // Only mirrors the stream while the panel is attached. Selection is managed
+  // by the generate/select handlers, so incoming chunks never clear it.
   useEffect(() => {
-    if (gen.isGenerating) {
-      setSelection(null);
+    if (gen.isGenerating && panelAttachedRef.current) {
       setPanel((p) => ({
         ...p,
         title: gen.prompt || "Generating...",
@@ -63,18 +70,24 @@ export default function App() {
   }, [gen.isGenerating, gen.componentsText, gen.datamodelText, gen.prompt]);
 
   // --- Finalize panel when generation completes ---
+  // Only takes over the panel if it is still attached to the stream. If the
+  // user navigated to a preset/protocol mid-generation, respect that choice
+  // and merely refresh the library so the finished protocol shows up in the
+  // sidebar for the user to open explicitly.
   useEffect(() => {
     if (gen.status === "done" && gen.done) {
       const d = gen.done;
-      setPanel((p) => ({
-        title: gen.prompt || p.title,
-        componentsText: d.components ? JSON.stringify(d.components, null, 2) : p.componentsText,
-        datamodelText: d.datamodel ? JSON.stringify(d.datamodel, null, 2) : p.datamodelText,
-        protocolId: d.protocol_id,
-        presetId: null,
-        hasRendering: false,
-      }));
-      setSelection({ kind: "protocol", id: d.protocol_id });
+      if (panelAttachedRef.current) {
+        setPanel((p) => ({
+          title: gen.prompt || p.title,
+          componentsText: d.components ? JSON.stringify(d.components, null, 2) : p.componentsText,
+          datamodelText: d.datamodel ? JSON.stringify(d.datamodel, null, 2) : p.datamodelText,
+          protocolId: d.protocol_id,
+          presetId: null,
+          hasRendering: false,
+        }));
+        setSelection({ kind: "protocol", id: d.protocol_id });
+      }
       void library.refresh();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +96,12 @@ export default function App() {
   // --- Archive the just-finished round into history when a new one starts ---
   const handleGenerate = useCallback(
     (prompt: string, provider: string | null, reasoning: boolean) => {
+      // A new round re-attaches the right panel to the live stream and
+      // immediately surfaces the task in "My Generations" (as the highlighted
+      // in-flight entry) so the user can switch away and come back at any time.
+      panelAttachedRef.current = true;
+      setSelection({ kind: "generation" });
+
       // Build multi-turn history from the last completed round (single-turn context).
       const chatHistory: ChatMessage[] = [];
       if (gen.prompt && gen.done?.components) {
@@ -128,6 +147,9 @@ export default function App() {
   const handleSelectPreset = useCallback(async (id: string) => {
     try {
       const rec = await fetchPreset(id);
+      // Selecting a preset detaches the panel from any in-flight stream so the
+      // preset content is not overwritten by incoming chunks.
+      panelAttachedRef.current = false;
       setSelection({ kind: "preset", id });
       setPanel({
         title: rec.name,
@@ -146,6 +168,8 @@ export default function App() {
   const handleSelectProtocol = useCallback(async (id: string) => {
     try {
       const rec = await fetchProtocol(id);
+      // Selecting a protocol detaches the panel from any in-flight stream.
+      panelAttachedRef.current = false;
       setSelection({ kind: "protocol", id });
       setPanel({
         title: rec.prompt || rec.id,
@@ -159,6 +183,24 @@ export default function App() {
       // ignore load errors for now
     }
   }, []);
+
+  // --- Re-attach the panel to the in-flight generation stream ---
+  // Lets the user browse a preset/protocol and then return to the still-running
+  // generation: the panel immediately mirrors the current partial output and
+  // keeps following incoming chunks until the round finishes.
+  const handleSelectLiveGeneration = useCallback(() => {
+    panelAttachedRef.current = true;
+    setSelection({ kind: "generation" });
+    setPanel((p) => ({
+      ...p,
+      title: gen.prompt || "Generating...",
+      componentsText: gen.componentsText,
+      datamodelText: gen.datamodelText,
+      protocolId: null,
+      presetId: null,
+      hasRendering: false,
+    }));
+  }, [gen.prompt, gen.componentsText, gen.datamodelText]);
 
   // --- Save manual edits (PUT) ---
   const handleSave = useCallback(
@@ -184,6 +226,10 @@ export default function App() {
       ? `/api/presets/${encodeURIComponent(panel.presetId)}/rendering`
       : null;
 
+  // The in-flight generation is surfaced at the top of "My Generations" so it
+  // can be re-opened after the user browses other presets/protocols.
+  const liveGeneration = gen.isGenerating ? { prompt: gen.prompt } : null;
+
   return (
     <div className="flex h-full flex-col overflow-hidden">
       <Header
@@ -199,8 +245,10 @@ export default function App() {
             protocols={library.protocols}
             loading={library.loading}
             selection={selection}
+            liveGeneration={liveGeneration}
             onSelectPreset={handleSelectPreset}
             onSelectProtocol={handleSelectProtocol}
+            onSelectGeneration={handleSelectLiveGeneration}
             onRefresh={library.refresh}
             onNewChat={handleNewChat}
           />
@@ -240,7 +288,7 @@ export default function App() {
             datamodelText={panel.datamodelText}
             onComponentsChange={(v) => setPanel((p) => ({ ...p, componentsText: v }))}
             onDatamodelChange={(v) => setPanel((p) => ({ ...p, datamodelText: v }))}
-            streaming={gen.isGenerating}
+            streaming={gen.isGenerating && panelAttachedRef.current}
             protocolId={panel.protocolId}
             presetId={panel.presetId}
             renderingUrl={renderingUrl}
