@@ -25,7 +25,16 @@ export function QrCodeCard({ url }: QrCodeCardProps) {
         <QRCodeSVG value={url} size={152} level="M" />
       </div>
       <p className="text-center text-[10px] font-medium leading-tight text-slate-500">
-        Scan with AGenUI Playground
+        Scan with{" "}
+        <a
+          href="http://localhost:3000/playground"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Open AGenUI Playground"
+          className="text-brand-500 transition hover:underline"
+        >
+          AGenUI Playground
+        </a>
       </p>
       <button
         type="button"

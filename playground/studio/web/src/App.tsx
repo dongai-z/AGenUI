@@ -38,7 +38,7 @@ const EMPTY_PANEL: PanelState = {
 
 export default function App() {
   const gen = useGeneration();
-  const { providers, active, serverInfo, refresh } = useProviders();
+  const { providers, active, serverInfo, loaded, refresh } = useProviders();
   const library = useLibrary();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -103,18 +103,24 @@ export default function App() {
       setSelection({ kind: "generation" });
 
       // Build multi-turn history from the last completed round (single-turn context).
+      // The assistant message must mirror the exact two-fenced-block output format
+      // the system prompt demands (block 1 = updateComponents, block 2 =
+      // updateDataModel). gen.done.components / gen.done.datamodel are already the
+      // full {"version", "updateComponents"} / {"version", "updateDataModel"} objects,
+      // so each is stringified into its own ```json block. Feeding the model a single
+      // combined object here makes it echo that shape back, which the two-block
+      // extractor cannot parse (-> "Could not extract A2UI protocol").
       const chatHistory: ChatMessage[] = [];
       if (gen.prompt && gen.done?.components) {
+        const blocks = [
+          "```json\n" + JSON.stringify(gen.done.components, null, 2) + "\n```",
+        ];
+        if (gen.done.datamodel) {
+          blocks.push("```json\n" + JSON.stringify(gen.done.datamodel, null, 2) + "\n```");
+        }
         chatHistory.push(
           { role: "user", content: gen.prompt },
-          {
-            role: "assistant",
-            content: JSON.stringify(
-              { updateComponents: gen.done.components, updateDataModel: gen.done.datamodel },
-              null,
-              2,
-            ),
-          },
+          { role: "assistant", content: blocks.join("\n\n") },
         );
       }
 
@@ -138,10 +144,17 @@ export default function App() {
     [gen],
   );
 
-  // --- New chat: clear conversation history ---
+  // --- New chat: start a brand-new conversation ---
+  // Clears the archived history and the live round (aborting any in-flight
+  // stream), detaches the panel from the stream, and resets the right panel
+  // so the user lands on a pristine, empty conversation page.
   const handleNewChat = useCallback(() => {
     setHistory([]);
-  }, []);
+    gen.reset();
+    panelAttachedRef.current = false;
+    setSelection(null);
+    setPanel(EMPTY_PANEL);
+  }, [gen.reset]);
 
   // --- Load a preset sample into the panel ---
   const handleSelectPreset = useCallback(async (id: string) => {
@@ -273,6 +286,7 @@ export default function App() {
           <InputBar
             providers={providers}
             active={active}
+            providersLoaded={loaded}
             isGenerating={gen.isGenerating}
             onSend={handleGenerate}
             onStop={gen.stop}

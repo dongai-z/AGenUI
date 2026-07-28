@@ -175,6 +175,18 @@ export function useGeneration() {
     setState((s) => ({ ...s, status: "idle", currentStage: null }));
   }, [clearThrottle]);
 
+  /** Reset to the pristine idle state to start a brand-new conversation.
+   * Aborts any in-flight stream and clears the prompt, thinking text and
+   * result so nothing from the previous round lingers. */
+  const reset = useCallback(() => {
+    abortedRef.current = true;
+    abortRef.current?.abort();
+    clearThrottle();
+    bufferRef.current = "";
+    reasoningRef.current = "";
+    setState(INITIAL);
+  }, [clearThrottle]);
+
   /** Editor onChange handlers (manual edits after generation completes). */
   const setComponentsText = useCallback((text: string) => {
     setState((s) => ({ ...s, componentsText: text }));
@@ -188,6 +200,7 @@ export function useGeneration() {
     isGenerating: state.status === "generating",
     generate,
     stop,
+    reset,
     setComponentsText,
     setDatamodelText,
   };

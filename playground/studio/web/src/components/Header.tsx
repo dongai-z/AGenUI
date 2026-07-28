@@ -1,6 +1,6 @@
 /** Top bar: sidebar toggle, brand, LAN address hint. */
 
-import { MenuIcon } from "@/components/icons";
+import { DownloadIcon, MenuIcon } from "@/components/icons";
 import mainpageIcon from "@/assets/mainpage_icon.png";
 import type { ServerInfo } from "@/types";
 
@@ -22,7 +22,13 @@ export function Header({ sidebarOpen, onToggleSidebar, serverInfo }: HeaderProps
         <MenuIcon size={18} />
       </button>
 
-      <div className="flex items-center gap-2">
+      <a
+        href="https://genui.amap.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Visit genui.amap.com"
+        className="flex items-center gap-2 rounded-md transition hover:opacity-80"
+      >
         <img
           src={mainpageIcon}
           alt="AGenUI Studio"
@@ -31,9 +37,19 @@ export function Header({ sidebarOpen, onToggleSidebar, serverInfo }: HeaderProps
         <h1 className="text-sm font-semibold tracking-wide text-slate-800">
           AGenUI Studio
         </h1>
-      </div>
+      </a>
 
       <div className="ml-auto flex items-center gap-3">
+        <a
+          href="http://localhost:3000/playground"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Download AGenUI Playground to preview on your device"
+          className="flex items-center gap-1.5 rounded-full bg-brand-500 px-3 py-1 text-xs font-medium text-white shadow-sm transition hover:bg-brand-600"
+        >
+          <DownloadIcon size={13} />
+          Download Playground
+        </a>
         {serverInfo && (
           <span
             className="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs text-slate-500 sm:flex"

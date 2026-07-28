@@ -13,6 +13,7 @@ interface ConfigModalProps {
 
 export function ConfigModal({ open, onClose, onSaved }: ConfigModalProps) {
   const [providers, setProviders] = useState<ConfigProvider[]>([]);
+  const [originalNames, setOriginalNames] = useState<string[]>([]);
   const [newNames, setNewNames] = useState<Set<string>>(new Set());
   const [showKeys, setShowKeys] = useState<Set<string>>(new Set());
   const [saving, setSaving] = useState(false);
@@ -27,7 +28,10 @@ export function ConfigModal({ open, onClose, onSaved }: ConfigModalProps) {
     setNewNames(new Set());
     setShowKeys(new Set());
     fetchAllConfig()
-      .then((data) => setProviders(data.providers))
+      .then((data) => {
+        setProviders(data.providers);
+        setOriginalNames(data.providers.map((p) => p.name));
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, [open]);
@@ -73,7 +77,11 @@ export function ConfigModal({ open, onClose, onSaved }: ConfigModalProps) {
     setSaving(true);
     setError(null);
     try {
-      await saveConfig(providers);
+      // Providers present in the loaded config but no longer in the list were
+      // deleted by the user; tell the backend to remove them from config.json.
+      const currentNames = new Set(providers.map((p) => p.name));
+      const removed = originalNames.filter((n) => !currentNames.has(n));
+      await saveConfig(providers, removed);
       onSaved();
       onClose();
     } catch (e) {

@@ -31,7 +31,10 @@ export async function fetchAllConfig(): Promise<{ active: string | null; provide
   return getJson("/api/config/all");
 }
 
-export async function saveConfig(providers: ConfigProvider[]): Promise<void> {
+export async function saveConfig(
+  providers: ConfigProvider[],
+  removeProviders: string[] = [],
+): Promise<void> {
   const set_providers: Record<string, { base_url: string; api_key: string; model: string; max_tokens: number }> = {};
   for (const p of providers) {
     set_providers[p.name] = {
@@ -44,7 +47,10 @@ export async function saveConfig(providers: ConfigProvider[]): Promise<void> {
   const res = await fetch("/api/config", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ set_providers }),
+    body: JSON.stringify({
+      set_providers,
+      ...(removeProviders.length > 0 ? { remove_providers: removeProviders } : {}),
+    }),
   });
   if (!res.ok) {
     throw new Error(`POST /api/config failed: ${res.status}`);
