@@ -78,7 +78,13 @@ jobs:
 
       - name: Install NDK and CMake
         run: |
+          # 27.3: pinned by the SDK module for compiling native code.
           sdkmanager --install "ndk;27.3.13750724"
+          # 27.0: AGP 8.9 default NDK. The playground app module does not pin
+          # ndkVersion, so AGP uses this default for the packaging-time
+          # stripDebugSymbols step. If it is missing, stripping is silently
+          # skipped and the APK ships unstripped native libraries (~10x larger).
+          sdkmanager --install "ndk;27.0.12077973"
           sdkmanager --install "cmake;3.18.1"
 
       - name: Cache Gradle packages
