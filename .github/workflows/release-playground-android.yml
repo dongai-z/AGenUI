@@ -44,8 +44,14 @@ jobs:
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "Extracted version: ${VERSION} from tag: ${TAG}"
 
-          # Extract base version (x.y.z) - used for consistency check
+          # Extract base version (x.y.z) - used as the build version and for
+          # the consistency check, so suffix tags like AGenUI-1.4.0.beta1
+          # still build with version 1.4.0
           BASE_VERSION=$(echo "$VERSION" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
+          if [[ -z "${BASE_VERSION}" ]]; then
+            echo "::error::Cannot extract a base version (x.y.z) from tag: ${TAG}"
+            exit 1
+          fi
           echo "base_version=${BASE_VERSION}" >> "$GITHUB_OUTPUT"
           echo "Base version: ${BASE_VERSION}"
 
@@ -92,6 +98,26 @@ jobs:
           echo "${{ secrets.ANDROID_PLAYGROUND_KEYSTORE_BASE64 }}" | base64 -d > "${RUNNER_TEMP}/agenui-playground-release.jks"
           echo "Keystore restored to ${RUNNER_TEMP}/agenui-playground-release.jks"
 
+      # ==================== Verify signing secrets (masked, no values leaked) ====================
+      - name: Check signing secrets
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_PLAYGROUND_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_PLAYGROUND_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_PLAYGROUND_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_PLAYGROUND_KEY_PASSWORD }}
+        run: |
+          missing=()
+          [[ -n "${KEYSTORE_BASE64}" ]] || missing+=(ANDROID_PLAYGROUND_KEYSTORE_BASE64)
+          [[ -n "${KEYSTORE_PASSWORD}" ]] || missing+=(ANDROID_PLAYGROUND_KEYSTORE_PASSWORD)
+          [[ -n "${KEY_ALIAS}" ]] || missing+=(ANDROID_PLAYGROUND_KEY_ALIAS)
+          [[ -n "${KEY_PASSWORD}" ]] || missing+=(ANDROID_PLAYGROUND_KEY_PASSWORD)
+          if [[ ${#missing[@]} -gt 0 ]]; then
+            echo "::error::The following repository secrets are empty or not visible to this workflow: ${missing[*]}"
+            echo "Check Settings > Secrets and variables > Actions > Repository secrets (exact names, case-sensitive)."
+            exit 1
+          fi
+          echo "✅ All signing secrets are present"
+
       # ==================== Build signed APK ====================
       - name: Build signed Playground APK
         env:
@@ -101,13 +127,13 @@ jobs:
           ANDROID_PLAYGROUND_KEY_PASSWORD: ${{ secrets.ANDROID_PLAYGROUND_KEY_PASSWORD }}
         run: |
           ./scripts/android/build-playground.sh \
-            --version "${{ steps.version.outputs.version }}" \
+            --version "${{ steps.version.outputs.base_version }}" \
+            --artifact-name "AGenUI-Playground.apk" \
             --clean
 
       - name: Verify APK artifact
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          APK_PATH="dist/android/playground/AGenUI-Playground-${VERSION}-android.apk"
+          APK_PATH="dist/android/playground/AGenUI-Playground.apk"
           if [[ ! -f "$APK_PATH" ]]; then
             echo "::error::Expected APK not found: ${APK_PATH}"
             ls -la dist/android/playground/ 2>/dev/null || echo "dist/android/playground/ does not exist"
@@ -124,8 +150,8 @@ jobs:
           VERSION="${{ steps.version.outputs.version }}"
           TAG="${{ steps.version.outputs.tag }}"
           APK_DIR="dist/android/playground"
-          ARTIFACT="AGenUI-Playground-${VERSION}-android.apk"
-          echo "Uploading ${ARTIFACT} to release ${TAG}..."
+          ARTIFACT="AGenUI-Playground.apk"
+          echo "Uploading ${ARTIFACT} (tag ${TAG}, version ${VERSION}) to release ${TAG}..."
           gh release upload "${TAG}" "${APK_DIR}/${ARTIFACT}" "${APK_DIR}/${ARTIFACT}.sha256" --clobber
           echo "✅ Upload complete"
 
