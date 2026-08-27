@@ -161,6 +161,13 @@ jobs:
           OHPM_PUBLISH_ID: ${{ secrets.OHPM_PUBLISH_ID }}
           OHPM_PRIVATE_KEY_PASSWORD: ${{ secrets.OHPM_PRIVATE_KEY_PASSWORD }}
         run: |
+          # Fail fast if any required secret is missing; otherwise ohpm fails
+          # later with a confusing "content of private key" error.
+          if [[ -z "$OHPM_PRIVATE_KEY_BASE64" || -z "$OHPM_PUBLISH_ID" || -z "$OHPM_PRIVATE_KEY_PASSWORD" ]]; then
+            echo "::error::Missing secret(s). Required: OHPM_PRIVATE_KEY_BASE64, OHPM_PUBLISH_ID, OHPM_PRIVATE_KEY_PASSWORD."
+            exit 1
+          fi
+
           # Write the private key from the secret to a temp file (publish_ohpm_openharmony.sh
           # equivalent of KEY_PATH; the local machine path is not available in CI).
           # The secret stores the key base64-encoded to avoid newline/whitespace
@@ -179,8 +186,20 @@ jobs:
             exit 1
           fi
 
-          # Temporarily configure the private key password for signing.
-          ohpm config set private_key_password "$OHPM_PRIVATE_KEY_PASSWORD"
+          # Configure the private key password. Write it directly into
+          # ~/.ohpm/.ohpmrc instead of `ohpm config set`, because the CLT ohpm
+          # reports "Invalid key: private_key_password" for the config command
+          # (which leaves the encrypted key undecryptable and makes publish
+          # retry forever). config set writes to the same file anyway.
+          mkdir -p "$HOME/.ohpm"
+          touch "$HOME/.ohpm/.ohpmrc"
+          chmod 600 "$HOME/.ohpm/.ohpmrc"
+          if grep -q '^private_key_password=' "$HOME/.ohpm/.ohpmrc"; then
+            sed -i "s|^private_key_password=.*|private_key_password=${OHPM_PRIVATE_KEY_PASSWORD}|" "$HOME/.ohpm/.ohpmrc"
+          else
+            echo "private_key_password=${OHPM_PRIVATE_KEY_PASSWORD}" >> "$HOME/.ohpm/.ohpmrc"
+          fi
+          echo "private_key_password configured in ~/.ohpm/.ohpmrc"
 
           echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
           ohpm publish dist/harmony/release/agenui.har \
