@@ -1,0 +1,78 @@
+# TEMPORARY debug workflow: inspect how the CLT ohpm reads the private key
+# password and what triggers "The content of private key in the key_path error".
+# DELETE this file once the ohpm publish issue is resolved.
+name: Debug - OHPM internals
+
+on:
+  push:
+    branches: [feat/publish_openharmony_test]
+    paths:
+      - '.github/workflows/debug-ohpm.yml'
+
+permissions:
+  contents: read
+
+env:
+  CLT_FILENAME: "commandline-tools-linux-x64-6.0.1.251.zip"
+
+jobs:
+  debug-ohpm:
+    name: Inspect CLT ohpm internals
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Cache HarmonyOS Command Line Tools
+        id: cache-clt
+        uses: actions/cache@v6
+        with:
+          path: ${{ env.CLT_FILENAME }}
+          key: harmonyos-clt-${{ env.CLT_FILENAME }}
+
+      - name: Download HarmonyOS Command Line Tools
+        if: steps.cache-clt.outputs.cache-hit != 'true'
+        run: |
+          curl -SL -O "https://huggingface.co/csukuangfj/harmonyos-commandline-tools/resolve/main/${CLT_FILENAME}"
+
+      - name: Extract Command Line Tools
+        run: |
+          unzip -q "${CLT_FILENAME}" -d .
+          echo "extracted"
+
+      - name: Inspect ohpm
+        run: |
+          set -x
+          CLT_ROOT="$(pwd)/command-line-tools"
+          OHPM="$CLT_ROOT/ohpm/bin/ohpm"
+
+          echo "=== ohpm version ==="
+          "$OHPM" -v || true
+
+          echo "=== ohpm directory layout ==="
+          find "$CLT_ROOT/ohpm" -maxdepth 2 | head -60
+
+          echo "=== ohpm config list -j (known config keys) ==="
+          "$OHPM" config list -j 2>&1 | head -80 || true
+
+          echo "=== files containing the error message ==="
+          grep -rl "content of private key" "$CLT_ROOT/ohpm" 2>/dev/null | head
+
+          echo "=== code context around the error message ==="
+          for f in $(grep -rl "content of private key" "$CLT_ROOT/ohpm" 2>/dev/null | head -3); do
+            echo "--- $f ---"
+            grep -o ".\{400\}content of private key.\{200\}" "$f" | head -5
+          done
+
+          echo "=== where is the password read from? ==="
+          for f in $(grep -rl "content of private key" "$CLT_ROOT/ohpm" 2>/dev/null | head -3); do
+            echo "--- $f ---"
+            grep -o ".\{200\}private_key_password.\{200\}" "$f" | head -5
+            grep -o ".\{200\}key_password.\{200\}" "$f" | head -5
+            grep -o ".\{150\}passphrase.\{150\}" "$f" | head -10
+          done
+
+          echo "=== how is .ohpmrc parsed / env overrides? ==="
+          for f in $(grep -rl "ohpmrc" "$CLT_ROOT/ohpm" 2>/dev/null | head -3); do
+            echo "--- $f ---"
+            grep -o ".\{150\}OHPM_\(HOME\|RC\|PASSWORD\)[A-Z_]*.\{150\}" "$f" | head -10
+          done
