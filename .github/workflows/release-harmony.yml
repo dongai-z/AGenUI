@@ -215,17 +215,21 @@ jobs:
 
           # TEMPORARY DEBUG: understand how ohpm 6.x encrypts/decrypts the
           # key_passphrase rc value (remove once publish works).
-          echo "--- DEBUG: rc key_passphrase after config set ---"
-          awk -F= '/^key_passphrase=/{print "rc value length:", length($2)}' "$HOME/.ohpm/.ohpmrc"
-          echo "--- DEBUG: decryption code context ---"
-          grep -rl "must be encrypted" "$DEVECO_HOME/ohpm" 2>/dev/null | head -3 | while read -r _f; do
-            echo "file: $_f"
-            grep -o ".\{400\}must be encrypted.\{300\}" "$_f" | head -3
-          done
-          echo "--- DEBUG: crypto key material ---"
-          grep -rno "crypto\.\(createDecipheriv\|createCipheriv\|privateDecrypt\)\|aes-\(128\|256\)-[a-z]*\|machineId\|getMachineId\|os\.hostname" "$DEVECO_HOME/ohpm/lib" 2>/dev/null | head -20
-          echo "--- DEBUG: .ohpm dir contents ---"
-          find "$HOME/.ohpm" -maxdepth 2 -type f | head -20
+          echo "--- DEBUG v2: ohpm config help ---"
+          ohpm config --help 2>&1 | head -40
+          ohpm --help 2>&1 | grep -i "encrypt" | head -10
+          echo "--- DEBUG v2: config-encrypt module layout ---"
+          find "$DEVECO_HOME/ohpm/lib/core/config-encrypt" -type f | head -30
+          echo "--- DEBUG v2: aesCryptUtil content ---"
+          head -c 8000 "$DEVECO_HOME/ohpm/lib/core/config-encrypt/crypto/aesCryptUtil.js"
+          echo ""
+          echo "--- DEBUG v2: where is key_passphrase handled ---"
+          grep -rno ".\{120\}key_passphrase.\{250\}" "$DEVECO_HOME/ohpm/lib" 2>/dev/null | head -15
+          echo "--- DEBUG v2: ufile usage ---"
+          grep -rno ".\{150\}ufile.\{200\}" "$DEVECO_HOME/ohpm/lib" 2>/dev/null | head -10
+          awk '{print "ufile size:", length($0)}' "$HOME/.ohpm/ufile" | head -2
+          echo "--- DEBUG v2: encrypt entry points ---"
+          grep -rno ".\{100\}config-encrypt.\{200\}" "$DEVECO_HOME/ohpm/lib/commands" "$DEVECO_HOME/ohpm/lib/config" 2>/dev/null | head -10
           echo "--- DEBUG END ---"
 
           echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
