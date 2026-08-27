@@ -202,20 +202,23 @@ jobs:
             exit 1
           fi
 
-          # Configure the private key password. Write it directly into
-          # ~/.ohpm/.ohpmrc instead of `ohpm config set`, because the CLT ohpm
-          # reports "Invalid key: private_key_password" for the config command
-          # (which leaves the encrypted key undecryptable and makes publish
-          # retry forever). config set writes to the same file anyway.
+          # Configure the private key password. The config key name depends
+          # on the ohpm version: CLT ohpm 6.x uses "key_passphrase" (shown in
+          # `ohpm config list -j`), while DevEco ohpm 5.x used
+          # "private_key_password". Write both so the step works with either,
+          # and avoid `set -x` so the password is never echoed to the log.
           mkdir -p "$HOME/.ohpm"
           touch "$HOME/.ohpm/.ohpmrc"
           chmod 600 "$HOME/.ohpm/.ohpmrc"
-          if grep -q '^private_key_password=' "$HOME/.ohpm/.ohpmrc"; then
-            sed -i "s|^private_key_password=.*|private_key_password=${OHPM_PRIVATE_KEY_PASSWORD}|" "$HOME/.ohpm/.ohpmrc"
-          else
-            echo "private_key_password=${OHPM_PRIVATE_KEY_PASSWORD}" >> "$HOME/.ohpm/.ohpmrc"
-          fi
-          echo "private_key_password configured in ~/.ohpm/.ohpmrc"
+          for _rc_key in key_passphrase private_key_password; do
+            if grep -q "^${_rc_key}=" "$HOME/.ohpm/.ohpmrc"; then
+              sed -i "s|^${_rc_key}=.*|${_rc_key}=${OHPM_PRIVATE_KEY_PASSWORD}|" "$HOME/.ohpm/.ohpmrc"
+            else
+              echo "${_rc_key}=${OHPM_PRIVATE_KEY_PASSWORD}" >> "$HOME/.ohpm/.ohpmrc"
+            fi
+          done
+          ohpm config set key_passphrase "$OHPM_PRIVATE_KEY_PASSWORD" >/dev/null 2>&1 || true
+          echo "passphrase configured in ~/.ohpm/.ohpmrc (key_passphrase + private_key_password)"
 
           echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
           ohpm publish dist/harmony/release/agenui.har \
