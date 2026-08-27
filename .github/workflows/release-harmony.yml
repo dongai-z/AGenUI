@@ -157,16 +157,27 @@ jobs:
       - name: Publish HAR to ohpm.openharmony.cn
         if: steps.version.outputs.is_stable == 'true'
         env:
-          OHPM_PRIVATE_KEY: ${{ secrets.OHPM_PRIVATE_KEY }}
+          OHPM_PRIVATE_KEY_BASE64: ${{ secrets.OHPM_PRIVATE_KEY_BASE64 }}
           OHPM_PUBLISH_ID: ${{ secrets.OHPM_PUBLISH_ID }}
           OHPM_PRIVATE_KEY_PASSWORD: ${{ secrets.OHPM_PRIVATE_KEY_PASSWORD }}
         run: |
           # Write the private key from the secret to a temp file (publish_ohpm_openharmony.sh
           # equivalent of KEY_PATH; the local machine path is not available in CI).
+          # The secret stores the key base64-encoded to avoid newline/whitespace
+          # corruption when pasting the multi-line PEM into GitHub Secrets.
           KEY_DIR="$(mktemp -d)"
           KEY_PATH="${KEY_DIR}/ohpm_agenui.key"
-          printf '%s\n' "$OHPM_PRIVATE_KEY" > "$KEY_PATH"
+          echo "$OHPM_PRIVATE_KEY_BASE64" | base64 -d > "$KEY_PATH"
           chmod 600 "$KEY_PATH"
+
+          # Fail fast if the decoded key is not a valid PEM private key,
+          # otherwise ohpm retries signing indefinitely.
+          if ! grep -q -- "-----BEGIN RSA PRIVATE KEY-----" "$KEY_PATH" || ! grep -q -- "-----END RSA PRIVATE KEY-----" "$KEY_PATH"; then
+            echo "::error::Decoded OHPM private key is invalid (missing PEM markers)."
+            echo "Re-create the OHPM_PRIVATE_KEY_BASE64 secret with: base64 -b 0 -i ohpm_agenui.key"
+            rm -rf "$KEY_DIR"
+            exit 1
+          fi
 
           # Temporarily configure the private key password for signing.
           ohpm config set private_key_password "$OHPM_PRIVATE_KEY_PASSWORD"
