@@ -1,22 +1,25 @@
 name: CI - Android
 
+# Temporarily disabled: automatic triggers (push / pull_request) are
+# commented out; the workflow can still be triggered manually.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'core/**'
-      - 'platforms/android/**'
-      - 'scripts/android/**'
-      - 'scripts/common/**'
-      - '.github/workflows/ci-android.yml'
-  pull_request:
-    branches: [main]
-    paths:
-      - 'core/**'
-      - 'platforms/android/**'
-      - 'scripts/android/**'
-      - 'scripts/common/**'
-      - '.github/workflows/ci-android.yml'
+  workflow_dispatch:
+#  push:
+#    branches: [main]
+#    paths:
+#      - 'core/**'
+#      - 'platforms/android/**'
+#      - 'scripts/android/**'
+#      - 'scripts/common/**'
+#      - '.github/workflows/ci-android.yml'
+#  pull_request:
+#    branches: [main]
+#    paths:
+#      - 'core/**'
+#      - 'platforms/android/**'
+#      - 'scripts/android/**'
+#      - 'scripts/common/**'
+#      - '.github/workflows/ci-android.yml'
 
 concurrency:
   group: ci-android-${{ github.ref }}

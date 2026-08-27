@@ -1,8 +1,10 @@
 name: Release - Android
 
+# Temporarily disabled: the automatic release trigger is commented out;
+# the workflow can still be triggered manually with an explicit tag.
 on:
-  release:
-    types: [created]
+#  release:
+#    types: [created]
   workflow_dispatch:
     inputs:
       tag:

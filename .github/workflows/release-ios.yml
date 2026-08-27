@@ -1,8 +1,11 @@
 name: Release - iOS
 
+# Temporarily disabled: the automatic release trigger is commented out;
+# the workflow can still be triggered manually.
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+#  release:
+#    types: [created]
 
 permissions:
   contents: write

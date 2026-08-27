@@ -1,24 +1,27 @@
 name: CI - iOS
 
+# Temporarily disabled: automatic triggers (push / pull_request) are
+# commented out; the workflow can still be triggered manually.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'core/**'
-      - 'platforms/ios/**'
-      - 'playground/ios/**'
-      - 'scripts/ios/**'
-      - 'scripts/common/**'
-      - '.github/workflows/ci-ios.yml'
-  pull_request:
-    branches: [main]
-    paths:
-      - 'core/**'
-      - 'platforms/ios/**'
-      - 'playground/ios/**'
-      - 'scripts/ios/**'
-      - 'scripts/common/**'
-      - '.github/workflows/ci-ios.yml'
+  workflow_dispatch:
+#  push:
+#    branches: [main]
+#    paths:
+#      - 'core/**'
+#      - 'platforms/ios/**'
+#      - 'playground/ios/**'
+#      - 'scripts/ios/**'
+#      - 'scripts/common/**'
+#      - '.github/workflows/ci-ios.yml'
+#  pull_request:
+#    branches: [main]
+#    paths:
+#      - 'core/**'
+#      - 'platforms/ios/**'
+#      - 'playground/ios/**'
+#      - 'scripts/ios/**'
+#      - 'scripts/common/**'
+#      - '.github/workflows/ci-ios.yml'
 
 concurrency:
   group: ci-ios-${{ github.ref }}
