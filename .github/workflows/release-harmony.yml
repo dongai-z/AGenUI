@@ -202,50 +202,49 @@ jobs:
             exit 1
           fi
 
-          # Configure the private key password. ohpm 6.x (CLT) reads it from
-          # the "key_passphrase" item of .ohpmrc, which MUST be stored
-          # encrypted (config-encrypt module, key derived from ~/.ohpm/ufile).
-          # `ohpm config set` writes plaintext in this build, so encrypt via
-          # ohpm's own module and write the ciphertext into the rc file.
-          echo "--- ENCRYPT PROBE ---"
-          node -e 'console.log("node:", process.version)' || true
-          head -c 3000 "$DEVECO_HOME/ohpm/lib/core/config-encrypt/index.js"
-          echo ""
-          grep -o "encrypt[^\"',;)]*" "$DEVECO_HOME/ohpm/lib/core/config-encrypt/types.js" | sort -u | head -10
-          ENCRYPTED_VALUE=$(node <<'EOF'
-          const path = require('path');
-          const base = process.env.DEVECO_HOME + '/ohpm/lib/core/config-encrypt';
-          const ce = require(base + '/index.js');
-          console.error('exports: ' + Object.keys(ce).join(','));
-          const fn = ce.encrypt || ce.encryptConfigValue || ce.encryptValue;
-          if (!fn) { console.error('no encrypt export'); process.exit(3); }
-          Promise.resolve(fn('probe_value')).then(v => {
-            if (typeof v !== 'string') v = v.value || JSON.stringify(v);
-            console.log(v);
-          }).catch(err => { console.error('encrypt failed: ' + err.message); process.exit(3); });
+          # Configure the private key password. ohpm 6.x requires the rc value
+          # of "key_passphrase" to be ENCRYPTED (00602020 otherwise). Its CLI
+          # only encrypts through the interactive startEncrypt flow, so try in
+          # order: 1) piped interactive `config set key_passphrase` (no inline
+          # value), 2) calling the Config.encrypt method directly via node.
+          echo "--- PASSPHRASE ENCRYPT: attempt 1 (piped interactive config set) ---"
+          printf '%s\n' "$OHPM_PRIVATE_KEY_PASSWORD" | ohpm config set key_passphrase || true
+          rc_len() { awk -F= '/^key_passphrase=/{print length($2)}' "$HOME/.ohpm/.ohpmrc" 2>/dev/null | head -1; }
+          RC_LEN=$(rc_len); RC_LEN="${RC_LEN:-0}"
+          echo "rc key_passphrase length: ${RC_LEN} (plaintext would be ${#OHPM_PRIVATE_KEY_PASSWORD})"
+
+          if [[ "$RC_LEN" -le "${#OHPM_PRIVATE_KEY_PASSWORD}" ]]; then
+            echo "--- PASSPHRASE ENCRYPT: attempt 2 (Config.encrypt via node) ---"
+            ENCRYPTED_VALUE=$(node <<'EOF'
+            const base = process.env.DEVECO_HOME + '/ohpm/lib';
+            try {
+              const cryptoMod = require(base + '/core/config-encrypt/crypto/index.js');
+              console.error('crypto exports: ' + Object.keys(cryptoMod).join(','));
+              const cfgMod = require(base + '/config/config.js');
+              console.error('config exports: ' + Object.keys(cfgMod).join(','));
+              const Config = cfgMod.Config || cfgMod.default;
+              const c = new Config();
+              console.error('Config methods: ' + Object.getOwnPropertyNames(Object.getPrototypeOf(c)).join(','));
+              if (typeof c.encrypt !== 'function') { console.error('no Config.encrypt method'); process.exit(3); }
+              Promise.resolve(c.encrypt(process.env.OHPM_PRIVATE_KEY_PASSWORD)).then(v => {
+                if (typeof v !== 'string') v = v.value || JSON.stringify(v);
+                console.log(v);
+              }).catch(e => { console.error('Config.encrypt failed: ' + e.message); process.exit(3); });
+            } catch (e) { console.error('node probe failed: ' + e.message); process.exit(3); }
           EOF
-          ) || true
-          if [[ -n "$ENCRYPTED_VALUE" ]]; then
-            echo "encrypt entry point works (ciphertext length: ${#ENCRYPTED_VALUE})"
-            REAL_ENCRYPTED=$(node <<'EOF'
-            const base = process.env.DEVECO_HOME + '/ohpm/lib/core/config-encrypt';
-            const ce = require(base + '/index.js');
-            const fn = ce.encrypt || ce.encryptConfigValue || ce.encryptValue;
-            Promise.resolve(fn(process.env.OHPM_PRIVATE_KEY_PASSWORD)).then(v => {
-              if (typeof v !== 'string') v = v.value || JSON.stringify(v);
-              console.log(v);
-            }).catch(err => { console.error('encrypt failed: ' + err.message); process.exit(1); });
-          EOF
-            )
-            grep -q '^key_passphrase=' "$HOME/.ohpm/.ohpmrc" \
-              && sed -i "s|^key_passphrase=.*|key_passphrase=${REAL_ENCRYPTED}|" "$HOME/.ohpm/.ohpmrc" \
-              || echo "key_passphrase=${REAL_ENCRYPTED}" >> "$HOME/.ohpm/.ohpmrc"
-            echo "passphrase stored encrypted in ~/.ohpm/.ohpmrc"
-          else
-            echo "::warning::encrypt entry point unavailable, falling back to plain config set"
-            ohpm config set key_passphrase "$OHPM_PRIVATE_KEY_PASSWORD" || true
+            ) || true
+            if [[ -n "$ENCRYPTED_VALUE" ]]; then
+              echo "Config.encrypt works (ciphertext length: ${#ENCRYPTED_VALUE})"
+              grep -q '^key_passphrase=' "$HOME/.ohpm/.ohpmrc" \
+                && sed -i "s|^key_passphrase=.*|key_passphrase=${ENCRYPTED_VALUE}|" "$HOME/.ohpm/.ohpmrc" \
+                || echo "key_passphrase=${ENCRYPTED_VALUE}" >> "$HOME/.ohpm/.ohpmrc"
+              echo "passphrase stored encrypted in ~/.ohpm/.ohpmrc"
+            else
+              echo "::error::Could not encrypt key_passphrase; publish will fail with 00602020. Check probe output above."
+              rm -rf "$KEY_DIR"
+              exit 1
+            fi
           fi
-          echo "--- ENCRYPT PROBE END ---"
 
           echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
           ohpm publish dist/harmony/release/agenui.har \
