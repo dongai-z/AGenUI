@@ -60,6 +60,21 @@ jobs:
           fi
           echo "✅ Version verified: header=${HEADER_VERSION}, tag base=${BASE_VERSION}"
 
+      # The OHPM-published version comes from the HAR's embedded
+      # oh-package.json5, so it must also match the tag. build.sh only warns
+      # on mismatch, but a wrong/duplicate version would fail on the public
+      # registry (same version cannot be re-published), so fail fast here.
+      - name: Verify oh-package.json5 version
+        run: |
+          PKG_VERSION=$(grep -o '"version"[[:space:]]*:[[:space:]]*"[^"]*"' platforms/harmony/agenui/oh-package.json5 | sed 's/.*"version"[[:space:]]*:[[:space:]]*"//;s/"//')
+          BASE_VERSION="${{ steps.version.outputs.base_version }}"
+          if [[ "$PKG_VERSION" != "$BASE_VERSION" ]]; then
+            echo "::error::Version mismatch! Tag base version: ${BASE_VERSION}, oh-package.json5: ${PKG_VERSION}"
+            echo "Please update platforms/harmony/agenui/oh-package.json5 to match the tag before releasing."
+            exit 1
+          fi
+          echo "✅ oh-package.json5 version verified: ${PKG_VERSION}"
+
       # ==================== Build Environment ====================
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -135,6 +150,37 @@ jobs:
           gh release upload "${TAG}" "${HAR_DEST}" --clobber
           echo "✅ Upload complete"
 
+      # ==================== OHPM Publish (stable releases only) ====================
+      # Mirrors the iOS (pod trunk push) / Android (Maven) rule: any AGenUI-*
+      # tag builds and uploads to GitHub Release, but only a pure x.y.z stable
+      # tag is published to the ohpm public registry.
+      - name: Publish HAR to ohpm.openharmony.cn
+        if: steps.version.outputs.is_stable == 'true'
+        env:
+          OHPM_PRIVATE_KEY: ${{ secrets.OHPM_PRIVATE_KEY }}
+          OHPM_PUBLISH_ID: ${{ secrets.OHPM_PUBLISH_ID }}
+          OHPM_PRIVATE_KEY_PASSWORD: ${{ secrets.OHPM_PRIVATE_KEY_PASSWORD }}
+        run: |
+          # Write the private key from the secret to a temp file (publish_ohpm_openharmony.sh
+          # equivalent of KEY_PATH; the local machine path is not available in CI).
+          KEY_DIR="$(mktemp -d)"
+          KEY_PATH="${KEY_DIR}/ohpm_agenui.key"
+          printf '%s\n' "$OHPM_PRIVATE_KEY" > "$KEY_PATH"
+          chmod 600 "$KEY_PATH"
+
+          # Temporarily configure the private key password for signing.
+          ohpm config set private_key_password "$OHPM_PRIVATE_KEY_PASSWORD"
+
+          echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
+          ohpm publish dist/harmony/release/agenui.har \
+            --publish_registry "https://ohpm.openharmony.cn/ohpm/" \
+            --publish_id "$OHPM_PUBLISH_ID" \
+            --key_path "$KEY_PATH"
+
+          # Clean up the private key file.
+          rm -rf "$KEY_DIR"
+          echo "✅ OHPM publish complete"
+
       # ==================== Summary ====================
       - name: Summary
         if: success()
@@ -148,9 +194,24 @@ jobs:
           echo "| Version | \`${VERSION}\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Release Type | $([ "$IS_STABLE" = 'true' ] && echo 'Stable' || echo 'Pre-release') |" >> "$GITHUB_STEP_SUMMARY"
           echo "| GitHub Release | HAR uploaded ✅ |" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$IS_STABLE" == "true" ]]; then
+            echo "| OHPM Registry | published ✅ |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| OHPM Registry | skipped (pre-release) ⏭️ |" >> "$GITHUB_STEP_SUMMARY"
+          fi
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "### Uploaded Artifacts" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "| File | Description |" >> "$GITHUB_STEP_SUMMARY"
           echo "|------|-------------|" >> "$GITHUB_STEP_SUMMARY"
           echo "| \`AGenUI-${VERSION}-harmony.har\` | Full HAR (includes all .so) |" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$IS_STABLE" == "true" ]]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Users can now integrate via:" >> "$GITHUB_STEP_SUMMARY"
+            echo "\`\`\`shell" >> "$GITHUB_STEP_SUMMARY"
+            echo "ohpm install @agenui/agenui" >> "$GITHUB_STEP_SUMMARY"
+            echo "\`\`\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "> Pre-release builds are uploaded to GitHub Release only." >> "$GITHUB_STEP_SUMMARY"
+          fi
