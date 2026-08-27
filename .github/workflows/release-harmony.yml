@@ -202,23 +202,16 @@ jobs:
             exit 1
           fi
 
-          # Configure the private key password. The config key name depends
-          # on the ohpm version: CLT ohpm 6.x uses "key_passphrase" (shown in
-          # `ohpm config list -j`), while DevEco ohpm 5.x used
-          # "private_key_password". Write both so the step works with either,
-          # and avoid `set -x` so the password is never echoed to the log.
-          mkdir -p "$HOME/.ohpm"
-          touch "$HOME/.ohpm/.ohpmrc"
-          chmod 600 "$HOME/.ohpm/.ohpmrc"
-          for _rc_key in key_passphrase private_key_password; do
-            if grep -q "^${_rc_key}=" "$HOME/.ohpm/.ohpmrc"; then
-              sed -i "s|^${_rc_key}=.*|${_rc_key}=${OHPM_PRIVATE_KEY_PASSWORD}|" "$HOME/.ohpm/.ohpmrc"
-            else
-              echo "${_rc_key}=${OHPM_PRIVATE_KEY_PASSWORD}" >> "$HOME/.ohpm/.ohpmrc"
-            fi
-          done
-          ohpm config set key_passphrase "$OHPM_PRIVATE_KEY_PASSWORD" >/dev/null 2>&1 || true
-          echo "passphrase configured in ~/.ohpm/.ohpmrc (key_passphrase + private_key_password)"
+          # Configure the private key password. ohpm 6.x (CLT) reads it from
+          # the "key_passphrase" item of .ohpmrc, which MUST be stored
+          # encrypted - only `ohpm config set` writes it correctly (a
+          # plaintext value causes error 00602020 "Decryption Failed").
+          if ! ohpm config set key_passphrase "$OHPM_PRIVATE_KEY_PASSWORD"; then
+            echo "::error::Failed to set key_passphrase via ohpm config."
+            rm -rf "$KEY_DIR"
+            exit 1
+          fi
+          echo "passphrase configured via 'ohpm config set key_passphrase'"
 
           echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
           ohpm publish dist/harmony/release/agenui.har \
