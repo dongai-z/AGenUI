@@ -204,33 +204,48 @@ jobs:
 
           # Configure the private key password. ohpm 6.x (CLT) reads it from
           # the "key_passphrase" item of .ohpmrc, which MUST be stored
-          # encrypted - only `ohpm config set` writes it correctly (a
-          # plaintext value causes error 00602020 "Decryption Failed").
-          if ! ohpm config set key_passphrase "$OHPM_PRIVATE_KEY_PASSWORD"; then
-            echo "::error::Failed to set key_passphrase via ohpm config."
-            rm -rf "$KEY_DIR"
-            exit 1
-          fi
-          echo "passphrase configured via 'ohpm config set key_passphrase'"
-
-          # TEMPORARY DEBUG: understand how ohpm 6.x encrypts/decrypts the
-          # key_passphrase rc value (remove once publish works).
-          echo "--- DEBUG v2: ohpm config help ---"
-          ohpm config --help 2>&1 | head -40
-          ohpm --help 2>&1 | grep -i "encrypt" | head -10
-          echo "--- DEBUG v2: config-encrypt module layout ---"
-          find "$DEVECO_HOME/ohpm/lib/core/config-encrypt" -type f | head -30
-          echo "--- DEBUG v2: aesCryptUtil content ---"
-          head -c 8000 "$DEVECO_HOME/ohpm/lib/core/config-encrypt/crypto/aesCryptUtil.js"
+          # encrypted (config-encrypt module, key derived from ~/.ohpm/ufile).
+          # `ohpm config set` writes plaintext in this build, so encrypt via
+          # ohpm's own module and write the ciphertext into the rc file.
+          echo "--- ENCRYPT PROBE ---"
+          node -e 'console.log("node:", process.version)' || true
+          head -c 3000 "$DEVECO_HOME/ohpm/lib/core/config-encrypt/index.js"
           echo ""
-          echo "--- DEBUG v2: where is key_passphrase handled ---"
-          grep -rno ".\{120\}key_passphrase.\{250\}" "$DEVECO_HOME/ohpm/lib" 2>/dev/null | head -15
-          echo "--- DEBUG v2: ufile usage ---"
-          grep -rno ".\{150\}ufile.\{200\}" "$DEVECO_HOME/ohpm/lib" 2>/dev/null | head -10
-          awk '{print "ufile size:", length($0)}' "$HOME/.ohpm/ufile" | head -2
-          echo "--- DEBUG v2: encrypt entry points ---"
-          grep -rno ".\{100\}config-encrypt.\{200\}" "$DEVECO_HOME/ohpm/lib/commands" "$DEVECO_HOME/ohpm/lib/config" 2>/dev/null | head -10
-          echo "--- DEBUG END ---"
+          grep -o "encrypt[^\"',;)]*" "$DEVECO_HOME/ohpm/lib/core/config-encrypt/types.js" | sort -u | head -10
+          ENCRYPTED_VALUE=$(node <<'EOF'
+          const path = require('path');
+          const base = process.env.DEVECO_HOME + '/ohpm/lib/core/config-encrypt';
+          const ce = require(base + '/index.js');
+          console.error('exports: ' + Object.keys(ce).join(','));
+          const fn = ce.encrypt || ce.encryptConfigValue || ce.encryptValue;
+          if (!fn) { console.error('no encrypt export'); process.exit(3); }
+          Promise.resolve(fn('probe_value')).then(v => {
+            if (typeof v !== 'string') v = v.value || JSON.stringify(v);
+            console.log(v);
+          }).catch(err => { console.error('encrypt failed: ' + err.message); process.exit(3); });
+          EOF
+          ) || true
+          if [[ -n "$ENCRYPTED_VALUE" ]]; then
+            echo "encrypt entry point works (ciphertext length: ${#ENCRYPTED_VALUE})"
+            REAL_ENCRYPTED=$(node <<'EOF'
+            const base = process.env.DEVECO_HOME + '/ohpm/lib/core/config-encrypt';
+            const ce = require(base + '/index.js');
+            const fn = ce.encrypt || ce.encryptConfigValue || ce.encryptValue;
+            Promise.resolve(fn(process.env.OHPM_PRIVATE_KEY_PASSWORD)).then(v => {
+              if (typeof v !== 'string') v = v.value || JSON.stringify(v);
+              console.log(v);
+            }).catch(err => { console.error('encrypt failed: ' + err.message); process.exit(1); });
+          EOF
+            )
+            grep -q '^key_passphrase=' "$HOME/.ohpm/.ohpmrc" \
+              && sed -i "s|^key_passphrase=.*|key_passphrase=${REAL_ENCRYPTED}|" "$HOME/.ohpm/.ohpmrc" \
+              || echo "key_passphrase=${REAL_ENCRYPTED}" >> "$HOME/.ohpm/.ohpmrc"
+            echo "passphrase stored encrypted in ~/.ohpm/.ohpmrc"
+          else
+            echo "::warning::encrypt entry point unavailable, falling back to plain config set"
+            ohpm config set key_passphrase "$OHPM_PRIVATE_KEY_PASSWORD" || true
+          fi
+          echo "--- ENCRYPT PROBE END ---"
 
           echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
           ohpm publish dist/harmony/release/agenui.har \
