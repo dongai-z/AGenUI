@@ -203,47 +203,63 @@ jobs:
           fi
 
           # Configure the private key password. ohpm 6.x requires the rc value
-          # of "key_passphrase" to be ENCRYPTED (00602020 otherwise). Its CLI
-          # only encrypts through the interactive startEncrypt flow, so try in
-          # order: 1) piped interactive `config set key_passphrase` (no inline
-          # value), 2) calling the Config.encrypt method directly via node.
-          echo "--- PASSPHRASE ENCRYPT: attempt 1 (piped interactive config set) ---"
-          printf '%s\n' "$OHPM_PRIVATE_KEY_PASSWORD" | ohpm config set key_passphrase || true
-          rc_len() { awk -F= '/^key_passphrase=/{print length($2)}' "$HOME/.ohpm/.ohpmrc" 2>/dev/null | head -1; }
-          RC_LEN=$(rc_len); RC_LEN="${RC_LEN:-0}"
-          echo "rc key_passphrase length: ${RC_LEN} (plaintext would be ${#OHPM_PRIVATE_KEY_PASSWORD})"
-
-          if [[ "$RC_LEN" -le "${#OHPM_PRIVATE_KEY_PASSWORD}" ]]; then
-            echo "--- PASSPHRASE ENCRYPT: attempt 2 (Config.encrypt via node) ---"
-            ENCRYPTED_VALUE=$(node <<'EOF'
-            const base = process.env.DEVECO_HOME + '/ohpm/lib';
+          # of "key_passphrase" to be ENCRYPTED (00602020 otherwise). The
+          # encryption lives in Config.handleSecurityKey / the config-encrypt
+          # crypto module; probe them and write the ciphertext into .ohpmrc.
+          CFG_JS="$DEVECO_HOME/ohpm/lib/config/config.js"
+          CRYPTO_JS="$DEVECO_HOME/ohpm/lib/core/config-encrypt/crypto/index.js"
+          echo "--- PASSPHRASE ENCRYPT: code context ---"
+          grep -o ".\{100\}isSupportSecurityKey.\{500\}" "$CFG_JS" 2>/dev/null | head -3
+          grep -o ".\{100\}handleSecurityKey.\{800\}" "$CFG_JS" 2>/dev/null | head -3
+          grep -o ".\{50\}getOriginalKey.\{400\}" "$CFG_JS" 2>/dev/null | head -3
+          grep -o ".\{50\}createCrypto.\{600\}" "$CRYPTO_JS" 2>/dev/null | head -3
+          echo "--- PASSPHRASE ENCRYPT: runtime probe ---"
+          PROBE_OUT=$(node <<'EOF'
+          const base = process.env.DEVECO_HOME + '/ohpm/lib';
+          const pwd = process.env.OHPM_PRIVATE_KEY_PASSWORD;
+          const cryptoMod = require(base + '/core/config-encrypt/crypto/index.js');
+          const { Config } = require(base + '/config/config.js');
+          (async () => {
+            const c = new Config();
+            try { console.error('isSupportSecurityKey(key_passphrase):', c.isSupportSecurityKey('key_passphrase')); } catch (e) { console.error('isSupportSecurityKey err: ' + e.message); }
+            for (const args of [['key_passphrase', pwd], [pwd, 'key_passphrase'], ['key_passphrase', pwd, 'set']]) {
+              try {
+                let r = c.handleSecurityKey.apply(c, args);
+                if (r && typeof r.then === 'function') r = await r;
+                console.error('handleSecurityKey(' + args.length + ' args) => ' + typeof r + (typeof r === 'string' ? ' len ' + r.length : ' ' + JSON.stringify(r)));
+                if (typeof r === 'string' && r.length > pwd.length) { console.log('CIPHER=' + r); return; }
+              } catch (e) { console.error('handleSecurityKey err: ' + e.message); }
+            }
             try {
-              const cryptoMod = require(base + '/core/config-encrypt/crypto/index.js');
-              console.error('crypto exports: ' + Object.keys(cryptoMod).join(','));
-              const cfgMod = require(base + '/config/config.js');
-              console.error('config exports: ' + Object.keys(cfgMod).join(','));
-              const Config = cfgMod.Config || cfgMod.default;
-              const c = new Config();
-              console.error('Config methods: ' + Object.getOwnPropertyNames(Object.getPrototypeOf(c)).join(','));
-              if (typeof c.encrypt !== 'function') { console.error('no Config.encrypt method'); process.exit(3); }
-              Promise.resolve(c.encrypt(process.env.OHPM_PRIVATE_KEY_PASSWORD)).then(v => {
-                if (typeof v !== 'string') v = v.value || JSON.stringify(v);
-                console.log(v);
-              }).catch(e => { console.error('Config.encrypt failed: ' + e.message); process.exit(3); });
-            } catch (e) { console.error('node probe failed: ' + e.message); process.exit(3); }
+              c.set('key_passphrase', pwd);
+              c.save();
+              console.error('Config.set+save done');
+            } catch (e) { console.error('Config.set/save err: ' + e.message); }
+            try {
+              const cr = cryptoMod.createCrypto();
+              console.error('createCrypto() proto: ' + Object.getOwnPropertyNames(Object.getPrototypeOf(cr)).join(','));
+              if (cr && typeof cr.encrypt === 'function') {
+                let v = cr.encrypt(pwd);
+                if (v && typeof v.then === 'function') v = await v;
+                const s = typeof v === 'string' ? v : JSON.stringify(v);
+                console.error('crypto.encrypt => len ' + s.length);
+                if (s.length > pwd.length) { console.log('CIPHER=' + s); return; }
+              }
+            } catch (e) { console.error('createCrypto err: ' + e.message); }
+          })();
           EOF
-            ) || true
-            if [[ -n "$ENCRYPTED_VALUE" ]]; then
-              echo "Config.encrypt works (ciphertext length: ${#ENCRYPTED_VALUE})"
-              grep -q '^key_passphrase=' "$HOME/.ohpm/.ohpmrc" \
-                && sed -i "s|^key_passphrase=.*|key_passphrase=${ENCRYPTED_VALUE}|" "$HOME/.ohpm/.ohpmrc" \
-                || echo "key_passphrase=${ENCRYPTED_VALUE}" >> "$HOME/.ohpm/.ohpmrc"
-              echo "passphrase stored encrypted in ~/.ohpm/.ohpmrc"
-            else
-              echo "::error::Could not encrypt key_passphrase; publish will fail with 00602020. Check probe output above."
-              rm -rf "$KEY_DIR"
-              exit 1
-            fi
+          ) || true
+          CIPHER=$(printf '%s\n' "$PROBE_OUT" | grep '^CIPHER=' | head -1 | cut -c8-)
+          if [[ -n "$CIPHER" ]]; then
+            echo "ciphertext obtained (length: ${#CIPHER})"
+            grep -q '^key_passphrase=' "$HOME/.ohpm/.ohpmrc" \
+              && sed -i "s|^key_passphrase=.*|key_passphrase=${CIPHER}|" "$HOME/.ohpm/.ohpmrc" \
+              || echo "key_passphrase=${CIPHER}" >> "$HOME/.ohpm/.ohpmrc"
+            echo "passphrase stored encrypted in ~/.ohpm/.ohpmrc"
+          else
+            echo "::error::Could not obtain encrypted key_passphrase; see probe output above."
+            rm -rf "$KEY_DIR"
+            exit 1
           fi
 
           echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
