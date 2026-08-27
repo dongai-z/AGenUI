@@ -202,74 +202,112 @@ jobs:
             exit 1
           fi
 
-          # Configure the private key password. ohpm 6.x requires the rc value
-          # of "key_passphrase" to be ENCRYPTED (00602020 otherwise). The
-          # encryption lives in Config.handleSecurityKey / the config-encrypt
-          # crypto module; probe them and write the ciphertext into .ohpmrc.
-          CFG_JS="$DEVECO_HOME/ohpm/lib/config/config.js"
-          CRYPTO_JS="$DEVECO_HOME/ohpm/lib/core/config-encrypt/crypto/index.js"
-          echo "--- PASSPHRASE ENCRYPT: code context ---"
-          grep -o ".\{100\}isSupportSecurityKey.\{500\}" "$CFG_JS" 2>/dev/null | head -3
-          grep -o ".\{100\}handleSecurityKey.\{800\}" "$CFG_JS" 2>/dev/null | head -3
-          grep -o ".\{50\}getOriginalKey.\{400\}" "$CFG_JS" 2>/dev/null | head -3
-          grep -o ".\{50\}createCrypto.\{600\}" "$CRYPTO_JS" 2>/dev/null | head -3
-          echo "--- PASSPHRASE ENCRYPT: runtime probe ---"
-          PROBE_OUT=$(node <<'EOF'
+          # ---------- Path 1: ohpm 6.x with a locally created crypto component ----------
+          # ohpm 6.x requires "key_passphrase" in .ohpmrc to be ciphertext that is
+          # decrypted through the crypto component directory referenced by the
+          # "crypto_path" config item. createCrypto() generates that component,
+          # then the returned Crypto object encrypts the passphrase.
+          HAR_FILE="dist/harmony/release/agenui.har"
+          PUBLISH_REGISTRY="https://ohpm.openharmony.cn/ohpm/"
+          PUBLISH_OK=false
+          CRYPTO_DIR="$RUNNER_TEMP/ohpm_crypto"
+          rm -rf "$CRYPTO_DIR"
+          CIPHER=$(CRYPTO_DIR="$CRYPTO_DIR" node <<'EOF'
           const base = process.env.DEVECO_HOME + '/ohpm/lib';
           const pwd = process.env.OHPM_PRIVATE_KEY_PASSWORD;
-          const cryptoMod = require(base + '/core/config-encrypt/crypto/index.js');
-          const { Config } = require(base + '/config/config.js');
+          const dir = process.env.CRYPTO_DIR;
           (async () => {
-            const c = new Config();
-            try { console.error('isSupportSecurityKey(key_passphrase):', c.isSupportSecurityKey('key_passphrase')); } catch (e) { console.error('isSupportSecurityKey err: ' + e.message); }
-            for (const args of [['key_passphrase', pwd], [pwd, 'key_passphrase'], ['key_passphrase', pwd, 'set']]) {
-              try {
-                let r = c.handleSecurityKey.apply(c, args);
-                if (r && typeof r.then === 'function') r = await r;
-                console.error('handleSecurityKey(' + args.length + ' args) => ' + typeof r + (typeof r === 'string' ? ' len ' + r.length : ' ' + JSON.stringify(r)));
-                if (typeof r === 'string' && r.length > pwd.length) { console.log('CIPHER=' + r); return; }
-              } catch (e) { console.error('handleSecurityKey err: ' + e.message); }
-            }
+            const cm = require(base + '/core/config-encrypt/crypto/index.js');
+            const cr = await cm.createCrypto(dir);
+            console.error('crypto instance proto: ' + Object.getOwnPropertyNames(Object.getPrototypeOf(cr)).join(','));
+            let head = '';
             try {
-              c.set('key_passphrase', pwd);
-              c.save();
-              console.error('Config.set+save done');
-            } catch (e) { console.error('Config.set/save err: ' + e.message); }
-            try {
-              const cr = cryptoMod.createCrypto();
-              console.error('createCrypto() proto: ' + Object.getOwnPropertyNames(Object.getPrototypeOf(cr)).join(','));
-              if (cr && typeof cr.encrypt === 'function') {
-                let v = cr.encrypt(pwd);
-                if (v && typeof v.then === 'function') v = await v;
-                const s = typeof v === 'string' ? v : JSON.stringify(v);
-                console.error('crypto.encrypt => len ' + s.length);
-                if (s.length > pwd.length) { console.log('CIPHER=' + s); return; }
+              const k = require(base + '/core/config-encrypt/crypto/constants.js');
+              console.error('crypto constants keys: ' + Object.keys(k).join(','));
+              head = k.KEY_HEAD || (k.Constants && k.Constants.KEY_HEAD) || '';
+              console.error('KEY_HEAD=' + head);
+            } catch (e) { console.error('constants err: ' + e.message); }
+            for (const m of ['encrypt', 'encryptConfig', 'encryptText', 'encryptValue', 'encryptData']) {
+              if (typeof cr[m] === 'function') {
+                try {
+                  let v = cr[m](pwd);
+                  if (v && typeof v.then === 'function') v = await v;
+                  let s = typeof v === 'string' ? v : JSON.stringify(v);
+                  if (s && s.length > pwd.length) {
+                    if (head && !s.startsWith(head)) s = head + s;
+                    console.log('CIPHER=' + s);
+                    return;
+                  }
+                } catch (e) { console.error(m + ' err: ' + e.message); }
               }
-            } catch (e) { console.error('createCrypto err: ' + e.message); }
-          })();
+            }
+            process.exit(3);
+          })().catch(e => { console.error('fatal: ' + e.message); process.exit(3); });
           EOF
           ) || true
-          CIPHER=$(printf '%s\n' "$PROBE_OUT" | grep '^CIPHER=' | head -1 | cut -c8-)
+          CIPHER=$(printf '%s\n' "$CIPHER" | grep '^CIPHER=' | head -1 | cut -c8-)
+
           if [[ -n "$CIPHER" ]]; then
-            echo "ciphertext obtained (length: ${#CIPHER})"
+            echo "Path 1: ciphertext obtained (length: ${#CIPHER})"
+            ohpm config set crypto_path "$CRYPTO_DIR"
             grep -q '^key_passphrase=' "$HOME/.ohpm/.ohpmrc" \
               && sed -i "s|^key_passphrase=.*|key_passphrase=${CIPHER}|" "$HOME/.ohpm/.ohpmrc" \
               || echo "key_passphrase=${CIPHER}" >> "$HOME/.ohpm/.ohpmrc"
-            echo "passphrase stored encrypted in ~/.ohpm/.ohpmrc"
+            echo "Publishing with ohpm 6.x (crypto component) ..."
+            if timeout 600 ohpm publish "$HAR_FILE" \
+              --publish_registry "$PUBLISH_REGISTRY" \
+              --publish_id "$OHPM_PUBLISH_ID" \
+              --key_path "$KEY_PATH"; then
+              PUBLISH_OK=true
+            else
+              echo "::warning::Path 1 publish failed, falling back to ohpm 5.x"
+            fi
           else
-            echo "::error::Could not obtain encrypted key_passphrase; see probe output above."
-            rm -rf "$KEY_DIR"
-            exit 1
+            echo "::warning::Path 1 could not produce ciphertext, falling back to ohpm 5.x"
           fi
 
-          echo "Publishing dist/harmony/release/agenui.har to https://ohpm.openharmony.cn/ohpm/ ..."
-          ohpm publish dist/harmony/release/agenui.har \
-            --publish_registry "https://ohpm.openharmony.cn/ohpm/" \
-            --publish_id "$OHPM_PUBLISH_ID" \
-            --key_path "$KEY_PATH"
+          # ---------- Path 2: standalone ohpm 5.x (plain private_key_password) ----------
+          # Mirrors the verified local flow (DevEco ohpm 5.x accepts a plaintext
+          # password), using the ohpm bundled in CLT 5.x from the same mirror.
+          if [[ "$PUBLISH_OK" != "true" ]]; then
+            echo "--- Path 2: downloading CLT 5.x to use its ohpm ---"
+            CLT5_DIR="$RUNNER_TEMP/clt5"
+            mkdir -p "$CLT5_DIR"
+            FILE_LIST=$(curl -sL --max-time 30 "https://huggingface.co/api/models/csukuangfj/harmonyos-commandline-tools/tree/main" || true)
+            CLT5_ZIP=$(printf '%s' "$FILE_LIST" | grep -o 'commandline-tools-linux-x64-5[^"]*\.zip' | sort -V | tail -1 || true)
+            if [[ -z "$CLT5_ZIP" ]]; then
+              echo "::error::Path 2 failed: no CLT 5.x linux zip found in mirror. Available files:"
+              printf '%s' "$FILE_LIST" | grep -o '"path":"[^"]*"' | head -20
+              rm -rf "$KEY_DIR" "$CRYPTO_DIR"
+              exit 1
+            fi
+            echo "Downloading $CLT5_ZIP ..."
+            curl -SL -o "$CLT5_DIR/clt5.zip" "https://huggingface.co/csukuangfj/harmonyos-commandline-tools/resolve/main/$CLT5_ZIP"
+            unzip -q "$CLT5_DIR/clt5.zip" -d "$CLT5_DIR"
+            OHPM5="$(find "$CLT5_DIR" -type f -name ohpm -path '*/bin/*' | head -1)"
+            if [[ -z "$OHPM5" ]]; then
+              echo "::error::Path 2 failed: ohpm binary not found inside $CLT5_ZIP"
+              rm -rf "$KEY_DIR" "$CRYPTO_DIR"
+              exit 1
+            fi
+            chmod +x "$OHPM5"
+            # Prefer the node bundled with CLT 5.x to avoid version mix-ups.
+            NODE5="$(find "$CLT5_DIR" -type f -name node -path '*/bin/*' | head -1 || true)"
+            if [[ -n "$NODE5" ]]; then
+              export PATH="$(dirname "$NODE5"):$PATH"
+              echo "Using bundled node: $(node -v)"
+            fi
+            "$OHPM5" -v || true
+            "$OHPM5" config set private_key_password "$OHPM_PRIVATE_KEY_PASSWORD"
+            echo "Publishing with ohpm 5.x ..."
+            timeout 600 "$OHPM5" publish "$HAR_FILE" \
+              --publish_registry "$PUBLISH_REGISTRY" \
+              --publish_id "$OHPM_PUBLISH_ID" \
+              --key_path "$KEY_PATH"
+          fi
 
-          # Clean up the private key file.
-          rm -rf "$KEY_DIR"
+          # Clean up the private key file and crypto component.
+          rm -rf "$KEY_DIR" "$CRYPTO_DIR"
           echo "✅ OHPM publish complete"
 
       # ==================== Summary ====================
